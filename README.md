@@ -1,5 +1,6 @@
 ## Training and testing codes for DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
-### Training
+Training
+----------
 - [main_train_dncnn.py](main_train_dncnn.py)
 - [main_train_fdncnn.py](main_train_fdncnn.py)
 - [main_train_ffdnet.py](main_train_ffdnet.py)
@@ -9,17 +10,24 @@
 - [main_train_msrresnet_gan.py](main_train_msrresnet_gan.py)
 - [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py)
 - [main_train_imdn.py](main_train_imdn.py)
-### Testing
-- [main_test_dncnn.py](main_test_dncnn.py)
-- [main_test_fdncnn.py](main_test_fdncnn.py)
-- [main_test_ffdnet.py](main_test_ffdnet.py)
-- [main_test_srmd.py](main_test_srmd.py)
-- [main_test_dpsr.py](main_test_dpsr.py)
-- [main_test_msrresnet.py](main_test_msrresnet.py)
-- [main_test_rrdb.py](main_test_rrdb.py)
-- [main_test_imdn.py](main_test_imdn.py)
 
-### References
+Testing
+----------
+- [main_test_dncnn.py](main_test_dncnn.py) ----------> ```model_zoo: dncnn_15.pth, dncnn_25.pth, dncnn_50.pth, dncnn_gray_blind.pth, dncnn_color_blind.pth, dncnn3.pth```
+- [main_test_fdncnn.py](main_test_fdncnn.py) ---------> ```model_zoo: fdncnn_gray.pth, fdncnn_color.pth, fdncnn_gray_clip.pth, fdncnn_color_clip.pth```
+- [main_test_ffdnet.py](main_test_ffdnet.py) ----------> ```model_zoo: ffdnet_gray.pth, ffdnet_color.pth, ffdnet_gray_clip.pth, ffdnet_color_clip.pth```
+- [main_test_srmd.py](main_test_srmd.py) -----------> ```model_zoo: srmdnf_x2.pth, srmdnf_x3.pth, srmdnf_x4.pth, srmd_x2.pth, srmd_x3.pth, srmd_x4.pth```
+- [main_test_dpsr.py](main_test_dpsr.py) ------------> ```model_zoo: dpsr_x2.pth, dpsr_x3.pth, dpsr_x4.pth, dpsr_x4_gan.pth```
+- [main_test_msrresnet.py](main_test_msrresnet.py) ------> ```model_zoo: msrresnet_x4_psnr.pth, msrresnet_x4_gan.pth```
+- [main_test_rrdb.py](main_test_rrdb.py) ------------> ```model_zoo: rrdb_x4_psnr.pth, rrdb_x4_esrgan.pth```
+- [main_test_imdn.py](main_test_imdn.py) -----------> ```model_zoo: imdn_x4.pth```
+
+[model_zoo](model_zoo)
+--------
+- download link [https://drive.google.com/drive/folders/13kfr3qny7S2xwG9h7v95F5mkWs0OmU0D](https://drive.google.com/drive/folders/13kfr3qny7S2xwG9h7v95F5mkWs0OmU0D)
+
+References
+----------
 ```
 @article{zhang2017beyond, % DnCNN
   title={Beyond a gaussian denoiser: Residual learning of deep cnn for image denoising},
