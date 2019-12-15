@@ -1,2 +1,20 @@
-### Image Restoration Toolbox (PyTorch)
-### Training and testing codes for DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
+## Training and testing codes for DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
+### Training
+- [main_train_dncnn.py](main_train_dncnn.py)
+- [main_train_fdncnn.py](main_train_fdncnn.py)
+- [main_train_ffdnet.py](main_train_ffdnet.py)
+- [main_train_srmd.py](main_train_srmd.py)
+- [main_train_dpsr.py](main_train_dpsr.py)
+- [main_train_msrresnet_psnr.py](main_train_msrresnet_psnr.py)
+- [main_train_msrresnet_gan.py](main_train_msrresnet_gan.py)
+- [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py)
+- [main_train_imdn.py](main_train_imdn.py)
+### Testing
+- [main_test_dncnn.py](main_test_dncnn.py)
+- [main_test_fdncnn.py](main_test_fdncnn.py)
+- [main_test_ffdnet.py](main_test_ffdnet.py)
+- [main_test_srmd.py](main_test_srmd.py)
+- [main_test_dpsr.py](main_test_dpsr.py)
+- [main_test_msrresnet.py](main_test_msrresnet.py)
+- [main_test_rrdb.py](main_test_rrdb.py)
+- [main_test_imdn.py](main_test_imdn.py)
