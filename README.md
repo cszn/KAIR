@@ -26,6 +26,28 @@ Testing
 --------
 - download link [https://drive.google.com/drive/folders/13kfr3qny7S2xwG9h7v95F5mkWs0OmU0D](https://drive.google.com/drive/folders/13kfr3qny7S2xwG9h7v95F5mkWs0OmU0D)
 
+[trainsets](trainsets)
+----------
+- [https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format](https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format)
+- [train400](https://github.com/cszn/DnCNN/tree/master/TrainingCodes/DnCNN_TrainingCodes_v1.0/data)
+- [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/)
+- [Flickr2K](https://cv.snu.ac.kr/research/EDSR/Flickr2K.tar)
+
+[testsets](testsets)
+-----------
+- [https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format](https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format)
+- [set12](https://github.com/cszn/FFDNet/tree/master/testsets)
+- [bsd68](https://github.com/cszn/FFDNet/tree/master/testsets)
+- [cbsd68](https://github.com/cszn/FFDNet/tree/master/testsets)
+- [kodak24](https://github.com/cszn/FFDNet/tree/master/testsets)
+- [srbsd68](https://github.com/cszn/DPSR/tree/master/testsets/BSD68/GT)
+- set5
+- set14
+- cbsd100
+- urban100
+- manga109
+
+
 References
 ----------
 ```
