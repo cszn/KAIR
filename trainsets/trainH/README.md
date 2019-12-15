@@ -1,1 +1,1 @@
-put high-quality images into here
+put high-quality training images into here
