@@ -32,6 +32,7 @@ Testing
 - [train400](https://github.com/cszn/DnCNN/tree/master/TrainingCodes/DnCNN_TrainingCodes_v1.0/data)
 - [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/)
 - [Flickr2K](https://cv.snu.ac.kr/research/EDSR/Flickr2K.tar)
+- use [split_imageset(original_dataroot, taget_dataroot, n_channels=3, p_size=512, p_overlap=96, p_max=800)](https://github.com/cszn/KAIR/blob/3ee0bf3e07b90ec0b7302d97ee2adb780617e637/utils/utils_image.py#L123) to get ```trainsets/trainH``` with small images for fast data loading
 
 [testsets](testsets)
 -----------
