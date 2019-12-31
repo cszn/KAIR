@@ -125,8 +125,8 @@ def main(json_path='options/train_msrresnet_gan.json'):
 
     model = define_Model(opt)
 
-    logger.info(model.info_network())
     model.init_train()
+    logger.info(model.info_network())
     logger.info(model.info_params())
 
     '''
