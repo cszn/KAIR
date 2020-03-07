@@ -1,4 +1,9 @@
 ## Training and testing codes for DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
+
+
+**News**: [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) will be added.
+_______
+
 Training
 ----------
 - [main_train_dncnn.py](main_train_dncnn.py) --------------- [https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)
