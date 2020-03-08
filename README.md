@@ -34,12 +34,13 @@ Network architectures
 
   <img src="https://github.com/cszn/SRMD/blob/master/figs/architecture.png" width="605px"/> 
 
-* SRResNet, SRGAN, RRDB, ESRGAN, IMDN
+* SRResNet, SRGAN, RRDB, ESRGAN
 
   <img src="https://github.com/xinntao/ESRGAN/blob/master/figures/architecture.jpg" width="595px"/> 
+  
+* IMDN
 
-
-
+  <img src="figs/imdn.png" width="460px"/>  ----- <img src="figs/imdn_block.png" width="100px"/> 
 
 
 
