@@ -16,6 +16,33 @@ Training
 - [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py) ----------- [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)
 - [main_train_imdn.py](main_train_imdn.py) ---------------- [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)
 
+Network architectures
+----------
+* [USRNet](https://github.com/cszn/USRNet)
+
+#TODO
+
+* DnCNN
+
+  <img src="https://github.com/cszn/DnCNN/blob/master/figs/dncnn.png" width="600px"/> 
+
+* FFDNet
+
+  <img src="https://github.com/cszn/FFDNet/blob/master/figs/ffdnet.png" width="600px"/> 
+
+* SRMD
+
+  <img src="https://github.com/cszn/SRMD/blob/master/figs/architecture.png" width="605px"/> 
+
+* RRDB, ESRGAN
+
+  <img src="https://github.com/xinntao/ESRGAN/blob/master/figures/architecture.jpg" width="595px"/> 
+
+
+
+
+
+
 Testing
 ----------
 - [main_test_dncnn.py](main_test_dncnn.py) ---------------> ```model_zoo: dncnn_15.pth, dncnn_25.pth, dncnn_50.pth, dncnn_gray_blind.pth, dncnn_color_blind.pth, dncnn3.pth```
