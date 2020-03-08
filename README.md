@@ -85,6 +85,13 @@ Testing
 References
 ----------
 ```
+@inproceedings{zhang2020deep, % USRNet
+  title={Deep unfolding network for image super-resolution},
+  author={Zhang, Kai and Van Gool, Luc and Timofte, Radu},
+  booktitle={IEEE Conference on Computer Vision and Pattern Recognition},
+  pages={0--0},
+  year={2020}
+}
 @article{zhang2017beyond, % DnCNN
   title={Beyond a gaussian denoiser: Residual learning of deep cnn for image denoising},
   author={Zhang, Kai and Zuo, Wangmeng and Chen, Yunjin and Meng, Deyu and Zhang, Lei},
