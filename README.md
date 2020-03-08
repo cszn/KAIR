@@ -34,7 +34,7 @@ Network architectures
 
   <img src="https://github.com/cszn/SRMD/blob/master/figs/architecture.png" width="605px"/> 
 
-* RRDB, ESRGAN
+* SRResNet, SRGAN, RRDB, ESRGAN, IMDN
 
   <img src="https://github.com/xinntao/ESRGAN/blob/master/figures/architecture.jpg" width="595px"/> 
 
