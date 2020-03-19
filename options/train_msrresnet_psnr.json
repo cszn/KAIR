@@ -36,7 +36,7 @@
   }
 
   , "netG": {
-    "net_type": "msrresnet0"  // "dncnn" | "fdncnn" | "ffdnet" | "srmd" | "dpsr" | "srresnet0" |  "srresnet1" | "rrdbnet" 
+    "net_type": "msrresnet0"  // "dncnn" | "fdncnn" | "ffdnet" | "srmd" | "dpsr" | "msrresnet0" |  "msrresnet1" | "rrdb" 
     , "in_nc": 3        // input channel number
     , "out_nc": 3       // ouput channel number
     , "nc": 64          // 96 for DPSR, 128 for SRMD, 64 for "dncnn"
