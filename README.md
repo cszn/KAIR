@@ -20,7 +20,7 @@ Network architectures
 ----------
 * [USRNet](https://github.com/cszn/USRNet)
 
-#TODO
+  <img src="https://github.com/cszn/USRNet/blob/master/figs/architecture.png" width="600px"/> 
 
 * DnCNN
 
