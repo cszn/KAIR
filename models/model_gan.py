@@ -225,13 +225,13 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         if current_step % self.D_update_ratio == 0 and current_step > self.D_init_iters:
             if self.opt_train['G_lossfn_weight'] > 0:
-                self.log_dict['G_loss'] = G_loss.item()/self.E.size()[0]
+                self.log_dict['G_loss'] = G_loss.item()  # /self.E.size()[0]
             if self.opt_train['F_lossfn_weight'] > 0:
-                self.log_dict['F_loss'] = F_loss.item()/self.E.size()[0]
-            self.log_dict['D_loss'] = D_loss.item()/self.E.size()[0]
+                self.log_dict['F_loss'] = F_loss.item()  # /self.E.size()[0]
+            self.log_dict['D_loss'] = D_loss.item()  # /self.E.size()[0]
 
-        self.log_dict['l_d_real'] = l_d_real.item()/self.E.size()[0]
-        self.log_dict['l_d_fake'] = l_d_fake.item()/self.E.size()[0]
+        self.log_dict['l_d_real'] = l_d_real.item()  # /self.E.size()[0]
+        self.log_dict['l_d_fake'] = l_d_fake.item()  # /self.E.size()[0]
         self.log_dict['D_real'] = torch.mean(pred_d_real.detach())
         self.log_dict['D_fake'] = torch.mean(pred_d_fake.detach())
 
