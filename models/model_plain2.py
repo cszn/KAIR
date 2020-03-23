@@ -139,7 +139,7 @@ class ModelPlain2(ModelBase):
         if G_regularizer_clipstep > 0 and current_step % G_regularizer_clipstep == 0 and current_step % self.opt['train']['checkpoint_save'] != 0:
             self.netG.apply(regularizer_clip)
 
-        self.log_dict['G_loss'] = G_loss.item()/self.E.size()[0]
+        self.log_dict['G_loss'] = G_loss.item()  # /self.E.size()[0]
 
     # ----------------------------------------
     # test / inference
