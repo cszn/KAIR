@@ -97,8 +97,8 @@ def patches_from_image(img, p_size=512, p_overlap=64, p_max=800):
         h1 = list(np.arange(0, h-p_size, p_size-p_overlap, dtype=np.int))
         w1.append(w-p_size)
         h1.append(h-p_size)
-        print(w1)
-        print(h1)
+        # print(w1)
+        # print(h1)
         for i in w1:
             for j in h1:
                 patches.append(img[i:i+p_size, j:j+p_size,:])
@@ -116,7 +116,7 @@ def imssave(imgs, img_path):
     for i, img in enumerate(imgs):
         if img.ndim == 3:
             img = img[:, :, [2, 1, 0]]
-        new_path = os.path.dirname(img_path)+img_name+str('_{:04d}'.format(i))+ext
+        new_path = os.path.join(os.path.dirname(img_path), img_name+str('_{:04d}'.format(i))+'.png')
         cv2.imwrite(new_path, img)
 
 
@@ -138,7 +138,7 @@ def split_imageset(original_dataroot, taget_dataroot, n_channels=3, p_size=512, 
         # img_name, ext = os.path.splitext(os.path.basename(img_path))
         img = imread_uint(img_path, n_channels=n_channels)
         patches = patches_from_image(img, p_size, p_overlap, p_max)
-        imssave(patches, taget_dataroot+os.path.basename(img_path))
+        imssave(patches, os.path.join(taget_dataroot, os.path.basename(img_path)))
         #if original_dataroot == taget_dataroot:
         #del img_path
 
