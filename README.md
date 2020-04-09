@@ -6,15 +6,17 @@ _______
 
 Training
 ----------
-- [main_train_dncnn.py](main_train_dncnn.py) --------------- [https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)
-- [main_train_fdncnn.py](main_train_fdncnn.py) -------------- [https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)
-- [main_train_ffdnet.py](main_train_ffdnet.py) --------------- [https://github.com/cszn/FFDNet](https://github.com/cszn/FFDNet)
-- [main_train_srmd.py](main_train_srmd.py) ---------------- [https://github.com/cszn/SRMD](https://github.com/cszn/SRMD)
-- [main_train_dpsr.py](main_train_dpsr.py) ----------------- [https://github.com/cszn/DPSR](https://github.com/cszn/DPSR)
-- [main_train_msrresnet_psnr.py](main_train_msrresnet_psnr.py) ----- [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)
-- [main_train_msrresnet_gan.py](main_train_msrresnet_gan.py) ------ [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)
-- [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py) ----------- [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)
-- [main_train_imdn.py](main_train_imdn.py) ---------------- [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)
+| Method | Original Link |
+|---|---|
+| [main_train_dncnn.py](main_train_dncnn.py) |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
+| [main_train_fdncnn.py](main_train_fdncnn.py) |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
+| [main_train_ffdnet.py](main_train_ffdnet.py) | [https://github.com/cszn/FFDNet](https://github.com/cszn/FFDNet)|
+| [main_train_srmd.py](main_train_srmd.py) | [https://github.com/cszn/SRMD](https://github.com/cszn/SRMD)|
+| [main_train_dpsr.py](main_train_dpsr.py) | [https://github.com/cszn/DPSR](https://github.com/cszn/DPSR)|
+| [main_train_msrresnet_psnr.py](main_train_msrresnet_psnr.py) | [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)|
+| [main_train_msrresnet_gan.py](main_train_msrresnet_gan.py) | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
+| [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py) | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
+| [main_train_imdn.py](main_train_imdn.py) | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
 
 Network architectures
 ----------
@@ -46,14 +48,17 @@ Network architectures
 
 Testing
 ----------
-- [main_test_dncnn.py](main_test_dncnn.py) ---------------> ```model_zoo: dncnn_15.pth, dncnn_25.pth, dncnn_50.pth, dncnn_gray_blind.pth, dncnn_color_blind.pth, dncnn3.pth```
-- [main_test_fdncnn.py](main_test_fdncnn.py) --------------> ```model_zoo: fdncnn_gray.pth, fdncnn_color.pth, fdncnn_gray_clip.pth, fdncnn_color_clip.pth```
-- [main_test_ffdnet.py](main_test_ffdnet.py) ---------------> ```model_zoo: ffdnet_gray.pth, ffdnet_color.pth, ffdnet_gray_clip.pth, ffdnet_color_clip.pth```
-- [main_test_srmd.py](main_test_srmd.py) ----------------> ```model_zoo: srmdnf_x2.pth, srmdnf_x3.pth, srmdnf_x4.pth, srmd_x2.pth, srmd_x3.pth, srmd_x4.pth``` ```The above models are converted from MatConvNet. ```
-- [main_test_dpsr.py](main_test_dpsr.py) -----------------> ```model_zoo: dpsr_x2.pth, dpsr_x3.pth, dpsr_x4.pth, dpsr_x4_gan.pth```
-- [main_test_msrresnet.py](main_test_msrresnet.py) -----------> ```model_zoo: msrresnet_x4_psnr.pth, msrresnet_x4_gan.pth```
-- [main_test_rrdb.py](main_test_rrdb.py) -----------------> ```model_zoo: rrdb_x4_psnr.pth, rrdb_x4_esrgan.pth```
-- [main_test_imdn.py](main_test_imdn.py) ----------------> ```model_zoo: imdn_x4.pth```
+|Method | [model_zoo](model_zoo)|
+|---|---|
+| [main_test_dncnn.py](main_test_dncnn.py) |```dncnn_15.pth, dncnn_25.pth, dncnn_50.pth, dncnn_gray_blind.pth, dncnn_color_blind.pth, dncnn3.pth```|
+| [main_test_fdncnn.py](main_test_fdncnn.py) | ```fdncnn_gray.pth, fdncnn_color.pth, fdncnn_gray_clip.pth, fdncnn_color_clip.pth```|
+| [main_test_ffdnet.py](main_test_ffdnet.py) | ```ffdnet_gray.pth, ffdnet_color.pth, ffdnet_gray_clip.pth, ffdnet_color_clip.pth```|
+| [main_test_srmd.py](main_test_srmd.py) | ```srmdnf_x2.pth, srmdnf_x3.pth, srmdnf_x4.pth, srmd_x2.pth, srmd_x3.pth, srmd_x4.pth```| 
+|  |```The above models are converted from MatConvNet. ```|
+| [main_test_dpsr.py](main_test_dpsr.py) | ```dpsr_x2.pth, dpsr_x3.pth, dpsr_x4.pth, dpsr_x4_gan.pth```|
+| [main_test_msrresnet.py](main_test_msrresnet.py) | ```msrresnet_x4_psnr.pth, msrresnet_x4_gan.pth```|
+| [main_test_rrdb.py](main_test_rrdb.py) | ```rrdb_x4_psnr.pth, rrdb_x4_esrgan.pth```|
+| [main_test_imdn.py](main_test_imdn.py) | ```imdn_x4.pth```|
 
 [model_zoo](model_zoo)
 --------
