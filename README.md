@@ -1,6 +1,9 @@
 ## Training and testing codes for DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
+[Kai Zhang](https://cszn.github.io/)
 
+*[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
+_______
 **News**: [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) will be added.
 _______
 
