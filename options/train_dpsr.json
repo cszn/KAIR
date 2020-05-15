@@ -45,7 +45,7 @@
     , "ng": 2           // unused
     , "reduction" : 16  // unused
     , "act_mode": "R"   // "BR" for BN+ReLU | "R" for ReLU
-    , "upsample_mode": "upconv"         // "pixelshuffle" | "convtranspose" | "upconv"
+    , "upsample_mode": "pixelshuffle"         // "pixelshuffle" | "convtranspose" | "upconv"
     , "downsample_mode": "strideconv"   // "strideconv" | "avgpool" | "maxpool"
 
     , "init_type": "orthogonal"         // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
