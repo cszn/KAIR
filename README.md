@@ -33,7 +33,7 @@ Network architectures
  
 * IRCNN denoiser
 
- <img src="https://github.com/lipengFu/IRCNN/raw/master/Image/image_2.png" width="600px"/> 
+ <img src="https://github.com/lipengFu/IRCNN/raw/master/Image/image_2.png" width="680px"/> 
 
 * FFDNet
 
