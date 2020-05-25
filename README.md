@@ -54,10 +54,11 @@ Testing
 |Method | [model_zoo](model_zoo)|
 |---|---|
 | [main_test_dncnn.py](main_test_dncnn.py) |```dncnn_15.pth, dncnn_25.pth, dncnn_50.pth, dncnn_gray_blind.pth, dncnn_color_blind.pth, dncnn3.pth```|
+| [main_test_ircnn_denoiser.py](main_test_ircnn_denoiser.py) | ```ircnn_gray.pth, ircnn_color.pth```| 
 | [main_test_fdncnn.py](main_test_fdncnn.py) | ```fdncnn_gray.pth, fdncnn_color.pth, fdncnn_gray_clip.pth, fdncnn_color_clip.pth```|
 | [main_test_ffdnet.py](main_test_ffdnet.py) | ```ffdnet_gray.pth, ffdnet_color.pth, ffdnet_gray_clip.pth, ffdnet_color_clip.pth```|
 | [main_test_srmd.py](main_test_srmd.py) | ```srmdnf_x2.pth, srmdnf_x3.pth, srmdnf_x4.pth, srmd_x2.pth, srmd_x3.pth, srmd_x4.pth```| 
-|  |```The above models are converted from MatConvNet. ```|
+|  | **The above models are converted from MatConvNet.** |
 | [main_test_dpsr.py](main_test_dpsr.py) | ```dpsr_x2.pth, dpsr_x3.pth, dpsr_x4.pth, dpsr_x4_gan.pth```|
 | [main_test_msrresnet.py](main_test_msrresnet.py) | ```msrresnet_x4_psnr.pth, msrresnet_x4_gan.pth```|
 | [main_test_rrdb.py](main_test_rrdb.py) | ```rrdb_x4_psnr.pth, rrdb_x4_esrgan.pth```|
@@ -108,6 +109,13 @@ References
   number={7},
   pages={3142--3155},
   year={2017}
+}
+@inproceedings{zhang2017learning, % IRCNN
+title={Learning deep CNN denoiser prior for image restoration},
+author={Zhang, Kai and Zuo, Wangmeng and Gu, Shuhang and Zhang, Lei},
+booktitle={IEEE conference on computer vision and pattern recognition},
+pages={3929--3938},
+year={2017}
 }
 @article{zhang2018ffdnet, % FFDNet, FDnCNN
   title={FFDNet: Toward a fast and flexible solution for CNN-based image denoising},
