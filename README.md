@@ -30,6 +30,10 @@ Network architectures
 * DnCNN
 
   <img src="https://github.com/cszn/DnCNN/blob/master/figs/dncnn.png" width="600px"/> 
+ 
+* IRCNN denoiser
+
+ <img src="https://github.com/lipengFu/IRCNN/raw/master/Image/image_2.png" width="600px"/> 
 
 * FFDNet
 
