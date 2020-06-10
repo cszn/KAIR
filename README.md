@@ -102,7 +102,7 @@ References
   title={Deep unfolding network for image super-resolution},
   author={Zhang, Kai and Van Gool, Luc and Timofte, Radu},
   booktitle={IEEE Conference on Computer Vision and Pattern Recognition},
-  pages={0--0},
+  pages={3217--3226},
   year={2020}
 }
 @article{zhang2017beyond, % DnCNN
