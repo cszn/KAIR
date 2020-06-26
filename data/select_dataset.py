@@ -41,6 +41,9 @@ def define_Dataset(dataset_opt):
     elif dataset_type in ['dpsr', 'dnsr']:
         from data.dataset_dpsr import DatasetDPSR as D
 
+    elif dataset_type in ['usrnet', 'usrgan']:
+        from data.dataset_usrnet import DatasetUSRNet as D
+
     # -----------------------------------------
     # common
     # -----------------------------------------
