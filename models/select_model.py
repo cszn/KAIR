@@ -15,6 +15,9 @@ def define_Model(opt):
     elif model == 'plain2':  # two inputs: L, C
         from models.model_plain2 import ModelPlain2 as M
 
+    elif model == 'plain4':  # two inputs: L, C
+        from models.model_plain4 import ModelPlain4 as M
+
     elif model == 'gan':     # one input: L
         from models.model_gan import ModelGAN as M
 
