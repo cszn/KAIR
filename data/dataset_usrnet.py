@@ -52,11 +52,10 @@ class DataSetUSRNet(data.Dataset):
             # 1) scale factor, ensure each batch only involves one scale factor
             # ---------------------------
             if self.count % self.opt['dataloader_batch_size'] == 0:
-                # self.sf = random.choice([1,2,3,4])
-                self.sf = random.choice(self.scales)
-            sf = self.sf
-            H, W, _ = img_H.shape
+                # sf = random.choice([1,2,3,4])
+                sf = random.choice(self.scales)
             self.count += 1
+            H, W, _ = img_H.shape
 
             # ----------------------------
             # randomly crop the patch
