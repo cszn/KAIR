@@ -126,7 +126,6 @@ class DatasetSRMD(data.Dataset):
         else:
 
             img_H, img_L = util.single2tensor3(img_H), util.single2tensor3(img_L)
-
             noise_level = noise_level = torch.FloatTensor([self.sigma_test])
 
         # ------------------------------------
@@ -146,12 +145,8 @@ class DatasetSRMD(data.Dataset):
         # concat L and noise level map M
         # -------------------------------------
         """
-        
-        print(img_L.shape)
-        print(M.shape)
+
         img_L = torch.cat((img_L, M), 0)
-
-
         L_path = H_path
 
         return {'L': img_L, 'H': img_H, 'L_path': L_path, 'H_path': H_path}
