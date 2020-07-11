@@ -117,6 +117,7 @@ def main():
 
     from models.network_dncnn import DnCNN as net
     model = net(in_nc=n_channels, out_nc=n_channels, nc=64, nb=nb, act_mode='R')
+    # model = net(in_nc=n_channels, out_nc=n_channels, nc=64, nb=nb, act_mode='BR')  # use this if BN is not merged by utils_bnorm.merge_bn(model)
     model.load_state_dict(torch.load(model_path), strict=True)
     model.eval()
     for k, v in model.named_parameters():
