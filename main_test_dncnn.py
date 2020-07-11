@@ -4,7 +4,7 @@ import logging
 import numpy as np
 from datetime import datetime
 from collections import OrderedDict
-from scipy.io import loadmat
+# from scipy.io import loadmat
 
 import torch
 
