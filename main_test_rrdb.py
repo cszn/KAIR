@@ -102,7 +102,7 @@ def main():
 
     from models.network_rrdb import RRDB as net
     model = net(in_nc=n_channels, out_nc=n_channels, nc=64, nb=23, gc=32, upscale=4, act_mode='L', upsample_mode='upconv')
-    model.load_state_dict(torch.load(model_path), strict=False)
+    model.load_state_dict(torch.load(model_path), strict=True)  # strict=False
     model.eval()
     for k, v in model.named_parameters():
         v.requires_grad = False
