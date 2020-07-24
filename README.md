@@ -4,7 +4,9 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-**News**: [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) will be added.
+- **News (2020-7)**: [main_challenge_sr.py](main_challenge_sr.py) can help you to obtain `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
+
+- **News (2020-6)**: [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) has been added.
 
 
 Training
