@@ -100,6 +100,12 @@ Testing
 References
 ----------
 ```BibTex
+@inproceedings{zhang2020aim, %efficientSR_challenge
+  title={AIM 2020 Challenge on Efficient Super-Resolution: Methods and Results},
+  author={Kai Zhang and Martin Danelljan and Yawei Li and Radu Timofte and others},
+  booktitle={European Conference on Computer Vision Workshops},
+  year={2020}
+}
 @inproceedings{zhang2020deep, % USRNet
   title={Deep unfolding network for image super-resolution},
   author={Zhang, Kai and Van Gool, Luc and Timofte, Radu},
