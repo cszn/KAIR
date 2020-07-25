@@ -18,8 +18,9 @@ logger.info('{:>16s} : {:<.4f} [M]'.format('#Params', num_parameters/10**6))
 ```
 
 
-- **News (2020-6)**: Add [USRNet (CVPR 2020)](https://github.com/cszn/USRNet), [USRNet Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309) for training and testing.
+- **News (2020-6)**: Add [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) for training and testing.
 
+    [USRNet Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309)
 
 Training
 ----------
