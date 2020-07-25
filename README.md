@@ -5,6 +5,18 @@
 
 _______
 - **News (2020-7)**: Add [main_challenge_sr.py](main_challenge_sr.py) to obtain `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
+```python
+from utils.utils_modelsummary import get_model_activation, get_model_flops
+input_dim = (3, 256, 256)  # set the input dimension
+activations, num_conv2d = get_model_activation(model, input_dim)
+logger.info('{:>16s} : {:<.4f} [M]'.format('#Activations', activations/10**6))
+logger.info('{:>16s} : {:<d}'.format('#Conv2d', num_conv2d))
+flops = get_model_flops(model, input_dim, False)
+logger.info('{:>16s} : {:<.4f} [G]'.format('FLOPs', flops/10**9))
+num_parameters = sum(map(lambda x: x.numel(), model.parameters()))
+logger.info('{:>16s} : {:<.4f} [M]'.format('#Params', num_parameters/10**6))
+```
+
 
 - **News (2020-6)**: Add [USRNet (CVPR 2020)](https://github.com/cszn/USRNet), [USRNet Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309) for training and testing.
 
