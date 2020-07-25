@@ -4,9 +4,9 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **News (2020-7)**: [main_challenge_sr.py](main_challenge_sr.py) can help you to obtain `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
+- **News (2020-7)**: Add [main_challenge_sr.py](main_challenge_sr.py) to obtain `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
 
-- **News (2020-6)**: [USRNet (CVPR 2020)](https://github.com/cszn/USRNet), [USRNet Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309) has been added.
+- **News (2020-6)**: Add [USRNet (CVPR 2020)](https://github.com/cszn/USRNet), [USRNet Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309) for training and testing.
 
 
 Training
