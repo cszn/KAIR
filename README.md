@@ -4,7 +4,7 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **News (2020-7)**: Add [main_challenge_sr.py](main_challenge_sr.py) to obtain `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
+- **News (2020-7)**: Add [main_challenge_sr.py](https://github.com/cszn/KAIR/blob/23b0d0f717980e48fad02513ba14045d57264fe1/main_challenge_sr.py#L90) to get `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv2d`, and `Max Memory Allocated`.
 ```python
 from utils.utils_modelsummary import get_model_activation, get_model_flops
 input_dim = (3, 256, 256)  # set the input dimension
