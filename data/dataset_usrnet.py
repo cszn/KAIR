@@ -13,7 +13,7 @@ from scipy.io import loadmat
 # import hdf5storage
 
 
-class DataSetUSRNet(data.Dataset):
+class DatasetUSRNet(data.Dataset):
     '''
     # -----------------------------------------
     # Get L/k/sf/sigma for USRNet.
@@ -21,7 +21,7 @@ class DataSetUSRNet(data.Dataset):
     # -----------------------------------------
     '''
     def __init__(self, opt):
-        super(DataSetUSRNet, self).__init__()
+        super(DatasetUSRNet, self).__init__()
         self.opt = opt
         self.n_channels = opt['n_channels'] if opt['n_channels'] else 3
         self.patch_size = self.opt['H_size'] if self.opt['H_size'] else 96
@@ -96,7 +96,7 @@ class DataSetUSRNet(data.Dataset):
             img_L = ndimage.filters.convolve(patch_H, np.expand_dims(k, axis=2), mode='wrap')
             img_L = img_L[0::sf, 0::sf, ...]
             # add Gaussian noise
-            img_L = util.unit2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
+            img_L = util.uint2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
             img_H = patch_H
 
         else:
@@ -106,7 +106,7 @@ class DataSetUSRNet(data.Dataset):
             noise_level = 0./255.0  # validation noise level
             img_L = ndimage.filters.convolve(img_H, np.expand_dims(k, axis=2), mode='wrap')  # blur
             img_L = img_L[0::self.sf_validation, 0::self.sf_validation, ...]  # downsampling
-            img_L = util.unit2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
+            img_L = util.uint2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
 
         k = util.single2tensor3(np.expand_dims(np.float32(k), axis=2))
         img_H, img_L = util.uint2tensor3(img_H), util.single2tensor3(img_L)

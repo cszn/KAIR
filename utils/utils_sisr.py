@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from utils import utils_image as util
+import random
 
 import scipy
 import scipy.stats as ss

@@ -118,7 +118,7 @@ class ModelPlain4(ModelBase):
     # ----------------------------------------
     def optimize_parameters(self, current_step):
         self.G_optimizer.zero_grad()
-        self.E = self.netG(self.L, self.C)
+        self.E = self.netG(self.L, self.k, self.sf, self.sigma)
         G_loss = self.G_lossfn_weight * self.G_lossfn(self.E, self.H)
         G_loss.backward()
 
