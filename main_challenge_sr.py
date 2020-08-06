@@ -15,7 +15,7 @@ This code can help you to calculate:
 - `#Params' denotes the total number of parameters. 
 - `FLOPs' is the abbreviation for floating point operations. 
 - `#Activations' measures the number of elements of all outputs of convolutional layers. 
-- `Memory' represents maximum GPU memory consumption according to the PyTorch function torch.cuda.max memory allocated().
+- `Memory' represents maximum GPU memory consumption according to the PyTorch function torch.cuda.max_memory_allocated().
 - `#Conv' represents the number of convolutional layers. 
 - `FLOPs', `#Activations', and `Memory' are tested on an LR image of size 256x256.
 
@@ -38,7 +38,7 @@ For more information, please refer to ECCVW paper "AIM 2020 Challenge on Efficie
 
 CuDNN (https://developer.nvidia.com/rdp/cudnn-archive) should be installed.
 
-For `Max Memery` and `Runtime`, set 'print_modelsummary = False' and 'save_results = False'.
+For `Memery` and `Runtime`, set 'print_modelsummary = False' and 'save_results = False'.
 '''
 
 
