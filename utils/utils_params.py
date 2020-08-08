@@ -113,8 +113,14 @@ if __name__ == '__main__':
         if k=='0.bias':
             print(v[0])
 
-
-
+    # transfer parameters of old model to new one
+    model_old = torch.load(model_path)
+    state_dict = model.state_dict()
+    for ((key, param),(key2, param2)) in zip(model_old.items(), state_dict.items()):
+        state_dict[key2] = param
+        print([key, key2])
+       # print([param.size(), param2.size()])
+    torch.save(state_dict, 'model_new.pth') 
 
 
    # rgb2gray_net(net)
