@@ -296,6 +296,38 @@ class ESA(nn.Module):
         # return x.mul(self.sigmoid(x2))
 
 
+class CFRB(nn.Module):
+    def __init__(self, in_channels=50, out_channels=50, kernel_size=3, stride=1, padding=1, bias=True, mode='CL', d_rate=0.5, negative_slope=0.05):
+        super(CFRB, self).__init__()
+        self.d_nc = int(in_channels * d_rate)
+        self.r_nc = in_channels  # int(in_channels - self.d_nc)
+
+        assert mode[0] == 'C', 'convolutional layer first'
+
+        self.conv1_d = conv(in_channels, self.d_nc, kernel_size=1, stride=1, padding=0, bias=bias, mode=mode[0])
+        self.conv1_r = conv(in_channels, self.r_nc, kernel_size, stride, padding, bias=bias, mode=mode[0])
+        self.conv2_d = conv(self.r_nc, self.d_nc, kernel_size=1, stride=1, padding=0, bias=bias, mode=mode[0])
+        self.conv2_r = conv(self.r_nc, self.r_nc, kernel_size, stride, padding, bias=bias, mode=mode[0])
+        self.conv3_d = conv(self.r_nc, self.d_nc, kernel_size=1, stride=1, padding=0, bias=bias, mode=mode[0])
+        self.conv3_r = conv(self.r_nc, self.r_nc, kernel_size, stride, padding, bias=bias, mode=mode[0])
+        self.conv4_d = conv(self.r_nc, self.d_nc, kernel_size, stride, padding, bias=bias, mode=mode[0])
+        self.conv1x1 = conv(self.d_nc*4, out_channels, kernel_size=1, stride=1, padding=0, bias=bias, mode=mode[0])
+        self.act = conv(mode=mode[-1], negative_slope=negative_slope)
+        self.esa = ESA(in_channels, reduction=4, bias=True)
+
+    def forward(self, x):
+        d1 = self.conv1_d(x)
+        x = self.act(self.conv1_r(x)+x)
+        d2 = self.conv2_d(x)
+        x = self.act(self.conv2_r(x)+x)
+        d3 = self.conv3_d(x)
+        x = self.act(self.conv3_r(x)+x)
+        x = self.conv4_d(x)
+        x = self.act(torch.cat([d1, d2, d3, x], dim=1))
+        x = self.esa(self.conv1x1(x))
+        return x
+
+
 # --------------------------------------------
 # Channel Attention (CA) Layer
 # --------------------------------------------
