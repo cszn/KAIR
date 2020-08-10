@@ -267,7 +267,6 @@ class IMDBlock(nn.Module):
 
 # --------------------------------------------
 # Enhanced Spatial Attention (ESA)
-# pay attention to the final inplace operation
 # --------------------------------------------
 class ESA(nn.Module):
     def __init__(self, channel=64, reduction=4, bias=True):
@@ -292,8 +291,8 @@ class ESA(nn.Module):
         x2 = self.relu(self.conv4(x2))
         x2 = F.interpolate(self.conv5(x2), (x.size(2), x.size(3)), mode='bilinear', align_corners=False) 
         x2 = self.conv6(x2 + self.conv21(x1))
-        return x.mul_(self.sigmoid(x2))
-        # return x.mul(self.sigmoid(x2))
+        return x.mul(self.sigmoid(x2))
+        # return x.mul_(self.sigmoid(x2))
 
 
 class CFRB(nn.Module):
