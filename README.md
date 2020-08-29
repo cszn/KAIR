@@ -7,6 +7,8 @@ _______
 
 - **_Pull requests are welcome!_**
 
+- **News (2020-8)**: A `deep plug-and-play image restoration toolbox` is released at [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR).
+
 - **News (2020-7)**: Add [main_challenge_sr.py](https://github.com/cszn/KAIR/blob/23b0d0f717980e48fad02513ba14045d57264fe1/main_challenge_sr.py#L90) to get `FLOPs`, `#Params`, `Runtime`, `#Activations`, `#Conv`, and `Max Memory Allocated`.
 ```python
 from utils.utils_modelsummary import get_model_activation, get_model_flops
