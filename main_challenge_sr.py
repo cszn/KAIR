@@ -6,6 +6,7 @@ import torch
 
 from utils import utils_logger
 from utils import utils_image as util
+# from utils import utils_model
 
 
 '''
@@ -58,6 +59,7 @@ def main():
     # --------------------------------
     model_names = ['msrresnet', 'imdn']
     model_id = 1                  # set the model name
+    sf = 4
     model_name = model_names[model_id]
     logger.info('{:>16s} : {:s}'.format('Model Name', model_name))
 
@@ -142,6 +144,7 @@ def main():
 
         start.record()
         img_E = model(img_L)
+        # img_E = utils_model.test_mode(model, img_L, mode=2, min_size=480, sf=sf)  # use this to avoid 'out of memery' issue.
         # logger.info('{:>16s} : {:<.3f} [M]'.format('Max Memery', torch.cuda.max_memory_allocated(torch.cuda.current_device())/1024**2))  # Memery
         end.record()
         torch.cuda.synchronize()
