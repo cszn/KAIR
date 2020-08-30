@@ -144,7 +144,7 @@ def main():
 
         start.record()
         img_E = model(img_L)
-        # img_E = utils_model.test_mode(model, img_L, mode=2, min_size=480, sf=sf)  # use this to avoid 'out of memery' issue.
+        # img_E = utils_model.test_mode(model, img_L, mode=2, min_size=480, sf=sf)  # use this to avoid 'out of memory' issue.
         # logger.info('{:>16s} : {:<.3f} [M]'.format('Max Memery', torch.cuda.max_memory_allocated(torch.cuda.current_device())/1024**2))  # Memery
         end.record()
         torch.cuda.synchronize()
