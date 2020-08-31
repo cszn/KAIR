@@ -53,7 +53,7 @@ class DatasetUSRNet(data.Dataset):
             # ---------------------------
             if self.count % self.opt['dataloader_batch_size'] == 0:
                 # sf = random.choice([1,2,3,4])
-                sf = random.choice(self.scales)
+                self.sf = random.choice(self.scales)
             self.count += 1
             H, W, _ = img_H.shape
 
@@ -94,7 +94,7 @@ class DatasetUSRNet(data.Dataset):
             # Low-quality image
             # ---------------------------
             img_L = ndimage.filters.convolve(patch_H, np.expand_dims(k, axis=2), mode='wrap')
-            img_L = img_L[0::sf, 0::sf, ...]
+            img_L = img_L[0::self.sf, 0::self.sf, ...]
             # add Gaussian noise
             img_L = util.uint2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
             img_H = patch_H
@@ -112,7 +112,7 @@ class DatasetUSRNet(data.Dataset):
         img_H, img_L = util.uint2tensor3(img_H), util.single2tensor3(img_L)
         noise_level = torch.FloatTensor([noise_level]).view([1,1,1])
 
-        return {'L': img_L, 'H': img_H, 'k': k, 'sigma': noise_level, 'sf': sf, 'L_path': L_path, 'H_path': H_path}
+        return {'L': img_L, 'H': img_H, 'k': k, 'sigma': noise_level, 'sf': self.sf, 'L_path': L_path, 'H_path': H_path}
 
     def __len__(self):
         return len(self.paths_H)
