@@ -54,6 +54,7 @@ class DatasetUSRNet(data.Dataset):
             if self.count % self.opt['dataloader_batch_size'] == 0:
                 # sf = random.choice([1,2,3,4])
                 self.sf = random.choice(self.scales)
+                # self.count = 0  # optional
             self.count += 1
             H, W, _ = img_H.shape
 
