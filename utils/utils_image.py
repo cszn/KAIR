@@ -234,15 +234,15 @@ def read_img(path):
 # --------------------------------------------
 # image format conversion
 # --------------------------------------------
-# numpy(single) <--->  numpy(unit)
+# numpy(single) <--->  numpy(uint)
 # numpy(single) <--->  tensor
-# numpy(unit)   <--->  tensor
+# numpy(uint)   <--->  tensor
 # --------------------------------------------
 '''
 
 
 # --------------------------------------------
-# numpy(single) [0, 1] <--->  numpy(unit)
+# numpy(single) [0, 1] <--->  numpy(uint)
 # --------------------------------------------
 
 
@@ -267,7 +267,7 @@ def single2uint16(img):
 
 
 # --------------------------------------------
-# numpy(unit) (HxWxC or HxW) <--->  tensor
+# numpy(uint) (HxWxC or HxW) <--->  tensor
 # --------------------------------------------
 
 
@@ -362,7 +362,7 @@ def tensor2img(tensor, out_type=np.uint8, min_max=(0, 1)):
             'Only support 4D, 3D and 2D tensor. But received with dimension: {:d}'.format(n_dim))
     if out_type == np.uint8:
         img_np = (img_np * 255.0).round()
-        # Important. Unlike matlab, numpy.unit8() WILL NOT round by default.
+        # Important. Unlike matlab, numpy.uint8() WILL NOT round by default.
     return img_np.astype(out_type)
 
 
