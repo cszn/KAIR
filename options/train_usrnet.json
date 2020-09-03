@@ -1,0 +1,77 @@
+{
+  "task": "usrnet" //  
+  , "model": "plain4" // "plain" | "gan"
+  , "gpu_ids": [0]
+  , "scale": 4
+  , "n_channels": 3 // 1 for grayscale image restoration, 3 for color image restoration
+  , "merge_bn": false
+  , "merge_bn_startpoint": 300000
+
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"
+      , "dataset_type": "usrnet"
+      , "dataroot_H": "trainsets/trainH"
+      , "dataroot_L": null
+      , "H_size": 96 // 128 | 192
+      , "use_flip": true
+      , "use_rot": true
+      , "scales": [1, 2, 3, 4]
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 8
+      , "dataloader_batch_size": 48
+    }
+    , "test": {
+      "name": "test_dataset"
+      , "dataset_type": "usrnet"
+      , "dataroot_H": "testsets/set5"
+      , "dataroot_L": null
+    }
+  }
+
+  , "path": {
+    "root": "SR"
+    , "pretrained_netG": null
+  }
+
+  , "netG": {
+    "net_type": "usrnet" // "srresnet" | "rrdbnet" | "rcan" | "unet" | "unetplus" | "nonlocalunet"
+    , "n_iter": 6 // 8
+    , "h_nc": 32 // 64
+    , "in_nc": 4
+    , "out_nc": 3
+    , "nc": [16, 32, 64, 64] // [64, 128, 256, 512] for "unet"
+    , "nb": 2
+    , "gc": 32
+    , "ng": 2
+    , "reduction" : 16
+    , "act_mode": "R" // "BR" for BN+ReLU | "R" for ReLU
+    , "upsample_mode": "convtranspose" // "pixelshuffle" | "convtranspose" | "upconv"
+    , "downsample_mode": "strideconv" // "strideconv" | "avgpool" | "maxpool"
+
+    , "init_type": "orthogonal" // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
+    , "init_bn_type": "uniform" // "uniform" | "constant"
+    , "init_gain": 0.2
+  }
+
+  , "train": {
+    "G_lossfn_type": "l1" // "l1" | "l2sum" | "l2" | "ssim"
+    , "G_lossfn_weight": 1.0
+
+    , "G_optimizer_type": "adam"
+    , "G_optimizer_lr": 1e-4
+    , "G_optimizer_wd": 0
+    , "G_optimizer_clipgrad": null
+
+    , "G_scheduler_type": "MultiStepLR"
+    , "G_scheduler_milestones": [100000, 200000, 300000, 400000]
+    , "G_scheduler_gamma": 0.5
+
+    , "G_regularizer_orthstep": null
+    , "G_regularizer_clipstep": null
+
+    , "checkpoint_test": 5000
+    , "checkpoint_save": 5000
+    , "checkpoint_print": 200
+  }
+}
