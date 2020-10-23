@@ -102,7 +102,7 @@ class ModelGAN(ModelBase):
             else:
                 raise NotImplementedError('Loss type [{:s}] not recognized.'.format(F_lossfn_type))
             self.F_lossfn_weight = self.opt_train['F_lossfn_weight']
-            self.netF = define_F(self.opt, use_bn=False).to(self.device)
+            # self.netF = define_F(self.opt, use_bn=False).to(self.device)
         else:
             print('Do not use feature loss.')
             self.F_lossfn = None
