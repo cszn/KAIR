@@ -61,7 +61,7 @@ class DatasetSRMD(data.Dataset):
         # kernel
         # ------------------------------------
         if self.opt['phase'] == 'train':
-            l_max = 50
+            l_max = 10
             theta = np.pi*np.random.rand(1)
             l1 = 0.1+l_max*np.random.rand(1)
             l2 = 0.1+(l1-0.1)*np.random.rand(1)
