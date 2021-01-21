@@ -5,6 +5,8 @@
 
 _______
 
+- **_News (2021-01)_**: [BSRNet](https://github.com/cszn/BSRNet) for blind real image super-resolution will be added.
+
 - **_Pull requests are welcome!_**
 
 - **Correction (2020-10)**: If you use multiple GPUs for GAN training, remove or comment [Line 105](https://github.com/cszn/KAIR/blob/e52a6944c6a40ba81b88430ffe38fd6517e0449e/models/model_gan.py#L105) to enable `DataParallel` for fast training
