@@ -5,7 +5,7 @@
 
 _______
 
-- **_News (2021-01)_**: [BSRNet](https://github.com/cszn/BSRNet) for blind real image super-resolution will be added.
+- **_News (2021-01)_**: [BSRGAN](https://github.com/cszn/BSRGAN) for blind real image super-resolution will be added.
 
 - **_Pull requests are welcome!_**
 
