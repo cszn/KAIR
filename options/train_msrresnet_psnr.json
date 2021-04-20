@@ -2,6 +2,7 @@
   "task": "msrresnet_psnr"     //  root/task/images-models-options, pay attention to the difference between "msrresnet0" and "msrresnet1"
   , "model": "plain" // "plain" | "plain2" if two inputs
   , "gpu_ids": [0]
+  , "dist": true
 
   , "scale": 4       // broadcast to "netG" if SISR
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
