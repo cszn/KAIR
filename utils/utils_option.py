@@ -92,6 +92,16 @@ def parse(opt_path, is_train=True):
     os.environ['CUDA_VISIBLE_DEVICES'] = gpu_list
     print('export CUDA_VISIBLE_DEVICES=' + gpu_list)
 
+    # ----------------------------------------
+    # default setting for distributeddataparallel
+    # ----------------------------------------
+    if 'find_unused_parameters' not in opt:
+        opt['find_unused_parameters'] = True
+    if 'dist' not in opt:
+        opt['dist'] = False
+    opt['num_gpu'] = len(opt['gpu_ids'])
+    print('number of GPUs is: ' + str(opt['num_gpu']))
+
     return opt
 
 
