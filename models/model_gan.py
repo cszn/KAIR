@@ -18,13 +18,13 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         # define network
         # ------------------------------------
-        self.netG = define_G(opt).to(self.device)
-        self.netG = DataParallel(self.netG)
+        self.netG = define_G(opt)
+        self.netG = self.model_to_device(self.netG)
         if self.is_train:
-            self.netF = define_F(opt).to(self.device)
-            self.netD = define_D(opt).to(self.device)
-            self.netF = DataParallel(self.netF)
-            self.netD = DataParallel(self.netD)
+            self.netF = define_F(opt)
+            self.netD = define_D(opt)
+            self.netF = self.model_to_device(self.netF)
+            self.netD = self.model_to_device(self.netD)
 
     """
     # ----------------------------------------
