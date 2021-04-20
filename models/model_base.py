@@ -95,7 +95,7 @@ class ModelBase():
         """Model to device. It also warps models with DistributedDataParallel
         or DataParallel.
         Args:
-            net (nn.Module)
+            network (nn.Module)
         """
         network = network.to(self.device)
         if self.opt['dist']:
@@ -109,8 +109,7 @@ class ModelBase():
     # network name and number of parameters
     # ----------------------------------------
     def describe_network(self, network):
-        if isinstance(network, nn.DataParallel):
-            network = network.module
+        network = self.get_bare_model(network)
         msg = '\n'
         msg += 'Networks name: {}'.format(network.__class__.__name__) + '\n'
         msg += 'Params number: {}'.format(sum(map(lambda x: x.numel(), network.parameters()))) + '\n'
@@ -121,8 +120,7 @@ class ModelBase():
     # parameters description
     # ----------------------------------------
     def describe_params(self, network):
-        if isinstance(network, nn.DataParallel):
-            network = network.module
+        network = self.get_bare_model(network)
         msg = '\n'
         msg += ' | {:^6s} | {:^6s} | {:^6s} | {:^6s} || {:<20s}'.format('mean', 'min', 'max', 'std', 'shape', 'param_name') + '\n'
         for name, param in network.state_dict().items():
@@ -144,8 +142,7 @@ class ModelBase():
     def save_network(self, save_dir, network, network_label, iter_label):
         save_filename = '{}_{}.pth'.format(iter_label, network_label)
         save_path = os.path.join(save_dir, save_filename)
-        if isinstance(network, nn.DataParallel):
-            network = network.module
+        network = self.get_bare_model(network)
         state_dict = network.state_dict()
         for key, param in state_dict.items():
             state_dict[key] = param.cpu()
@@ -155,8 +152,7 @@ class ModelBase():
     # load the state_dict of the network
     # ----------------------------------------
     def load_network(self, load_path, network, strict=True):
-        if isinstance(network, nn.DataParallel):
-            network = network.module
+        network = self.get_bare_model(network)
         network.load_state_dict(torch.load(load_path), strict=strict)
 
     """
