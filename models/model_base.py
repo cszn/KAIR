@@ -2,6 +2,7 @@ import os
 import torch
 import torch.nn as nn
 from utils.utils_bnorm import merge_bn, tidy_sequential
+from torch.nn.parallel import DataParallel, DistributedDataParallel
 
 
 class ModelBase():
@@ -81,6 +82,28 @@ class ModelBase():
 
     def info_params(self):
         pass
+
+    def get_bare_model(self, network):
+        """Get bare model, especially under wrapping with
+        DistributedDataParallel or DataParallel.
+        """
+        if isinstance(network, (DataParallel, DistributedDataParallel)):
+            network = network.module
+        return network
+
+    def model_to_device(self, network):
+        """Model to device. It also warps models with DistributedDataParallel
+        or DataParallel.
+        Args:
+            net (nn.Module)
+        """
+        network = network.to(self.device)
+        if self.opt['dist']:
+            find_unused_parameters = self.opt['find_unused_parameters']
+            network = DistributedDataParallel(network, device_ids=[torch.cuda.current_device()], find_unused_parameters=find_unused_parameters)
+        else:
+            network = DataParallel(network)
+        return network
 
     # ----------------------------------------
     # network name and number of parameters
