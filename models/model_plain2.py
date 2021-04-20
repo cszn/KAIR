@@ -20,8 +20,8 @@ class ModelPlain2(ModelBase):
         # ------------------------------------
         # define network
         # ------------------------------------
-        self.netG = define_G(opt).to(self.device)
-        self.netG = DataParallel(self.netG)
+        self.netG = define_G(opt)
+        self.netG = self.model_to_device(self.netG)
 
     """
     # ----------------------------------------
