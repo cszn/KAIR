@@ -159,6 +159,21 @@ def define_G(opt):
                    )
 
     # ----------------------------------------
+    # Deep Residual U-Net (drunet)
+    # ----------------------------------------
+    elif net_type == 'drunet':
+        from models.network_unet import UNetRes as net
+        netG = net(in_nc=opt_net['in_nc'],
+                   out_nc=opt_net['out_nc'],
+                   nc=opt_net['nc'],
+                   nb=opt_net['nb'],
+                   act_mode=opt_net['act_mode'],
+                   downsample_mode=opt_net['downsample_mode'],
+                   upsample_mode=opt_net['upsample_mode'],
+                   bias=opt_net['bias'])
+
+
+    # ----------------------------------------
     # others
     # ----------------------------------------
     # TODO
