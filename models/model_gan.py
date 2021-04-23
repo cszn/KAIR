@@ -185,7 +185,7 @@ class ModelGAN(ModelBase):
                 loss_G_total += F_loss                 # 2) VGG feature loss
 
             pred_g_fake = self.netD(self.E)
-            if self.opt['train']['gan_type'] == 'gan':
+            if self.opt['train']['gan_type'] in ['gan', 'lsgan', 'wgangp']:
                 D_loss = self.D_lossfn_weight * self.D_lossfn(pred_g_fake, True)
             elif self.opt['train']['gan_type'] == 'ragan':
                 pred_d_real = self.netD(self.var_ref).detach()
