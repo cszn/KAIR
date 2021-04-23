@@ -208,7 +208,7 @@ class ModelGAN(ModelBase):
 
         pred_d_real = self.netD(self.var_ref)          # 1) real data
         pred_d_fake = self.netD(self.E.detach())       # 2) fake data, detach to avoid BP to G
-        if self.opt['train']['gan_type'] == 'gan':
+        if self.opt['train']['gan_type'] in ['gan', 'lsgan', 'wgangp']:
             l_d_real = self.D_lossfn(pred_d_real, True)
             l_d_fake = self.D_lossfn(pred_d_fake, False)
             loss_D_total = l_d_real + l_d_fake
