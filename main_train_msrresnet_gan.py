@@ -39,6 +39,9 @@ def main(json_path='options/train_msrresnet_gan.json'):
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-opt', type=str, default=json_path, help='Path to option JSON file.')
+    parser.add_argument('--launcher', default='pytorch', help='job launcher')
+    parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
     util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
@@ -67,6 +70,7 @@ def main(json_path='options/train_msrresnet_gan.json'):
     # return None for missing key
     # ----------------------------------------
     opt = option.dict_to_nonedict(opt)
+    opt['dist'] = parser.parse_args().dist
 
     # ----------------------------------------
     # configure logger
@@ -75,6 +79,13 @@ def main(json_path='options/train_msrresnet_gan.json'):
     utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
     logger = logging.getLogger(logger_name)
     logger.info(option.dict2str(opt))
+
+    # ----------------------------------------
+    # distributed settings
+    # ----------------------------------------
+    if opt['dist']:
+        init_dist('pytorch')
+    opt['rank'], opt['world_size'] = get_dist_info()
 
     # ----------------------------------------
     # seed
@@ -103,12 +114,23 @@ def main(json_path='options/train_msrresnet_gan.json'):
             train_set = define_Dataset(dataset_opt)
             train_size = int(math.ceil(len(train_set) / dataset_opt['dataloader_batch_size']))
             logger.info('Number of train images: {:,d}, iters: {:,d}'.format(len(train_set), train_size))
-            train_loader = DataLoader(train_set,
-                                      batch_size=dataset_opt['dataloader_batch_size'],
-                                      shuffle=dataset_opt['dataloader_shuffle'],
-                                      num_workers=dataset_opt['dataloader_num_workers'],
-                                      drop_last=True,
-                                      pin_memory=True)
+            if opt['dist']:
+                train_sampler = DistributedSampler(train_set, shuffle=dataset_opt['dataloader_shuffle'], drop_last=True, seed=seed)
+                train_loader = DataLoader(train_set,
+                                          batch_size=dataset_opt['dataloader_batch_size']//opt['num_gpu'],
+                                          shuffle=False,
+                                          num_workers=dataset_opt['dataloader_num_workers']//opt['num_gpu'],
+                                          drop_last=True,
+                                          pin_memory=True,
+                                          sampler=train_sampler)
+            else:
+                train_loader = DataLoader(train_set,
+                                          batch_size=dataset_opt['dataloader_batch_size'],
+                                          shuffle=dataset_opt['dataloader_shuffle'],
+                                          num_workers=dataset_opt['dataloader_num_workers'],
+                                          drop_last=True,
+                                          pin_memory=True)
+
         elif phase == 'test':
             test_set = define_Dataset(dataset_opt)
             test_loader = DataLoader(test_set, batch_size=1,
@@ -126,8 +148,9 @@ def main(json_path='options/train_msrresnet_gan.json'):
     model = define_Model(opt)
 
     model.init_train()
-    logger.info(model.info_network())
-    logger.info(model.info_params())
+    if opt['rank'] == 0:
+        logger.info(model.info_network())
+        logger.info(model.info_params())
 
     '''
     # ----------------------------------------
@@ -158,7 +181,7 @@ def main(json_path='options/train_msrresnet_gan.json'):
             # -------------------------------
             # 4) training information
             # -------------------------------
-            if current_step % opt['train']['checkpoint_print'] == 0:
+            if current_step % opt['train']['checkpoint_print'] == 0 and opt['rank'] == 0:
                 logs = model.current_log()  # such as loss
                 message = '<epoch:{:3d}, iter:{:8,d}, lr:{:.3e}> '.format(epoch, current_step, model.current_learning_rate())
                 for k, v in logs.items():  # merge log information into message
@@ -168,14 +191,14 @@ def main(json_path='options/train_msrresnet_gan.json'):
             # -------------------------------
             # 5) save model
             # -------------------------------
-            if current_step % opt['train']['checkpoint_save'] == 0:
+            if current_step % opt['train']['checkpoint_save'] == 0 and opt['rank'] == 0:
                 logger.info('Saving the model.')
                 model.save(current_step)
 
             # -------------------------------
             # 6) testing
             # -------------------------------
-            if current_step % opt['train']['checkpoint_test'] == 0:
+            if current_step % opt['train']['checkpoint_test'] == 0 and opt['rank'] == 0:
 
                 avg_psnr = 0.0
                 idx = 0
