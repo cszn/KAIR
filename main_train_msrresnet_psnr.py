@@ -7,6 +7,7 @@ import numpy as np
 from collections import OrderedDict
 import logging
 from torch.utils.data import DataLoader
+from torch.utils.data.distributed import DistributedSampler
 import torch
 
 from utils import utils_logger
@@ -42,6 +43,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     parser.add_argument('-opt', type=str, default=json_path, help='Path to option JSON file.')
     parser.add_argument('--launcher', default='pytorch', help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
+    parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
     util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
@@ -66,6 +68,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     # return None for missing key
     # ----------------------------------------
     opt = option.dict_to_nonedict(opt)
+    opt['dist'] = parser.parse_args().dist
 
     # ----------------------------------------
     # configure logger
