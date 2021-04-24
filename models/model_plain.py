@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch.optim import Adam
-from torch.nn.parallel import DataParallel  # , DistributedDataParallel
 
 from models.select_network import define_G
 from models.model_base import ModelBase
