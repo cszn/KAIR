@@ -3,11 +3,11 @@ import torch
 import torch.nn as nn
 from torch.optim import lr_scheduler
 from torch.optim import Adam
-from torch.nn.parallel import DataParallel  # , DistributedDataParallel
+# from torch.nn.parallel import DataParallel  # , DistributedDataParallel
 
-from models.select_network import define_G, define_D, define_F
+from models.select_network import define_G, define_D
 from models.model_base import ModelBase
-from models.loss import GANLoss
+from models.loss import GANLoss, PerceptualLoss
 from models.loss_ssim import SSIMLoss
 
 
@@ -21,9 +21,7 @@ class ModelGAN(ModelBase):
         self.netG = define_G(opt)
         self.netG = self.model_to_device(self.netG)
         if self.is_train:
-            self.netF = define_F(opt)
             self.netD = define_D(opt)
-            self.netF = self.model_to_device(self.netF)
             self.netD = self.model_to_device(self.netD)
 
     """
@@ -95,14 +93,8 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         if self.opt_train['F_lossfn_weight'] > 0:
             F_lossfn_type = self.opt_train['F_lossfn_type']
-            if F_lossfn_type == 'l1':
-                self.F_lossfn = nn.L1Loss().to(self.device)
-            elif F_lossfn_type == 'l2':
-                self.F_lossfn = nn.MSELoss().to(self.device)
-            else:
-                raise NotImplementedError('Loss type [{:s}] not recognized.'.format(F_lossfn_type))
+            self.F_lossfn = PerceptualLoss(lossfn_type=F_lossfn_type).to(self.device)
             self.F_lossfn_weight = self.opt_train['F_lossfn_weight']
-            # self.netF = define_F(self.opt, use_bn=False).to(self.device)
         else:
             print('Do not use feature loss.')
             self.F_lossfn = None
@@ -179,9 +171,7 @@ class ModelGAN(ModelBase):
                 G_loss = self.G_lossfn_weight * self.G_lossfn(self.E, self.H)
                 loss_G_total += G_loss                 # 1) pixel loss
             if self.opt_train['F_lossfn_weight'] > 0:
-                real_fea = self.netF(self.H).detach()
-                fake_fea = self.netF(self.E)
-                F_loss = self.F_lossfn_weight * self.F_lossfn(fake_fea, real_fea)
+                F_loss = self.F_lossfn_weight * self.F_lossfn(self.E, self.H)
                 loss_G_total += F_loss                 # 2) VGG feature loss
 
             pred_g_fake = self.netD(self.E)
@@ -204,20 +194,46 @@ class ModelGAN(ModelBase):
             p.requires_grad = True
 
         self.D_optimizer.zero_grad()
-        loss_D_total = 0
 
-        pred_d_real = self.netD(self.var_ref)          # 1) real data
-        pred_d_fake = self.netD(self.E.detach())       # 2) fake data, detach to avoid BP to G
-        if self.opt['train']['gan_type'] in ['gan', 'lsgan', 'wgangp']:
-            l_d_real = self.D_lossfn(pred_d_real, True)
-            l_d_fake = self.D_lossfn(pred_d_fake, False)
-            loss_D_total = l_d_real + l_d_fake
-        elif self.opt['train']['gan_type'] == 'ragan':
-            l_d_real = self.D_lossfn(pred_d_real - torch.mean(pred_d_fake), True)
-            l_d_fake = self.D_lossfn(pred_d_fake - torch.mean(pred_d_real), False)
-            loss_D_total = (l_d_real + l_d_fake) / 2
+        if self.opt['dist']:
+            # In order to avoid the error in distributed training:
+            # "Error detected in CudnnBatchNormBackward: RuntimeError: one of
+            # the variables needed for gradient computation has been modified by
+            # an inplace operation",
+            # we separate the backwards for real and fake, and also detach the
+            # tensor for calculating mean.
+            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgangp', 'wgansoftplus']:
+                # real
+                pred_d_real = self.netD(self.var_ref)          # 1) real data
+                l_d_real = self.D_lossfn(pred_d_real, True)
+                l_d_real.backward()
+                # fake
+                pred_d_fake = self.netD(self.E.detach())       # 2) fake data, detach to avoid BP to G
+                l_d_fake = self.D_lossfn(pred_d_fake, False)
+                l_d_fake.backward()
+            elif self.opt_train['gan_type'] == 'ragan':
+                # real
+                pred_d_real = self.netD(self.var_ref)          # 1) real data
+                pred_d_fake = self.netD(self.E).detach()       # 2) fake data, detach to avoid BP to G
+                l_d_real = 0.5 * self.D_lossfn(pred_d_real - torch.mean(pred_d_fake, 0, True), True)
+                # fake
+                pred_d_fake = self.netD(self.E.detach())
+                l_d_fake = 0.5 * self.D_lossfn(pred_d_fake - torch.mean(pred_d_real, 0, True), False)
+                l_d_fake.backward()
+        else:
+            loss_D_total = 0
+            pred_d_real = self.netD(self.var_ref)          # 1) real data
+            pred_d_fake = self.netD(self.E.detach())       # 2) fake data, detach to avoid BP to G
+            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgangp', 'wgansoftplus']:
+                l_d_real = self.D_lossfn(pred_d_real, True)
+                l_d_fake = self.D_lossfn(pred_d_fake, False)
+                loss_D_total = l_d_real + l_d_fake
+            elif self.opt_train['gan_type'] == 'ragan':
+                l_d_real = self.D_lossfn(pred_d_real - torch.mean(pred_d_fake, 0, True), True)
+                l_d_fake = self.D_lossfn(pred_d_fake - torch.mean(pred_d_real, 0, True), False)
+                loss_D_total = (l_d_real + l_d_fake) / 2
+            loss_D_total.backward()
 
-        loss_D_total.backward()
         self.D_optimizer.step()
 
         # ------------------------------------
@@ -225,13 +241,13 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         if current_step % self.D_update_ratio == 0 and current_step > self.D_init_iters:
             if self.opt_train['G_lossfn_weight'] > 0:
-                self.log_dict['G_loss'] = G_loss.item()  # /self.E.size()[0]
+                self.log_dict['G_loss'] = G_loss.item()
             if self.opt_train['F_lossfn_weight'] > 0:
-                self.log_dict['F_loss'] = F_loss.item()  # /self.E.size()[0]
-            self.log_dict['D_loss'] = D_loss.item()  # /self.E.size()[0]
+                self.log_dict['F_loss'] = F_loss.item()
+            self.log_dict['D_loss'] = D_loss.item()
 
-        self.log_dict['l_d_real'] = l_d_real.item()  # /self.E.size()[0]
-        self.log_dict['l_d_fake'] = l_d_fake.item()  # /self.E.size()[0]
+        #self.log_dict['l_d_real'] = l_d_real.item()
+        #self.log_dict['l_d_fake'] = l_d_fake.item()
         self.log_dict['D_real'] = torch.mean(pred_d_real.detach())
         self.log_dict['D_fake'] = torch.mean(pred_d_fake.detach())
 
@@ -276,9 +292,6 @@ class ModelGAN(ModelBase):
         if self.is_train:
             msg = self.describe_network(self.netD)
             print(msg)
-            if self.opt_train['F_lossfn_weight'] > 0:
-                msg = self.describe_network(self.netF)
-                print(msg)
 
     # ----------------------------------------
     # print params
@@ -294,8 +307,6 @@ class ModelGAN(ModelBase):
         msg = self.describe_network(self.netG)
         if self.is_train:
             msg += self.describe_network(self.netD)
-            if self.opt_train['F_lossfn_weight'] > 0:
-                msg += self.describe_network(self.netF)
         return msg
 
     # ----------------------------------------
