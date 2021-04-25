@@ -112,7 +112,7 @@ Testing
 
 [trainsets](trainsets)
 ----------
-- [https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format](https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format)
+- [https://github.com/xinntao/BasicSR/blob/master/docs/DatasetPreparation.md](https://github.com/xinntao/BasicSR/blob/master/docs/DatasetPreparation.md)
 - [train400](https://github.com/cszn/DnCNN/tree/master/TrainingCodes/DnCNN_TrainingCodes_v1.0/data)
 - [DIV2K](https://data.vision.ee.ethz.ch/cvl/DIV2K/)
 - [Flickr2K](https://cv.snu.ac.kr/research/EDSR/Flickr2K.tar)
@@ -120,7 +120,7 @@ Testing
 
 [testsets](testsets)
 -----------
-- [https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format](https://github.com/xinntao/BasicSR/wiki/Prepare-datasets-in-LMDB-format)
+- [https://github.com/xinntao/BasicSR/blob/master/docs/DatasetPreparation.md](https://github.com/xinntao/BasicSR/blob/master/docs/DatasetPreparation.md)
 - [set12](https://github.com/cszn/FFDNet/tree/master/testsets)
 - [bsd68](https://github.com/cszn/FFDNet/tree/master/testsets)
 - [cbsd68](https://github.com/cszn/FFDNet/tree/master/testsets)
