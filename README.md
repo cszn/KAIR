@@ -30,10 +30,19 @@ num_parameters = sum(map(lambda x: x.numel(), model.parameters()))
 logger.info('{:>16s} : {:<.4f} [M]'.format('#Params', num_parameters/10**6))
 ```
 
-
 - **News (2020-6)**: Add [USRNet (CVPR 2020)](https://github.com/cszn/USRNet) for training and testing.
   - [Network Architecture](https://github.com/cszn/KAIR/blob/3357aa0e54b81b1e26ceb1cee990f39add235e17/models/network_usrnet.py#L309)
   - [Dataset](https://github.com/cszn/KAIR/blob/6c852636d3715bb281637863822a42c72739122a/data/dataset_usrnet.py#L16)
+
+
+Clone repo
+----------
+```
+git clone https://github.com/cszn/KAIR.git
+```
+
+
+
 
 Training
 ----------
