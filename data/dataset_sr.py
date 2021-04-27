@@ -88,7 +88,7 @@ class DatasetSR(data.Dataset):
             # --------------------------------
             # augmentation - flip and/or rotate
             # --------------------------------
-            mode = np.random.randint(0, 8)
+            mode = random.randint(0, 7)
             img_L, img_H = util.augment_img(img_L, mode=mode), util.augment_img(img_H, mode=mode)
 
         # ------------------------------------
