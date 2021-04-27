@@ -59,7 +59,7 @@ class DatasetDnCNN(data.Dataset):
             # --------------------------------
             # augmentation - flip, rotate
             # --------------------------------
-            mode = np.random.randint(0, 8)
+            mode = random.randint(0, 7)
             patch_H = util.augment_img(patch_H, mode=mode)
 
             # --------------------------------
