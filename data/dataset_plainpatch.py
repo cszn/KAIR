@@ -109,7 +109,7 @@ class DatasetPlainPatch(data.Dataset):
             # --------------------------------
             # augmentation - flip and/or rotate
             # --------------------------------
-            mode = np.random.randint(0, 8)
+            mode = random.randint(0, 7)
             patch_L = util.augment_img(patch_L, mode=mode)
             patch_H = util.augment_img(patch_H, mode=mode)
 
