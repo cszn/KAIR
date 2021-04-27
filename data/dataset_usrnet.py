@@ -74,19 +74,19 @@ class DatasetUSRNet(data.Dataset):
             # ---------------------------
             # 2) kernel
             # ---------------------------
-            r_value = np.random.randint(0, 8)
+            r_value = random.randint(0, 7)
             if r_value>3:
                 k = utils_deblur.blurkernel_synthesis(h=25)  # motion blur
             else:
                 sf_k = random.choice(self.scales)
                 k = utils_sisr.gen_kernel(scale_factor=np.array([sf_k, sf_k]))  # Gaussian blur
-                mode_k = np.random.randint(0, 8)
+                mode_k = random.randint(0, 7)
                 k = util.augment_img(k, mode=mode_k)
 
             # ---------------------------
             # 3) noise level
             # ---------------------------
-            if np.random.randint(0, 8) == 1:
+            if random.randint(0, 8) == 1:
                 noise_level = 0/255.0
             else:
                 noise_level = np.random.randint(0, self.sigma_max)/255.0
