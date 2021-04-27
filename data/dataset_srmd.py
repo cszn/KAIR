@@ -62,9 +62,9 @@ class DatasetSRMD(data.Dataset):
         # ------------------------------------
         if self.opt['phase'] == 'train':
             l_max = 10
-            theta = np.pi*np.random.rand(1)
-            l1 = 0.1+l_max*np.random.rand(1)
-            l2 = 0.1+(l1-0.1)*np.random.rand(1)
+            theta = np.pi*random.random()
+            l1 = 0.1+l_max*random.random()
+            l2 = 0.1+(l1-0.1)*random.random()
 
             kernel = utils_sisr.anisotropic_Gaussian(ksize=self.ksize, theta=theta[0], l1=l1[0], l2=l2[0])
         else:
@@ -105,7 +105,7 @@ class DatasetSRMD(data.Dataset):
             # --------------------------------
             # augmentation - flip and/or rotate
             # --------------------------------
-            mode = np.random.randint(0, 8)
+            mode = random.randint(0, 7)
             img_L, img_H = util.augment_img(img_L, mode=mode), util.augment_img(img_H, mode=mode)
 
             # --------------------------------
