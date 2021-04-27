@@ -64,7 +64,7 @@ class DatasetPlain(data.Dataset):
             # --------------------------------
             # augmentation - flip and/or rotate
             # --------------------------------
-            mode = np.random.randint(0, 8)
+            mode = random.randint(0, 7)
             patch_L, patch_H = util.image_augment(patch_L, mode=mode), util.image_augment(patch_H, mode=mode)
 
             # --------------------------------
