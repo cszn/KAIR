@@ -152,8 +152,8 @@ def main(json_path='options/train_drunet.json'):
     model = define_Model(opt)
 
     model.init_train()
-	if opt['rank'] == 0:
-		logger.info(model.info_params())
+    if opt['rank'] == 0:
+	logger.info(model.info_params())
 
     '''
     # ----------------------------------------
@@ -255,6 +255,4 @@ def main(json_path='options/train_drunet.json'):
 
 
 if __name__ == '__main__':
-    #set_start_method('spawn')
-  #  print(torch.multiprocessing.get_start_method())
     main()
