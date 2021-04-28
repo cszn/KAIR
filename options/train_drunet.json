@@ -34,7 +34,7 @@
 
   , "netG": {
     "net_type": "drunet" // "dncnn" | "fdncnn" | "ffdnet" | "srmd" | "dpsr" | "srresnet0" |  "srresnet1" | "rrdbnet" 
-    , "in_nc": 3        // input channel number
+    , "in_nc": 4        // input channel number
     , "out_nc": 3       // ouput channel number
     , "nc": [64, 128, 256, 512]          // 64 for "dncnn"
     , "nb": 4          // 17 for "dncnn", 20 for dncnn3, 16 for "srresnet"
