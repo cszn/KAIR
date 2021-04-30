@@ -51,7 +51,7 @@ def main(json_path='options/train_drunet.json'):
     parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
-    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
+    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key)) if opt['rank'] == 0 else None
 
     # ----------------------------------------
     # update opt
@@ -67,7 +67,7 @@ def main(json_path='options/train_drunet.json'):
     # ----------------------------------------
     # save opt to  a '../option.json' file
     # ----------------------------------------
-    option.save(opt)
+    option.save(opt) if opt['rank'] == 0 else None
 
     # ----------------------------------------
     # return None for missing key
@@ -78,10 +78,11 @@ def main(json_path='options/train_drunet.json'):
     # ----------------------------------------
     # configure logger
     # ----------------------------------------
-    logger_name = 'train'
-    utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
-    logger = logging.getLogger(logger_name)
-    logger.info(option.dict2str(opt))
+    if opt['rank'] == 0:
+        logger_name = 'train'
+        utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
+        logger = logging.getLogger(logger_name)
+        logger.info(option.dict2str(opt))
 
     # ----------------------------------------
     # distributed settings
@@ -97,7 +98,7 @@ def main(json_path='options/train_drunet.json'):
     seed = opt['train']['manual_seed']
     if seed is None:
         seed = random.randint(1, 10000)
-    logger.info('Random seed: {}'.format(seed))
+    logger.info('Random seed: {}'.format(seed)) if opt['rank'] == 0 else None
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -117,7 +118,7 @@ def main(json_path='options/train_drunet.json'):
         if phase == 'train':
             train_set = define_Dataset(dataset_opt)
             train_size = int(math.ceil(len(train_set) / dataset_opt['dataloader_batch_size']))
-            logger.info('Number of train images: {:,d}, iters: {:,d}'.format(len(train_set), train_size))
+            logger.info('Number of train images: {:,d}, iters: {:,d}'.format(len(train_set), train_size)) if opt['rank'] == 0 else None
             if opt['dist']:
                 train_sampler = DistributedSampler(train_set, shuffle=dataset_opt['dataloader_shuffle'], drop_last=True, seed=seed+opt['rank'])
                 train_loader = DataLoader(train_set,
@@ -150,10 +151,8 @@ def main(json_path='options/train_drunet.json'):
     '''
 
     model = define_Model(opt)
-
     model.init_train()
-    if opt['rank'] == 0:
-	logger.info(model.info_params())
+    logger.info(model.info_params()) if opt['rank'] == 0 else None
 
     '''
     # ----------------------------------------
@@ -248,10 +247,6 @@ def main(json_path='options/train_drunet.json'):
 
                 # testing log
                 logger.info('<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, avg_psnr))
-
-    logger.info('Saving the final model.')
-    model.save('latest')
-    logger.info('End of training.')
 
 
 if __name__ == '__main__':
