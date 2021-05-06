@@ -75,7 +75,8 @@ def main(json_path='options/train_msrresnet_gan.json'):
     # ----------------------------------------
     # save opt to  a '../option.json' file
     # ----------------------------------------
-    option.save(opt)
+    if opt['rank'] == 0:
+        option.save(opt)
 
     # ----------------------------------------
     # return None for missing key
@@ -88,7 +89,8 @@ def main(json_path='options/train_msrresnet_gan.json'):
     logger_name = 'train'
     utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
     logger = logging.getLogger(logger_name)
-    logger.info(option.dict2str(opt))
+    if opt['rank'] == 0:
+        logger.info(option.dict2str(opt))
 
     # ----------------------------------------
     # seed
