@@ -45,7 +45,17 @@ def main(json_path='options/train_msrresnet_gan.json'):
     parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
-    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
+    opt['dist'] = parser.parse_args().dist
+
+    # ----------------------------------------
+    # distributed settings
+    # ----------------------------------------
+    if opt['dist']:
+        init_dist('pytorch')
+    opt['rank'], opt['world_size'] = get_dist_info()
+
+    if opt['rank'] == 0:
+        util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
 
     # ----------------------------------------
     # update opt
@@ -71,7 +81,6 @@ def main(json_path='options/train_msrresnet_gan.json'):
     # return None for missing key
     # ----------------------------------------
     opt = option.dict_to_nonedict(opt)
-    opt['dist'] = parser.parse_args().dist
 
     # ----------------------------------------
     # configure logger
@@ -80,13 +89,6 @@ def main(json_path='options/train_msrresnet_gan.json'):
     utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
     logger = logging.getLogger(logger_name)
     logger.info(option.dict2str(opt))
-
-    # ----------------------------------------
-    # distributed settings
-    # ----------------------------------------
-    if opt['dist']:
-        init_dist('pytorch')
-    opt['rank'], opt['world_size'] = get_dist_info()
 
     # ----------------------------------------
     # seed
