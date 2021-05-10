@@ -71,7 +71,7 @@ class GANLoss(nn.Module):
             self.loss = nn.BCEWithLogitsLoss()
         elif self.gan_type == 'lsgan':
             self.loss = nn.MSELoss()
-        elif self.gan_type == 'wgan-gp':
+        elif self.gan_type == 'wgan':
             def wgan_loss(input, target):
                 # target is boolean
                 return -1 * input.mean() if target else input.mean()
@@ -87,7 +87,7 @@ class GANLoss(nn.Module):
             raise NotImplementedError('GAN type [{:s}] is not found'.format(self.gan_type))
 
     def get_target_label(self, input, target_is_real):
-        if self.gan_type in ['wgan-gp', 'softplusgan']:
+        if self.gan_type in ['wgan', 'softplusgan']:
             return target_is_real
         if target_is_real:
             return torch.empty_like(input).fill_(self.real_label_val)
