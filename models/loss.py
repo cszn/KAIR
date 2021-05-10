@@ -52,7 +52,7 @@ class PerceptualLoss(nn.Module):
         Returns:
             Tensor: Forward results.
         """
-        x_vgg, gt_vgg = self.vgg(x), self.vgg(gt.detach())
+        x_vgg, gt_vgg = self.vgg(x), self.vgg(gt).detach()
         loss = self.lossfn(x_vgg, gt_vgg)
         return loss
 
