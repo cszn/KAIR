@@ -93,10 +93,12 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         if self.opt_train['F_lossfn_weight'] > 0:
             F_lossfn_type = self.opt_train['F_lossfn_type']
+            F_use_input_norm = self.opt_train['F_use_input_norm']
+            F_feature_layer = self.opt_train['F_feature_layer']
             if self.opt['dist']:
-                self.F_lossfn = PerceptualLoss(lossfn_type=F_lossfn_type).to(self.device)
+                self.F_lossfn = PerceptualLoss(feature_layer=F_feature_layer, use_input_norm=F_use_input_norm, lossfn_type=F_lossfn_type).to(self.device)
             else:
-                self.F_lossfn = PerceptualLoss(lossfn_type=F_lossfn_type)
+                self.F_lossfn = PerceptualLoss(feature_layer=F_feature_layer, use_input_norm=F_use_input_norm, lossfn_type=F_lossfn_type)
                 self.model_to_device(self.F_lossfn.vgg)
                 self.F_lossfn.lossfn.to(self.device)
             self.F_lossfn_weight = self.opt_train['F_lossfn_weight']
