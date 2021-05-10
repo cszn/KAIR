@@ -64,6 +64,9 @@ class ModelBase():
     def current_learning_rate(self):
         return self.schedulers[0].get_lr()[0]
 
+    def requires_grad(self, model, flag=True):
+        for p in model.parameters():
+            p.requires_grad = flag
 
     """
     # ----------------------------------------
