@@ -42,7 +42,7 @@ class PerceptualLoss(nn.Module):
         if self.lossfn_type == 'l1':
             self.lossfn = nn.L1Loss()
         else:
-            self.lossfn = nn.L2loss()
+            self.lossfn = nn.MSELoss()
 
     def forward(self, x, gt):
         """Forward function.
