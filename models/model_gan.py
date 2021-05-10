@@ -220,10 +220,11 @@ class ModelGAN(ModelBase):
                 # real
                 pred_d_real = self.netD(self.var_ref)          # 1) real data
                 pred_d_fake = self.netD(self.E).detach()       # 2) fake data, detach to avoid BP to G
-                l_d_real = 0.5 * self.D_lossfn(pred_d_real - torch.mean(pred_d_fake, 0, True), True)
+                l_d_real = 0.5 * self.D_lossfn(pred_d_real - torch.mean(pred_d_fake), True)
+                l_d_real.backward()
                 # fake
                 pred_d_fake = self.netD(self.E.detach())
-                l_d_fake = 0.5 * self.D_lossfn(pred_d_fake - torch.mean(pred_d_real, 0, True), False)
+                l_d_fake = 0.5 * self.D_lossfn(pred_d_fake - torch.mean(pred_d_real.detach()), False)
                 l_d_fake.backward()
         else:
             loss_D_total = 0
@@ -234,8 +235,8 @@ class ModelGAN(ModelBase):
                 l_d_fake = self.D_lossfn(pred_d_fake, False)
                 loss_D_total = l_d_real + l_d_fake
             elif self.opt_train['gan_type'] == 'ragan':
-                l_d_real = self.D_lossfn(pred_d_real - torch.mean(pred_d_fake, 0, True), True)
-                l_d_fake = self.D_lossfn(pred_d_fake - torch.mean(pred_d_real, 0, True), False)
+                l_d_real = self.D_lossfn(pred_d_real - torch.mean(pred_d_fake), True)
+                l_d_fake = self.D_lossfn(pred_d_fake - torch.mean(pred_d_real), False)
                 loss_D_total = (l_d_real + l_d_fake) / 2
             loss_D_total.backward()
 
