@@ -7,6 +7,9 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 
 
+# ----------------------------------
+# init
+# ----------------------------------
 def init_dist(launcher, backend='nccl', **kwargs):
     if mp.get_start_method(allow_none=True) is None:
         mp.set_start_method('spawn')
@@ -56,6 +59,10 @@ def _init_dist_slurm(backend, port=None):
     dist.init_process_group(backend=backend)
 
 
+
+# ----------------------------------
+# get rank and world_size
+# ----------------------------------
 def get_dist_info():
     if dist.is_available():
         initialized = dist.is_initialized()
@@ -68,6 +75,26 @@ def get_dist_info():
         rank = 0
         world_size = 1
     return rank, world_size
+
+
+def get_rank():
+    if not dist.is_available():
+        return 0
+
+    if not dist.is_initialized():
+        return 0
+
+    return dist.get_rank()
+
+
+def get_world_size():
+    if not dist.is_available():
+        return 1
+
+    if not dist.is_initialized():
+        return 1
+
+    return dist.get_world_size()
 
 
 def master_only(func):
@@ -85,41 +112,9 @@ def master_only(func):
 
 
 
-def get_rank():
-    if not dist.is_available():
-        return 0
-
-    if not dist.is_initialized():
-        return 0
-
-    return dist.get_rank()
-
-
-def synchronize():
-    if not dist.is_available():
-        return
-
-    if not dist.is_initialized():
-        return
-
-    world_size = dist.get_world_size()
-
-    if world_size == 1:
-        return
-
-    dist.barrier()
-
-
-def get_world_size():
-    if not dist.is_available():
-        return 1
-
-    if not dist.is_initialized():
-        return 1
-
-    return dist.get_world_size()
-
-
+# ----------------------------------
+# operation across ranks
+# ----------------------------------
 def reduce_sum(tensor):
     if not dist.is_available():
         return tensor
