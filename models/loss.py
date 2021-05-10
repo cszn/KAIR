@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torchvision
+from torch.nn import functional as F
 
 
 # --------------------------------------------
@@ -76,11 +77,17 @@ class GANLoss(nn.Module):
                 return -1 * input.mean() if target else input.mean()
 
             self.loss = wgan_loss
+        elif self.gan_type == 'softplusgan':
+            def softplusgan_loss(input, target):
+                # target is boolean
+                return F.softplus(-input).mean() if target else F.softplus(input).mean()
+
+            self.loss = softplusgan_loss
         else:
             raise NotImplementedError('GAN type [{:s}] is not found'.format(self.gan_type))
 
     def get_target_label(self, input, target_is_real):
-        if self.gan_type == 'wgan-gp':
+        if self.gan_type in ['wgan-gp', 'softplusgan']:
             return target_is_real
         if target_is_real:
             return torch.empty_like(input).fill_(self.real_label_val)
@@ -122,26 +129,75 @@ class TVLoss(nn.Module):
         return t.size()[1] * t.size()[2] * t.size()[3]
 
 
-# --------------------------------------------
-# GradientPenaltyLoss
-# --------------------------------------------
-class GradientPenaltyLoss(nn.Module):
-    def __init__(self, device=torch.device('cpu')):
-        super(GradientPenaltyLoss, self).__init__()
-        self.register_buffer('grad_outputs', torch.Tensor())
-        self.grad_outputs = self.grad_outputs.to(device)
 
-    def get_grad_outputs(self, input):
-        if self.grad_outputs.size() != input.size():
-            self.grad_outputs.resize_(input.size()).fill_(1.0)
-        return self.grad_outputs
 
-    def forward(self, interp, interp_crit):
-        grad_outputs = self.get_grad_outputs(interp_crit)
-        grad_interp = torch.autograd.grad(outputs=interp_crit, inputs=interp, \
-            grad_outputs=grad_outputs, create_graph=True, retain_graph=True, only_inputs=True)[0]
-        grad_interp = grad_interp.view(grad_interp.size(0), -1)
-        grad_interp_norm = grad_interp.norm(2, dim=1)
 
-        loss = ((grad_interp_norm - 1)**2).mean()
-        return loss
+
+
+def r1_penalty(real_pred, real_img):
+    """R1 regularization for discriminator. The core idea is to
+        penalize the gradient on real data alone: when the
+        generator distribution produces the true data distribution
+        and the discriminator is equal to 0 on the data manifold, the
+        gradient penalty ensures that the discriminator cannot create
+        a non-zero gradient orthogonal to the data manifold without
+        suffering a loss in the GAN game.
+        Ref:
+        Eq. 9 in Which training methods for GANs do actually converge.
+        """
+    grad_real = autograd.grad(
+        outputs=real_pred.sum(), inputs=real_img, create_graph=True)[0]
+    grad_penalty = grad_real.pow(2).view(grad_real.shape[0], -1).sum(1).mean()
+    return grad_penalty
+
+
+def g_path_regularize(fake_img, latents, mean_path_length, decay=0.01):
+    noise = torch.randn_like(fake_img) / math.sqrt(
+        fake_img.shape[2] * fake_img.shape[3])
+    grad = autograd.grad(
+        outputs=(fake_img * noise).sum(), inputs=latents, create_graph=True)[0]
+    path_lengths = torch.sqrt(grad.pow(2).sum(2).mean(1))
+
+    path_mean = mean_path_length + decay * (
+        path_lengths.mean() - mean_path_length)
+
+    path_penalty = (path_lengths - path_mean).pow(2).mean()
+
+    return path_penalty, path_lengths.detach().mean(), path_mean.detach()
+
+
+def gradient_penalty_loss(discriminator, real_data, fake_data, weight=None):
+    """Calculate gradient penalty for wgan-gp.
+    Args:
+        discriminator (nn.Module): Network for the discriminator.
+        real_data (Tensor): Real input data.
+        fake_data (Tensor): Fake input data.
+        weight (Tensor): Weight tensor. Default: None.
+    Returns:
+        Tensor: A tensor for gradient penalty.
+    """
+
+    batch_size = real_data.size(0)
+    alpha = real_data.new_tensor(torch.rand(batch_size, 1, 1, 1))
+
+    # interpolate between real_data and fake_data
+    interpolates = alpha * real_data + (1. - alpha) * fake_data
+    interpolates = autograd.Variable(interpolates, requires_grad=True)
+
+    disc_interpolates = discriminator(interpolates)
+    gradients = autograd.grad(
+        outputs=disc_interpolates,
+        inputs=interpolates,
+        grad_outputs=torch.ones_like(disc_interpolates),
+        create_graph=True,
+        retain_graph=True,
+        only_inputs=True)[0]
+
+    if weight is not None:
+        gradients = gradients * weight
+
+    gradients_penalty = ((gradients.norm(2, dim=1) - 1)**2).mean()
+    if weight is not None:
+        gradients_penalty /= torch.mean(weight)
+
+    return gradients_penalty
