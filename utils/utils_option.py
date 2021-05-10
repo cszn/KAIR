@@ -102,6 +102,14 @@ def parse(opt_path, is_train=True):
     opt['num_gpu'] = len(opt['gpu_ids'])
     print('number of GPUs is: ' + str(opt['num_gpu']))
 
+    # ----------------------------------------
+    # default setting for perceptual loss
+    # ----------------------------------------
+    if 'F_use_input_norm' not in opt['train']:
+        opt['train']['F_use_input_norm'] = True
+    if 'F_feature_layer' not in opt['train']:
+        opt['train']['F_feature_layer'] = 34  # 25
+
     return opt
 
 
