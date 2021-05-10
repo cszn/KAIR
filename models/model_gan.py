@@ -209,7 +209,7 @@ class ModelGAN(ModelBase):
             # an inplace operation",
             # we separate the backwards for real and fake, and also detach the
             # tensor for calculating mean.
-            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgangp', 'wgansoftplus']:
+            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgan', 'softplusgan']:
                 # real
                 pred_d_real = self.netD(self.var_ref)          # 1) real data
                 l_d_real = self.D_lossfn(pred_d_real, True)
@@ -232,7 +232,7 @@ class ModelGAN(ModelBase):
             loss_D_total = 0
             pred_d_real = self.netD(self.var_ref)          # 1) real data
             pred_d_fake = self.netD(self.E.detach())       # 2) fake data, detach to avoid BP to G
-            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgangp', 'wgansoftplus']:
+            if self.opt_train['gan_type'] in ['gan', 'lsgan', 'wgan', 'softplusgan']:
                 l_d_real = self.D_lossfn(pred_d_real, True)
                 l_d_fake = self.D_lossfn(pred_d_fake, False)
                 loss_D_total = l_d_real + l_d_fake
