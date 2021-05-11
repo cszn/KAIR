@@ -25,7 +25,7 @@ def find_last_checkpoint(save_dir, net_type='G'):
     # ---------------------------------------
     Args:
         save_dir: model folder
-        net_type: 'G' or 'D'
+        net_type: 'G' or 'D' or 'optimizerG' or 'optimizerD'
 
     Return:
         init_iter: iteration number
