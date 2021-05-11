@@ -16,5 +16,5 @@ class ModelPlain2(ModelPlain):
     # feed (L, C) to netG and get E
     # ----------------------------------------
     def netG_forward(self):
-        self.E = self.netG(self.L, self,C)
+        self.E = self.netG(self.L, self.C)
 
