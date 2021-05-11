@@ -88,10 +88,12 @@
     , "G_scheduler_type": "MultiStepLR"
     , "G_scheduler_milestones": [200000, 800000, 1200000, 2000000]
     , "G_scheduler_gamma": 0.5
+    , "G_optimizer_reuse": true
 
     , "D_scheduler_type": "MultiStepLR"
     , "D_scheduler_milestones": [200000, 800000, 1200000, 2000000]
     , "D_scheduler_gamma": 0.5
+    , "D_optimizer_reuse": true
 
     , "checkpoint_test": 5000
     , "checkpoint_save": 5000
