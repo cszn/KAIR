@@ -46,7 +46,17 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
-    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
+    opt['dist'] = parser.parse_args().dist
+
+    # ----------------------------------------
+    # distributed settings
+    # ----------------------------------------
+    if opt['dist']:
+        init_dist('pytorch')
+    opt['rank'], opt['world_size'] = get_dist_info()
+    
+    if opt['rank'] == 0:
+        util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
 
     # ----------------------------------------
     # update opt
@@ -56,7 +66,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     opt['path']['pretrained_netG'] = init_path_G
     init_iter_optimizerG, init_path_optimizerG = option.find_last_checkpoint(opt['path']['models'], net_type='optimizerG')
     opt['path']['pretrained_optimizerG'] = init_path_optimizerG
-    current_step = max(init_iter, init_iter_optimizerG)
+    current_step = max(init_iter_G, init_iter_optimizerG)
 
     border = opt['scale']
     # --<--<--<--<--<--<--<--<--<--<--<--<--<-
@@ -64,13 +74,13 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     # ----------------------------------------
     # save opt to  a '../option.json' file
     # ----------------------------------------
-    option.save(opt)
+    if opt['rank'] == 0:
+        option.save(opt)
 
     # ----------------------------------------
     # return None for missing key
     # ----------------------------------------
     opt = option.dict_to_nonedict(opt)
-    opt['dist'] = parser.parse_args().dist
 
     # ----------------------------------------
     # configure logger
@@ -78,14 +88,8 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     logger_name = 'train'
     utils_logger.logger_info(logger_name, os.path.join(opt['path']['log'], logger_name+'.log'))
     logger = logging.getLogger(logger_name)
-    logger.info(option.dict2str(opt))
-
-    # ----------------------------------------
-    # distributed settings
-    # ----------------------------------------
-    if opt['dist']:
-        init_dist('pytorch')
-    opt['rank'], opt['world_size'] = get_dist_info()
+    if opt['rank'] == 0:
+        logger.info(option.dict2str(opt))
 
     # ----------------------------------------
     # seed
@@ -237,11 +241,6 @@ def main(json_path='options/train_msrresnet_psnr.json'):
 
                 # testing log
                 logger.info('<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, avg_psnr))
-
-    logger.info('Saving the final model.')
-    model.save('latest')
-    logger.info('End of training.')
-
 
 if __name__ == '__main__':
     main()
