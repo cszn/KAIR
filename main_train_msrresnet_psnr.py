@@ -52,9 +52,11 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     # update opt
     # ----------------------------------------
     # -->-->-->-->-->-->-->-->-->-->-->-->-->-
-    init_iter, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
+    init_iter_G, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
     opt['path']['pretrained_netG'] = init_path_G
-    current_step = init_iter
+    init_iter_optimizerG, init_path_optimizerG = option.find_last_checkpoint(opt['path']['models'], net_type='optimizerG')
+    opt['path']['pretrained_optimizerG'] = init_path_optimizerG
+    current_step = max(init_iter, init_iter_optimizerG)
 
     border = opt['scale']
     # --<--<--<--<--<--<--<--<--<--<--<--<--<-
