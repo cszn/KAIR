@@ -55,10 +55,10 @@ class ModelPlain(ModelBase):
     # load optimizer
     # ----------------------------------------
     def load_optimizer(self):
-        load_path_O = self.opt['path']['pretrained_netO']
-        if load_path_O is not None and self.opt_train['G_optimizer_reuse']:
-            print('Loading optimizer [{:s}] ...'.format(load_path_O))
-            self.load_optimizer(load_path_O, self.G_optimizer)
+        load_path_optimizerG = self.opt['path']['pretrained_optimizerG']
+        if load_path_optimizerG is not None and self.opt_train['G_optimizer_reuse']:
+            print('Loading optimizerG [{:s}] ...'.format(load_path_optimizerG))
+            self.load_optimizer(load_path_optimizerG, self.G_optimizer)
 
     # ----------------------------------------
     # save model / optimizer(optional)
@@ -66,7 +66,7 @@ class ModelPlain(ModelBase):
     def save(self, iter_label):
         self.save_network(self.save_dir, self.netG, 'G', iter_label)
         if self.opt_train['G_optimizer_reuse']:
-            self.save_optimizer(self.save_dir, self.G_optimizer, 'O', iter_label)
+            self.save_optimizer(self.save_dir, self.G_optimizer, 'optimizerG', iter_label)
 
     # ----------------------------------------
     # define loss
