@@ -160,6 +160,12 @@ class ModelGAN(ModelBase):
             self.var_ref = input_ref.to(self.device)
 
     # ----------------------------------------
+    # feed L to netG and get E
+    # ----------------------------------------
+    def netG_forward(self):
+        self.E = self.netG(self.L)
+
+    # ----------------------------------------
     # update parameters and get loss
     # ----------------------------------------
     def optimize_parameters(self, current_step):
@@ -170,7 +176,7 @@ class ModelGAN(ModelBase):
             p.requires_grad = False
 
         self.G_optimizer.zero_grad()
-        self.E = self.netG(self.L)
+        self.netG_forward()
         loss_G_total = 0
 
         if current_step % self.D_update_ratio == 0 and current_step > self.D_init_iters:  # updata D first
@@ -265,7 +271,7 @@ class ModelGAN(ModelBase):
     def test(self):
         self.netG.eval()
         with torch.no_grad():
-            self.E = self.netG(self.L)
+            self.netG_forward()
         self.netG.train()
 
     # ----------------------------------------
