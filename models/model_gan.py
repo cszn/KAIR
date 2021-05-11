@@ -41,6 +41,7 @@ class ModelGAN(ModelBase):
         self.netD.train()                     # set training mode,for BN
         self.define_loss()                    # define loss
         self.define_optimizer()               # define optimizer
+        self.load_optimizer()                 # load optimizer
         self.define_scheduler()               # define scheduler
         self.log_dict = OrderedDict()         # log
 
