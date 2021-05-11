@@ -158,6 +158,21 @@ class ModelBase():
         network = self.get_bare_model(network)
         network.load_state_dict(torch.load(load_path), strict=strict)
 
+    # ----------------------------------------
+    # save the state_dict of the optimizer
+    # ----------------------------------------
+    def save_optimizer(self, save_dir, optimizer, optimizer_label, iter_label):
+        save_filename = '{}_{}.pth'.format(iter_label, optimizer_label)
+        save_path = os.path.join(save_dir, save_filename)
+        state_dict = optimizer.state_dict()
+        torch.save(state_dict, save_path)
+
+    # ----------------------------------------
+    # load the state_dict of the optimizer
+    # ----------------------------------------
+    def load_optimizer(self, load_path, optimizer):
+        optimizer.load_state_dict(torch.load(load_path))
+
     """
     # ----------------------------------------
     # Merge Batch Normalization for training
