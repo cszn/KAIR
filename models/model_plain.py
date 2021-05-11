@@ -38,6 +38,7 @@ class ModelPlain(ModelBase):
         self.netG.train()                     # set training mode,for BN
         self.define_loss()                    # define loss
         self.define_optimizer()               # define optimizer
+        self.load_optimizer()                 # load optimizer
         self.define_scheduler()               # define scheduler
         self.log_dict = OrderedDict()         # log
 
@@ -51,10 +52,21 @@ class ModelPlain(ModelBase):
             self.load_network(load_path_G, self.netG)
 
     # ----------------------------------------
-    # save model
+    # load optimizer
+    # ----------------------------------------
+    def load_optimizer(self):
+        load_path_O = self.opt['path']['pretrained_netO']
+        if load_path_O is not None and self.opt_train['G_optimizer_reuse']:
+            print('Loading optimizer [{:s}] ...'.format(load_path_O))
+            self.load_optimizer(load_path_O, self.G_optimizer)
+
+    # ----------------------------------------
+    # save model / optimizer(optional)
     # ----------------------------------------
     def save(self, iter_label):
         self.save_network(self.save_dir, self.netG, 'G', iter_label)
+        if self.opt_train['G_optimizer_reuse']:
+            self.save_optimizer(self.save_dir, self.G_optimizer, 'O', iter_label)
 
     # ----------------------------------------
     # define loss
