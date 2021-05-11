@@ -58,11 +58,28 @@ class ModelGAN(ModelBase):
             self.load_network(load_path_D, self.netD)
 
     # ----------------------------------------
-    # save model
+    # load optimizer
+    # ----------------------------------------
+    def load_optimizer(self):
+        load_path_OG = self.opt['path']['pretrained_netOG']
+        if load_path_OG is not None and self.opt_train['G_optimizer_reuse']:
+            print('Loading optimizer for G [{:s}] ...'.format(load_path_OG))
+            self.load_optimizer(load_path_OG, self.G_optimizer)
+        load_path_OD = self.opt['path']['pretrained_netOD']
+        if load_path_OD is not None and self.opt_train['D_optimizer_reuse']:
+            print('Loading optimizer for D [{:s}] ...'.format(load_path_OD))
+            self.load_optimizer(load_path_OD, self.D_optimizer)
+
+    # ----------------------------------------
+    # save model / optimizer(optional)
     # ----------------------------------------
     def save(self, iter_label):
         self.save_network(self.save_dir, self.netG, 'G', iter_label)
         self.save_network(self.save_dir, self.netD, 'D', iter_label)
+        if self.opt_train['G_optimizer_reuse']:
+            self.save_optimizer(self.save_dir, self.G_optimizer, 'OG', iter_label)
+        if self.opt_train['D_optimizer_reuse']:
+            self.save_optimizer(self.save_dir, self.D_optimizer, 'OD', iter_label)
 
     # ----------------------------------------
     # define loss
