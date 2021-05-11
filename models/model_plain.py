@@ -109,11 +109,17 @@ class ModelPlain(ModelBase):
             self.H = data['H'].to(self.device)
 
     # ----------------------------------------
+    # feed L to netG
+    # ----------------------------------------
+    def netG_forward(self):
+        self.E = self.netG(self.L)
+
+    # ----------------------------------------
     # update parameters and get loss
     # ----------------------------------------
     def optimize_parameters(self, current_step):
         self.G_optimizer.zero_grad()
-        self.E = self.netG(self.L)
+        self.netG_forward()
         G_loss = self.G_lossfn_weight * self.G_lossfn(self.E, self.H)
         G_loss.backward()
 
@@ -146,7 +152,7 @@ class ModelPlain(ModelBase):
     def test(self):
         self.netG.eval()
         with torch.no_grad():
-            self.E = self.netG(self.L)
+            self.netG_forward()
         self.netG.train()
 
     # ----------------------------------------
