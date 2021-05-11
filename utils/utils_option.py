@@ -110,6 +110,14 @@ def parse(opt_path, is_train=True):
     if 'F_feature_layer' not in opt['train']:
         opt['train']['F_feature_layer'] = 34  # 25
 
+    # ----------------------------------------
+    # default setting for optimizer
+    # ----------------------------------------
+    if 'G_optimizer_reuse' not in opt['train']:
+        opt['train']['G_optimizer_reuse'] = False
+    if 'D_optimizer_reuse' not in opt['train']:
+        opt['train']['D_optimizer_reuse'] = False
+
     return opt
 
 
@@ -117,7 +125,7 @@ def find_last_checkpoint(save_dir, net_type='G'):
     """
     Args: 
         save_dir: model folder
-        net_type: 'G' or 'D'
+        net_type: 'G' or 'D' or 'optimizerG' or 'optimizerD'
 
     Return:
         init_iter: iteration number
