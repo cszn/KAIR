@@ -61,6 +61,7 @@
     , "G_optimizer_type": "adam"        // fixed, adam is enough
     , "G_optimizer_lr": 1e-4            // learning rate
     , "G_optimizer_clipgrad": null      // unused
+    , "G_optimizer_reuse": true
 
     , "G_scheduler_type": "MultiStepLR" // "MultiStepLR" is enough
     , "G_scheduler_milestones": [200000, 400000, 600000, 800000, 1000000, 2000000]
