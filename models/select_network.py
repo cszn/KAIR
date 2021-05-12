@@ -234,6 +234,27 @@ def define_D(opt):
         from models.network_discriminator import Discriminator_VGG_128_SN as discriminator
         netD = discriminator()
 
+    elif net_type == 'patchgan_batch':
+        from models.network_discriminator import Discriminator_PatchGAN as discriminator
+        netD = discriminator(input_nc=opt_net['in_nc'], 
+                             ndf=opt_net['base_nc'],
+                             n_layers=opt_net['n_layers'],
+                             norm_type='batch')
+                             
+    elif net_type == 'patchgan_instance':
+        from models.network_discriminator import Discriminator_PatchGAN as discriminator
+        netD = discriminator(input_nc=opt_net['in_nc'], 
+                             ndf=opt_net['base_nc'],
+                             n_layers=opt_net['n_layers'],
+                             norm_type='instance')
+                             
+    elif net_type == 'patchgan_spectral':
+        from models.network_discriminator import Discriminator_PatchGAN as discriminator
+        netD = discriminator(input_nc=opt_net['in_nc'], 
+                             ndf=opt_net['base_nc'],
+                             n_layers=opt_net['n_layers'],
+                             norm_type='spectral')   
+
     else:
         raise NotImplementedError('netD [{:s}] is not found.'.format(net_type))
 
