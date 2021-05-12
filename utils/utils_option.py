@@ -118,6 +118,18 @@ def parse(opt_path, is_train=True):
     if 'D_optimizer_reuse' not in opt['train']:
         opt['train']['D_optimizer_reuse'] = False
 
+    # ----------------------------------------
+    # default setting for discriminator
+    # ----------------------------------------
+    if 'net_type' not in opt['netD']:
+        opt['netD']['net_type'] = 'patchgan_batch'
+    if 'in_nc' not in opt['netD']:
+        opt['netD']['in_nc'] = 3
+    if 'base_nc' not in opt['netD']:
+        opt['netD']['base_nc'] = 64
+    if 'n_layers' not in opt['netD']:
+        opt['netD']['n_layers'] = 3
+
     return opt
 
 
