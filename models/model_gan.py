@@ -117,8 +117,8 @@ class ModelGAN(ModelBase):
                 self.F_lossfn = PerceptualLoss(feature_layer=F_feature_layer, use_input_norm=F_use_input_norm, lossfn_type=F_lossfn_type).to(self.device)
             else:
                 self.F_lossfn = PerceptualLoss(feature_layer=F_feature_layer, use_input_norm=F_use_input_norm, lossfn_type=F_lossfn_type)
-                self.model_to_device(self.F_lossfn.vgg)
-                self.F_lossfn.lossfn.to(self.device)
+                self.F_lossfn.vgg = self.model_to_device(self.F_lossfn.vgg)
+                self.F_lossfn.lossfn = self.F_lossfn.lossfn.to(self.device)
             self.F_lossfn_weight = self.opt_train['F_lossfn_weight']
         else:
             print('Do not use feature loss.')
