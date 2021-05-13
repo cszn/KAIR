@@ -4,7 +4,9 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **_News (2021-04)_**: Support distributed training, see also [https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md](https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md).
+- **_News (2021-05-13)_**: Add [PatchGAN discriminator](https://github.com/cszn/KAIR/blob/f93303ed7908c011433de331ab1d8bc2b8fb090f/models/network_discriminator.py#L23).
+
+- **_News (2021-05-12)_**: Support distributed training, see also [https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md](https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md).
 
 - **_News (2021-01)_**: [BSRGAN](https://github.com/cszn/BSRGAN) for blind real image super-resolution will be added.
 
