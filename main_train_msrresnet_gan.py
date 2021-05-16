@@ -40,7 +40,7 @@ def main(json_path='options/train_msrresnet_gan.json'):
     '''
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-opt', type=str, default=json_path, help='Path to option JSON file.')
+    parser.add_argument('--opt', type=str, default=json_path, help='Path to option JSON file.')
     parser.add_argument('--launcher', default='pytorch', help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument('--dist', default=False)
