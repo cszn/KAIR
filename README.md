@@ -63,6 +63,8 @@ Training
 | ESRGAN | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
 | RRDB | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
 | IMDB | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
+| USRNet | [https://github.com/cszn/USRNet](https://github.com/cszn/USRNet)|
+| DRUNet | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
 
 Network architectures
 ----------
