@@ -172,8 +172,7 @@ class ModelBase():
     def save_optimizer(self, save_dir, optimizer, optimizer_label, iter_label):
         save_filename = '{}_{}.pth'.format(iter_label, optimizer_label)
         save_path = os.path.join(save_dir, save_filename)
-        state_dict = optimizer.state_dict()
-        torch.save(state_dict, save_path)
+        torch.save(optimizer.state_dict(), save_path)
 
     # ----------------------------------------
     # load the state_dict of the optimizer
