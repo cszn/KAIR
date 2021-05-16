@@ -56,8 +56,8 @@ Training
 | [main_train_ffdnet.py](main_train_ffdnet.py) | [https://github.com/cszn/FFDNet](https://github.com/cszn/FFDNet)|
 | [main_train_srmd.py](main_train_srmd.py) | [https://github.com/cszn/SRMD](https://github.com/cszn/SRMD)|
 | [main_train_dpsr.py](main_train_dpsr.py) | [https://github.com/cszn/DPSR](https://github.com/cszn/DPSR)|
-| [main_train_msrresnet_psnr.py](main_train_msrresnet_psnr.py) | [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)|
-| [main_train_msrresnet_gan.py](main_train_msrresnet_gan.py) | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
+| `python main_train_psnr.py --opt options/train_msrresnet_psnr.json` | [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)|
+| `python main_train_gan.py --opt options/train_msrresnet_gan.json` | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
 | [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py) | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
 | [main_train_imdn.py](main_train_imdn.py) | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
 
