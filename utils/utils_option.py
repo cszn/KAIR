@@ -136,7 +136,7 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     if 'strict_netG' not in opt['path']:
         opt['path']['strict_netG'] = True
-    if 'netD' in opt and 'strict_netD' not in opt['path']::
+    if 'netD' in opt and 'strict_netD' not in opt['path']:
         opt['path']['strict_netD'] = True
 
     return opt
