@@ -49,7 +49,7 @@ class ModelPlain(ModelBase):
         load_path_G = self.opt['path']['pretrained_netG']
         if load_path_G is not None:
             print('Loading model for G [{:s}] ...'.format(load_path_G))
-            self.load_network(load_path_G, self.netG)
+            self.load_network(load_path_G, self.netG, strict=self.opt['path']['strict_netG'])
 
     # ----------------------------------------
     # load optimizer
