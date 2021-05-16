@@ -131,6 +131,14 @@ def parse(opt_path, is_train=True):
         if 'n_layers' not in opt['netD']:
             opt['netD']['n_layers'] = 3
 
+    # ----------------------------------------
+    # default setting of strict for model loading
+    # ----------------------------------------
+    if 'strict_netG' not in opt['path']:
+        opt['path']['strict_netG'] = True
+    if 'netD' in opt and 'strict_netD' not in opt['path']::
+        opt['path']['strict_netD'] = True
+
     return opt
 
 
