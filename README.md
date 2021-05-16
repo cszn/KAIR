@@ -48,8 +48,48 @@ git clone https://github.com/cszn/KAIR.git
 
 
 Training
+----------
+
+You should modify the json file from [options](https://github.com/cszn/KAIR/tree/master/options) first, for example,
+setting ["gpu_ids": [0,1,2,3]](https://github.com/cszn/KAIR/blob/ff80d265f64de67dfb3ffa9beff8949773c81a3d/options/train_msrresnet_psnr.json#L4) if 4 GPUs are used,
+setting ["dataroot_H": "trainsets/trainH"](https://github.com/cszn/KAIR/blob/ff80d265f64de67dfb3ffa9beff8949773c81a3d/options/train_msrresnet_psnr.json#L24) if path of the high quality dataset is `trainsets/trainH`.
+
+- Training with `DataParallel` - PSNR
 
 
+```python
+python main_train_psnr.py --opt options/train_msrresnet_psnr.json
+```
+
+- Training with `DataParallel` - GAN
+
+```python
+python main_train_gan.py --opt options/train_msrresnet_gan.json
+```
+
+- Training with `DistributedDataParallel` - PSNR - 4 GPUs
+
+```python
+python -m torch.distributed.launch --nproc_per_node=4 --master_port=1234 main_train_psnr.py --opt options/train_msrresnet_psnr.json  --dist True
+```
+
+- Training with `DistributedDataParallel` - PSNR - 8 GPUs
+
+```python
+python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_train_psnr.py --opt options/train_msrresnet_psnr.json  --dist True
+```
+
+- Training with `DistributedDataParallel` - GAN - 4 GPUs
+
+```python
+python -m torch.distributed.launch --nproc_per_node=4 --master_port=1234 main_train_gan.py --opt options/train_msrresnet_gan.json  --dist True
+```
+
+- Training with `DistributedDataParallel` - GAN - 8 GPUs
+
+```python
+python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_train_gan.py --opt options/train_msrresnet_gan.json  --dist True
+```
 
 ----------
 | Method | Original Link |
