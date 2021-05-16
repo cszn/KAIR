@@ -48,18 +48,21 @@ git clone https://github.com/cszn/KAIR.git
 
 
 Training
+
+
+
 ----------
 | Method | Original Link |
 |---|---|
-| [main_train_dncnn.py](main_train_dncnn.py) |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
-| [main_train_fdncnn.py](main_train_fdncnn.py) |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
-| [main_train_ffdnet.py](main_train_ffdnet.py) | [https://github.com/cszn/FFDNet](https://github.com/cszn/FFDNet)|
-| [main_train_srmd.py](main_train_srmd.py) | [https://github.com/cszn/SRMD](https://github.com/cszn/SRMD)|
-| [main_train_dpsr.py](main_train_dpsr.py) | [https://github.com/cszn/DPSR](https://github.com/cszn/DPSR)|
-| `python main_train_psnr.py --opt options/train_msrresnet_psnr.json` | [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)|
-| `python main_train_gan.py --opt options/train_msrresnet_gan.json` | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
-| [main_train_rrdb_psnr.py](main_train_rrdb_psnr.py) | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
-| [main_train_imdn.py](main_train_imdn.py) | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
+| DnCNN |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
+| FDnCNN |[https://github.com/cszn/DnCNN](https://github.com/cszn/DnCNN)|
+| FFDNet | [https://github.com/cszn/FFDNet](https://github.com/cszn/FFDNet)|
+| SRMD | [https://github.com/cszn/SRMD](https://github.com/cszn/SRMD)|
+| DPSR-SRResNet | [https://github.com/cszn/DPSR](https://github.com/cszn/DPSR)|
+| SRResNet | [https://github.com/xinntao/BasicSR](https://github.com/xinntao/BasicSR)|
+| ESRGAN | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
+| RRDB | [https://github.com/xinntao/ESRGAN](https://github.com/xinntao/ESRGAN)|
+| IMDB | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
 
 Network architectures
 ----------
