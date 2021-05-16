@@ -52,11 +52,11 @@ class ModelGAN(ModelBase):
         load_path_G = self.opt['path']['pretrained_netG']
         if load_path_G is not None:
             print('Loading model for G [{:s}] ...'.format(load_path_G))
-            self.load_network(load_path_G, self.netG)
+            self.load_network(load_path_G, self.netG, strict=self.opt['path']['strict_netG'])
         load_path_D = self.opt['path']['pretrained_netD']
         if self.opt['is_train'] and load_path_D is not None:
             print('Loading model for D [{:s}] ...'.format(load_path_D))
-            self.load_network(load_path_D, self.netD)
+            self.load_network(load_path_D, self.netD, strict=self.opt['path']['strict_netD'])
 
     # ----------------------------------------
     # load optimizerG and optimizerD
