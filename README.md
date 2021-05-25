@@ -91,6 +91,12 @@ python -m torch.distributed.launch --nproc_per_node=4 --master_port=1234 main_tr
 python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_train_gan.py --opt options/train_msrresnet_gan.json  --dist True
 ```
 
+- Kill distributed training processes of `main_train_gan.py`
+
+```python
+kill $(ps aux | grep main_train_gan.py | grep -v grep | awk '{print $2}')
+```
+
 ----------
 | Method | Original Link |
 |---|---|
