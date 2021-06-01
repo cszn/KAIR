@@ -66,7 +66,7 @@ class DatasetSRMD(data.Dataset):
             l1 = 0.1+l_max*random.random()
             l2 = 0.1+(l1-0.1)*random.random()
 
-            kernel = utils_sisr.anisotropic_Gaussian(ksize=self.ksize, theta=theta[0], l1=l1[0], l2=l2[0])
+            kernel = utils_sisr.anisotropic_Gaussian(ksize=self.ksize, theta=theta, l1=l1, l2=l2)
         else:
             kernel = utils_sisr.anisotropic_Gaussian(ksize=self.ksize, theta=np.pi, l1=0.1, l2=0.1)
 
