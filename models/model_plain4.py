@@ -1,7 +1,9 @@
 from models.model_plain import ModelPlain
+import numpy as np
 
-class ModelPlain4(ModelBase):
-    """Train with four inputs (L, k, sf, sigma) and with pixel loss"""
+
+class ModelPlain4(ModelPlain):
+    """Train with four inputs (L, k, sf, sigma) and with pixel loss for USRNet"""
 
     # ----------------------------------------
     # feed L/H data
