@@ -12,12 +12,16 @@ https://github.com/yangxy/GPEN
 ==================================================
 slightly modified by Kai Zhang (2021-06-03)
 https://github.com/cszn/KAIR
+
 How to run:
-step 1: Download RetinaFace model and our pre-trained model and put them into `model_zoo`.
-RetinaFace-R50: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/RetinaFace-R50.pth
-GPEN-512: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/GPEN-512.pth
-step 2: set `inputdir` for your own testing images
-step 3: python main_test_face_enhancement.py
+
+step 1: Download <RetinaFace-R50.pth> model and <GPEN-512.pth> model and put them into `model_zoo`.
+RetinaFace-R50.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/RetinaFace-R50.pth
+GPEN-512.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/GPEN-512.pth
+
+step 2: Install ninja by `pip install ninja`; set <inputdir> for your own testing images
+
+step 3: `python main_test_face_enhancement.py`
 ==================================================
 '''
 
