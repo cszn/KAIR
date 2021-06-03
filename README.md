@@ -4,6 +4,14 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+
+- **_News (2021-06-03)_**: Add testing codes of [GPEN (CVPR21)](https://github.com/yangxy/GPEN) for face image enhancement: [main_test_face_enhancement.py](https://github.com/cszn/KAIR/blob/master/main_test_face_enhancement.py)
+
+<img src="figs/face_04_comparison.png" width="360px"/> <img src="figs/face_13_comparison.png" width="360px"/>
+<img src="figs/face_08_comparison.png" width="360px"/> <img src="figs/face_01_comparison.png" width="360px"/>
+<img src="figs/face_12_comparison.png" width="360px"/> <img src="figs/face_10_comparison.png" width="360px"/>
+
+
 - **_News (2021-05-13)_**: Add [PatchGAN discriminator](https://github.com/cszn/KAIR/blob/f93303ed7908c011433de331ab1d8bc2b8fb090f/models/network_discriminator.py#L23).
 
 - **_News (2021-05-12)_**: Support distributed training, see also [https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md](https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md).
@@ -260,5 +268,11 @@ year={2017}
   author={Kai Zhang and Shuhang Gu and Radu Timofte and others},
   booktitle={IEEE International Conference on Computer Vision Workshops},
   year={2019}
+}
+@inproceedings{Yang2021GPEN,
+    title={GAN Prior Embedded Network for Blind Face Restoration in the Wild},
+    author={Tao Yang, Peiran Ren, Xuansong Xie, and Lei Zhang},
+    booktitle={IEEE Conference on Computer Vision and Pattern Recognition},
+    year={2021}
 }
 ```
