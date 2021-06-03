@@ -51,7 +51,9 @@ Clone repo
 ```
 git clone https://github.com/cszn/KAIR.git
 ```
-
+```
+pip install -r requirement.txt
+```
 
 
 
