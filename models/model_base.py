@@ -159,7 +159,7 @@ class ModelBase():
         if strict:
             network.load_state_dict(torch.load(load_path), strict=strict)
         else:
-            state_dict_old = torch.load(model_path)
+            state_dict_old = torch.load(load_path)
             state_dict = network.state_dict()
             for ((key_old, param_old),(key, param)) in zip(state_dict_old.items(), state_dict.items()):
                 state_dict[key] = param_old
