@@ -563,6 +563,7 @@ def ycbcr2rgb(img):
     # convert
     rlt = np.matmul(img, [[0.00456621, 0.00456621, 0.00456621], [0, -0.00153632, 0.00791071],
                           [0.00625893, -0.00318811, 0]]) * 255.0 + [-222.921, 135.576, -276.836]
+    rlt = np.clip(rlt, 0, 255)
     if in_img_type == np.uint8:
         rlt = rlt.round()
     else:
