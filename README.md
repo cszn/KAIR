@@ -124,6 +124,7 @@ kill $(ps aux | grep main_train_gan.py | grep -v grep | awk '{print $2}')
 | IMDB | [https://github.com/Zheng222/IMDN](https://github.com/Zheng222/IMDN)|
 | USRNet | [https://github.com/cszn/USRNet](https://github.com/cszn/USRNet)|
 | DRUNet | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
+| DPIR | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
 
 Network architectures
 ----------
