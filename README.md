@@ -202,6 +202,12 @@ Testing
 References
 ----------
 ```BibTex
+@article{zhang2021plug, % DPIR & DRUNet & IRCNN
+  title={Plug-and-Play Image Restoration with Deep Denoiser Prior},
+  author={Zhang, Kai and Li, Yawei and Zuo, Wangmeng and Zhang, Lei and Van Gool, Luc and Timofte, Radu},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year={2021}
+}
 @inproceedings{zhang2020aim, % efficientSR_challenge
   title={AIM 2020 Challenge on Efficient Super-Resolution: Methods and Results},
   author={Kai Zhang and Martin Danelljan and Yawei Li and Radu Timofte and others},
