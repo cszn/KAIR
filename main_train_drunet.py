@@ -13,26 +13,18 @@ import torch
 from utils import utils_logger
 from utils import utils_image as util
 from utils import utils_option as option
+from utils.utils_dist import get_dist_info, init_dist
 
 from data.select_dataset import define_Dataset
 from models.select_model import define_Model
-from utils.utils_dist import get_dist_info, init_dist
 
 
 '''
 # --------------------------------------------
 # training code for DRUNet
 # --------------------------------------------
-github: https://github.com/cszn/DPIR
-        https://github.com/cszn/IRCNN
-        https://github.com/cszn/KAIR
-@article{zhang2020plug,
-  title={Plug-and-Play Image Restoration with Deep Denoiser Prior},
-  author={Zhang, Kai and Li, Yawei and Zuo, Wangmeng and Zhang, Lei and Van Gool, Luc and Timofte, Radu},
-  journal={arXiv preprint},
-  year={2020}
-}
-# --------------------------------------------
+# Kai Zhang (cskaizhang@gmail.com)
+# github: https://github.com/cszn/KAIR
 '''
 
 
@@ -51,29 +43,41 @@ def main(json_path='options/train_drunet.json'):
     parser.add_argument('--dist', default=False)
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
-    util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key)) if opt['rank'] == 0 else None
+    opt['dist'] = parser.parse_args().dist
+
+    # ----------------------------------------
+    # distributed settings
+    # ----------------------------------------
+    if opt['dist']:
+        init_dist('pytorch')
+    opt['rank'], opt['world_size'] = get_dist_info()
+    
+    if opt['rank'] == 0:
+        util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
 
     # ----------------------------------------
     # update opt
     # ----------------------------------------
     # -->-->-->-->-->-->-->-->-->-->-->-->-->-
-    init_iter, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
+    init_iter_G, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
     opt['path']['pretrained_netG'] = init_path_G
-    current_step = init_iter
+    init_iter_optimizerG, init_path_optimizerG = option.find_last_checkpoint(opt['path']['models'], net_type='optimizerG')
+    opt['path']['pretrained_optimizerG'] = init_path_optimizerG
+    current_step = max(init_iter_G, init_iter_optimizerG)
 
-    border = 0
+    border = opt['scale']
     # --<--<--<--<--<--<--<--<--<--<--<--<--<-
 
     # ----------------------------------------
     # save opt to  a '../option.json' file
     # ----------------------------------------
-    option.save(opt) if opt['rank'] == 0 else None
+    if opt['rank'] == 0:
+        option.save(opt)
 
     # ----------------------------------------
     # return None for missing key
     # ----------------------------------------
     opt = option.dict_to_nonedict(opt)
-    opt['dist'] = parser.parse_args().dist
 
     # ----------------------------------------
     # configure logger
@@ -85,20 +89,12 @@ def main(json_path='options/train_drunet.json'):
         logger.info(option.dict2str(opt))
 
     # ----------------------------------------
-    # distributed settings
-    # ----------------------------------------
-    if opt['dist']:
-        init_dist('pytorch')
-    opt['rank'], opt['world_size'] = get_dist_info()
-    print(str(opt['rank']) + '----' + str(opt['world_size']))
-
-    # ----------------------------------------
     # seed
     # ----------------------------------------
     seed = opt['train']['manual_seed']
     if seed is None:
         seed = random.randint(1, 10000)
-    logger.info('Random seed: {}'.format(seed)) if opt['rank'] == 0 else None
+    print('Random seed: {}'.format(seed))
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -118,9 +114,10 @@ def main(json_path='options/train_drunet.json'):
         if phase == 'train':
             train_set = define_Dataset(dataset_opt)
             train_size = int(math.ceil(len(train_set) / dataset_opt['dataloader_batch_size']))
-            logger.info('Number of train images: {:,d}, iters: {:,d}'.format(len(train_set), train_size)) if opt['rank'] == 0 else None
+            if opt['rank'] == 0:
+                logger.info('Number of train images: {:,d}, iters: {:,d}'.format(len(train_set), train_size))
             if opt['dist']:
-                train_sampler = DistributedSampler(train_set, shuffle=dataset_opt['dataloader_shuffle'], drop_last=True, seed=seed+opt['rank'])
+                train_sampler = DistributedSampler(train_set, shuffle=dataset_opt['dataloader_shuffle'], drop_last=True, seed=seed)
                 train_loader = DataLoader(train_set,
                                           batch_size=dataset_opt['dataloader_batch_size']//opt['num_gpu'],
                                           shuffle=False,
@@ -152,7 +149,9 @@ def main(json_path='options/train_drunet.json'):
 
     model = define_Model(opt)
     model.init_train()
-    logger.info(model.info_params()) if opt['rank'] == 0 else None
+    if opt['rank'] == 0:
+        logger.info(model.info_network())
+        logger.info(model.info_params())
 
     '''
     # ----------------------------------------
@@ -179,14 +178,6 @@ def main(json_path='options/train_drunet.json'):
             # 3) optimize parameters
             # -------------------------------
             model.optimize_parameters(current_step)
-
-            # -------------------------------
-            # merge bnorm
-            # -------------------------------
-#            if opt['merge_bn'] and opt['merge_bn_startpoint'] == current_step:
-#                logger.info('^_^ -----merging bnorm----- ^_^')
-#                model.merge_bnorm_train()
-#                model.print_network()
 
             # -------------------------------
             # 4) training information
@@ -247,7 +238,6 @@ def main(json_path='options/train_drunet.json'):
 
                 # testing log
                 logger.info('<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, avg_psnr))
-
 
 if __name__ == '__main__':
     main()
