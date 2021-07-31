@@ -108,6 +108,7 @@ class DatasetUSRNet(data.Dataset):
             img_L = ndimage.filters.convolve(img_H, np.expand_dims(k, axis=2), mode='wrap')  # blur
             img_L = img_L[0::self.sf_validation, 0::self.sf_validation, ...]  # downsampling
             img_L = util.uint2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
+            self.sf = self.sf_validation
 
         k = util.single2tensor3(np.expand_dims(np.float32(k), axis=2))
         img_H, img_L = util.uint2tensor3(img_H), util.single2tensor3(img_L)
