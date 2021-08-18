@@ -396,9 +396,14 @@ def add_speckle_noise(img, noise_level1=2, noise_level2=25):
 
 
 def add_Poisson_noise(img):
-    img = np.clip(img, 0.0, 1.0)
+    img = np.clip((img * 255.0).round(), 0, 255) / 255.
     vals = 10**(2*random.random()+2.0)  # [2, 4]
-    img = np.random.poisson(img * vals).astype(np.float32) / vals
+    if random.random() < 0.5:
+        img = np.random.poisson(img * vals).astype(np.float32) / vals
+    else:
+        img_gray = util.rgb2ycbcr(img.copy(), only_y=True)
+        noise_gray = np.random.poisson(img_gray * vals).astype(np.float32) / vals - img_gray
+        img += np.tile(noise_gray[:, :, np.newaxis], (1,1,3))
     img = np.clip(img, 0.0, 1.0)
     return img
 
