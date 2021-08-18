@@ -423,7 +423,7 @@ def random_crop(lq, hq, sf=4, lq_patchsize=64):
     return lq, hq
 
 
-def degradation_bsrgan_plus(img, sf=4, use_shuffle=True, use_sharp=True, lq_patchsize=64):
+def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64):
     """
     This is an extended degradation model by combining
     the degradation models of BSRGAN and Real-ESRGAN
@@ -450,7 +450,10 @@ def degradation_bsrgan_plus(img, sf=4, use_shuffle=True, use_sharp=True, lq_patc
         img = add_sharpening(img)
     hq = img.copy()
 
-    shuffle_order = random.sample(range(11), 11) if use_shuffle else range(11)
+    if random.random() < shuffle_prob:
+        shuffle_order = random.sample(range(11), 11)
+    else:
+        shuffle_order = range(11)
 
     for i in shuffle_order:
         if i == 0:
