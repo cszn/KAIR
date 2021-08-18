@@ -430,7 +430,7 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
     ----------
     img: HXWXC, [0, 1], its size should be large than (lq_patchsizexsf)x(lq_patchsizexsf)
     sf: scale factor
-    use_shuffle: the degradation shuffle
+    shuffle_prob: probability of using degradation shuffle
     use_sharp: sharpening the img
 
     Returns
@@ -502,7 +502,7 @@ if __name__ == '__main__':
     img = util.uint2single(img)
     sf = 4
     for i in range(10):
-        img_lq, img_hq = degradation_bsrgan_plus(img, sf=sf, use_shuffle=True, use_sharp=True, lq_patchsize=64)
+        img_lq, img_hq = degradation_bsrgan_plus(img, sf=sf, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64)
         print(i)
         lq_nearest =  cv2.resize(util.single2uint(img_lq), (int(sf*img_lq.shape[1]), int(sf*img_lq.shape[0])), interpolation=0)
         img_concat = np.concatenate([lq_nearest, util.single2uint(img_hq)], axis=1)
