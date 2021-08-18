@@ -401,9 +401,10 @@ def add_Poisson_noise(img):
     if random.random() < 0.5:
         img = np.random.poisson(img * vals).astype(np.float32) / vals
     else:
-        img_gray = util.rgb2ycbcr(img.copy(), only_y=True)
+        img_gray = np.dot(img[...,:3], [0.299, 0.587, 0.114])
+        img_gray = np.clip((img_gray * 255.0).round(), 0, 255) / 255.
         noise_gray = np.random.poisson(img_gray * vals).astype(np.float32) / vals - img_gray
-        img += np.tile(noise_gray[:, :, np.newaxis], (1,1,3))
+        img += noise_gray[:, :, np.newaxis]
     img = np.clip(img, 0.0, 1.0)
     return img
 
