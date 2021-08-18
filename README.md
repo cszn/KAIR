@@ -7,7 +7,7 @@ _______
 - **_News (2021-08-18)_**: We upload the extended BSRGAN degradation model. It is different from our published version. https://github.com/cszn/KAIR/blob/17b8f657850a38fbdc7959466d9057ea41cbfd7a/utils/utils_blindsr.py#L426
 ```python
 from utils import utils_blindsr as blindsr
-img_lq, img_hq = blindsr.degradation_bsrgan_plus(img, sf=4, use_shuffle=True, use_sharp=True, lq_patchsize=64)
+img_lq, img_hq = blindsr.degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64)
 ```
 - **_News (2021-06-03)_**: Add testing codes of [GPEN (CVPR21)](https://github.com/yangxy/GPEN) for face image enhancement: [main_test_face_enhancement.py](https://github.com/cszn/KAIR/blob/master/main_test_face_enhancement.py)
 
