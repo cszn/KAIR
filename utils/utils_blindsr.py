@@ -461,6 +461,8 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
     else:
         shuffle_order = range(11)
 
+    poisson_prob, speckle_prob = 0.1, 0.1
+
     for i in shuffle_order:
         if i == 0:
             img = add_blur(img, sf=sf)
@@ -469,10 +471,10 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
         elif i == 2:
             img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
         elif i == 3:
-            if random.random() > 0.9:
+            if random.random() < poisson_prob:
                 img = add_Poisson_noise(img)
         elif i == 4:
-            if random.random() > 0.9:
+            if random.random() < speckle_prob:
                 img = add_speckle_noise(img)
         elif i == 5:
             img = add_JPEG_noise(img)
@@ -483,13 +485,14 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
         elif i == 8:
             img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
         elif i == 9:
-            if random.random() > 0.9:
+            if random.random() < poisson_prob:
                 img = add_Poisson_noise(img)
         elif i == 10:
-            if random.random() > 0.9:
+            if random.random() < speckle_prob:
                 img = add_speckle_noise(img)
         else:
             print('check the shuffle!')
+
 
     # resize to desired size
     img = cv2.resize(img, (int(1/sf*hq.shape[1]), int(1/sf*hq.shape[0])), interpolation=random.choice([1, 2, 3]))
