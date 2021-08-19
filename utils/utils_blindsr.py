@@ -470,7 +470,7 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patc
         if i == 0:
             img = add_blur(img, sf=sf)
         elif i == 1:
-            img = add_resize(img, sf=4)
+            img = add_resize(img, sf=sf)
         elif i == 2:
             img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
         elif i == 3:
