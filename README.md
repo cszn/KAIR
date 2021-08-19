@@ -4,7 +4,7 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **_News (2021-08-18)_**: We upload the extended BSRGAN degradation model. It is different from our published version. https://github.com/cszn/KAIR/blob/17b8f657850a38fbdc7959466d9057ea41cbfd7a/utils/utils_blindsr.py#L426
+- **_News (2021-08-18)_**: We upload the extended BSRGAN degradation model. It is slightly different from our published version. https://github.com/cszn/KAIR/blob/fddadd364be21d285d0da0a8fce0253a7766c064/utils/utils_blindsr.py#L432
 ```python
 from utils import utils_blindsr as blindsr
 img_lq, img_hq = blindsr.degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64)
