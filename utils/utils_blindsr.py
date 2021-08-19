@@ -459,7 +459,10 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patc
     if random.random() < shuffle_prob:
         shuffle_order = random.sample(range(13), 13)
     else:
-        shuffle_order = range(13)
+        shuffle_order = list(range(13))
+        # local shuffle for noise, JPEG is always the last one
+        shuffle_order[2:6] = random.sample(shuffle_order[2:6], len(range(2, 6)))
+        shuffle_order[9:13] = random.sample(shuffle_order[9:13], len(range(9, 13)))
 
     poisson_prob, speckle_prob, isp_prob = 0.1, 0.1, 0.1
 
