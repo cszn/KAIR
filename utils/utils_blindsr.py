@@ -429,14 +429,14 @@ def random_crop(lq, hq, sf=4, lq_patchsize=64):
     return lq, hq
 
 
-def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64):
+def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patchsize=64, isp_model=None):
     """
     This is an extended degradation model by combining
     the degradation models of BSRGAN and Real-ESRGAN
     ----------
     img: HXWXC, [0, 1], its size should be large than (lq_patchsizexsf)x(lq_patchsizexsf)
     sf: scale factor
-    shuffle_prob: probability of using degradation shuffle
+    use_shuffle: the degradation shuffle
     use_sharp: sharpening the img
 
     Returns
@@ -457,11 +457,11 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
     hq = img.copy()
 
     if random.random() < shuffle_prob:
-        shuffle_order = random.sample(range(11), 11)
+        shuffle_order = random.sample(range(13), 13)
     else:
-        shuffle_order = range(11)
+        shuffle_order = range(13)
 
-    poisson_prob, speckle_prob = 0.1, 0.1
+    poisson_prob, speckle_prob, isp_prob = 0.1, 0.1, 0.1
 
     for i in shuffle_order:
         if i == 0:
@@ -477,22 +477,29 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
             if random.random() < speckle_prob:
                 img = add_speckle_noise(img)
         elif i == 5:
-            img = add_JPEG_noise(img)
+            if random.random() < isp_prob and isp_model is not None:
+                with torch.no_grad():
+                    img, hq = isp_model.forward(img.copy(), hq)
         elif i == 6:
-            img = add_blur(img, sf=sf)
+            img = add_JPEG_noise(img)
         elif i == 7:
-            img = add_resize(img, sf=sf)
+            img = add_blur(img, sf=sf)
         elif i == 8:
-            img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
+            img = add_resize(img, sf=sf)
         elif i == 9:
+            img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
+        elif i == 10:
             if random.random() < poisson_prob:
                 img = add_Poisson_noise(img)
-        elif i == 10:
+        elif i == 11:
             if random.random() < speckle_prob:
                 img = add_speckle_noise(img)
+        elif i == 12:
+            if random.random() < isp_prob and isp_model is not None:
+                with torch.no_grad():
+                    img, hq = isp_model.forward(img.copy(), hq)
         else:
             print('check the shuffle!')
-
 
     # resize to desired size
     img = cv2.resize(img, (int(1/sf*hq.shape[1]), int(1/sf*hq.shape[0])), interpolation=random.choice([1, 2, 3]))
@@ -504,6 +511,7 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, use_sharp=True, lq_patc
     img, hq = random_crop(img, hq, sf, lq_patchsize)
 
     return img, hq
+
 
 
 if __name__ == '__main__':
