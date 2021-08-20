@@ -437,8 +437,7 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patc
     img: HXWXC, [0, 1], its size should be large than (lq_patchsizexsf)x(lq_patchsizexsf)
     sf: scale factor
     use_shuffle: the degradation shuffle
-    use_sharp: sharpening the img
-
+    use_sharp: sharpening the img; set False for PSNR-BSRNet; set True for (perceptual quality)-BSRNet-BSRGAN 
     Returns
     -------
     img: low-quality patch, size: lq_patchsizeXlq_patchsizeXC, range: [0, 1]
@@ -452,8 +451,6 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patc
     if h < lq_patchsize*sf or w < lq_patchsize*sf:
         raise ValueError(f'img size ({h1}X{w1}) is too small!')
 
-    if use_sharp:
-        img = add_sharpening(img)
     hq = img.copy()
 
     if random.random() < shuffle_prob:
@@ -509,11 +506,16 @@ def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patc
 
     # add final JPEG compression noise
     img = add_JPEG_noise(img)
+    
+    # sharpen the GT
+    if use_sharp:
+        hq = add_sharpening(hq)
 
     # random crop
     img, hq = random_crop(img, hq, sf, lq_patchsize)
 
     return img, hq
+
 
 
 
