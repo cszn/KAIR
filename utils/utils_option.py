@@ -105,10 +105,16 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     # default setting for perceptual loss
     # ----------------------------------------
+    if 'F_feature_layer' not in opt['train']:
+        opt['train']['F_feature_layer'] = 34  # 25; [2,7,16,25,34]
+    if 'F_weights' not in opt['train']:
+        opt['train']['F_weights'] = 1.0  # 1.0; [0.1,0.1,1.0,1.0,1.0]
+    if 'F_lossfn_type' not in opt['train']:
+        opt['train']['F_lossfn_type'] = 'l1'
     if 'F_use_input_norm' not in opt['train']:
         opt['train']['F_use_input_norm'] = True
-    if 'F_feature_layer' not in opt['train']:
-        opt['train']['F_feature_layer'] = 34  # 25
+    if 'F_use_range_norm' not in opt['train']:
+        opt['train']['F_use_range_norm'] = False
 
     # ----------------------------------------
     # default setting for optimizer
