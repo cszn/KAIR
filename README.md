@@ -4,6 +4,7 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+- **_News (2021-08-22)_**: Support multi-feature-layer VGG perceptual loss and UNet discriminator. 
 - **_News (2021-08-18)_**: We upload the extended BSRGAN degradation model. It is slightly different from our published version. 
 ```python
 from utils import utils_blindsr as blindsr
@@ -19,7 +20,7 @@ img_lq, img_hq = blindsr.degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.1, us
 <img src="figs/face_10_comparison.png" width="730px"/> 
 
 
-- **_News (2021-05-13)_**: Add [PatchGAN discriminator](https://github.com/cszn/KAIR/blob/f93303ed7908c011433de331ab1d8bc2b8fb090f/models/network_discriminator.py#L23).
+- **_News (2021-05-13)_**: Add [PatchGAN discriminator](https://github.com/cszn/KAIR/blob/master/models/network_discriminator.py).
 
 - **_News (2021-05-12)_**: Support distributed training, see also [https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md](https://github.com/xinntao/BasicSR/blob/master/docs/TrainTest.md).
 
