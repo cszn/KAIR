@@ -130,6 +130,18 @@ def define_G(opt):
                    upsample_mode=opt_net['upsample_mode'])
 
     # ----------------------------------------
+    # RRDBNet
+    # ----------------------------------------
+    elif net_type == 'rrdbnet':  # RRDBNet
+        from models.network_rrdbnet import RRDBNet as net
+        netG = net(in_nc=opt_net['in_nc'],
+                   out_nc=opt_net['out_nc'],
+                   nf=opt_net['nf'],
+                   nb=opt_net['nb'],
+                   gc=opt_net['gc'],
+                   sf=opt_net['scale'])
+
+    # ----------------------------------------
     # IMDB
     # ----------------------------------------
     elif net_type == 'imdn':  # IMDB
