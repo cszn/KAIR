@@ -15,6 +15,8 @@
     "root": "superresolution"  // "denoising" | "superresolution"
     , "pretrained_netG": null  // path of pretrained model
     , "pretrained_netD": null  // path of pretrained model
+    , "strict_netG": true
+    , "strict_netD": true
   }
 
   , "datasets": {
@@ -55,10 +57,12 @@
   }
 
   , "netD": {
-    "net_type": "discriminator_vgg_96" // "discriminator_vgg_192" | "discriminator_vgg_128" | "discriminator_vgg_96"
+    "net_type": "discriminator_vgg_96" // "discriminator_patchgan" | "discriminator_unet" | "discriminator_vgg_192" | "discriminator_vgg_128" | "discriminator_vgg_96"
     , "in_nc": 3
-    , "act_mode": "BL"                 // "BL" means BN+LeakyReLU
     , "base_nc": 64
+    , "act_mode": "BL"                 // "BL" means BN+LeakyReLU
+    , "n_layers": 3   // only for "net_type":"discriminator_patchgan"
+    , "norm_type": 3  // only for "net_type":"discriminator_patchgan"  | 'batch', 'instance', 'spectral', 'batchspectral', instancespectral'
 
     , "init_type": "orthogonal" // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
     , "init_bn_type": "uniform" // "uniform" | "constant"
@@ -71,8 +75,12 @@
 
     , "F_lossfn_type": "l1"  // "l1" | "l2"
     , "F_lossfn_weight": 1
+    , "F_feature_layer": 34  // 25 | [2,7,16,25,34]
+    , "F_weights": 1.0       // 1.0 | [0.1,0.1,1.0,1.0,1.0]
+    , "F_use_input_norm": true
+    , "F_use_range_norm": false
 
-    , "gan_type": "ragan"    // "gan" | "ragan" 
+    , "gan_type": "ragan"    // "gan" | "ragan" | "lsgan" | "wgan" | "softplusgan"
     , "D_lossfn_weight": 5e-3
 
     , "D_init_iters": 0
