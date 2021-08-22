@@ -129,13 +129,15 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     if 'netD' in opt:
         if 'net_type' not in opt['netD']:
-            opt['netD']['net_type'] = 'patchgan_batch'
+            opt['netD']['net_type'] = 'discriminator_patchgan'  # discriminator_unet
         if 'in_nc' not in opt['netD']:
             opt['netD']['in_nc'] = 3
         if 'base_nc' not in opt['netD']:
             opt['netD']['base_nc'] = 64
         if 'n_layers' not in opt['netD']:
             opt['netD']['n_layers'] = 3
+        if 'norm_type' not in opt['netD']:
+            opt['netD']['norm_type'] = 'spectral'
 
     # ----------------------------------------
     # default setting of strict for model loading
