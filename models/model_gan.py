@@ -205,8 +205,6 @@ class ModelGAN(ModelBase):
                 loss_G_total += F_loss                 # 2) VGG feature loss
 
             if self.opt['train']['gan_type'] in ['gan', 'lsgan', 'wgan', 'softplusgan']:
-                if self.opt_train['M_lossfn_weight'] > 0:
-                    pred_d_real = self.netD(self.H)
                 pred_g_fake = self.netD(self.E)
                 D_loss = 0.0
                 D_loss = self.D_lossfn_weight * self.D_lossfn(pred_g_fake, True)
