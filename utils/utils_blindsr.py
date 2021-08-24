@@ -429,6 +429,98 @@ def random_crop(lq, hq, sf=4, lq_patchsize=64):
     return lq, hq
 
 
+def degradation_bsrgan(img, sf=4, lq_patchsize=72, isp_model=None):
+    """
+    This is the degradation model of BSRGAN from the paper
+    "Designing a Practical Degradation Model for Deep Blind Image Super-Resolution"
+    ----------
+    img: HXWXC, [0, 1], its size should be large than (lq_patchsizexsf)x(lq_patchsizexsf)
+    sf: scale factor
+    isp_model: camera ISP model
+
+    Returns
+    -------
+    img: low-quality patch, size: lq_patchsizeXlq_patchsizeXC, range: [0, 1]
+    hq: corresponding high-quality patch, size: (lq_patchsizexsf)X(lq_patchsizexsf)XC, range: [0, 1]
+    """
+    isp_prob, jpeg_prob, scale2_prob = 0.25, 0.9, 0.25
+    sf_ori = sf
+
+    h1, w1 = img.shape[:2]
+    img = img.copy()[:w1 - w1 % sf, :h1 - h1 % sf, ...]  # mod crop
+    h, w = img.shape[:2]
+
+    if h < lq_patchsize*sf or w < lq_patchsize*sf:
+        raise ValueError(f'img size ({h1}X{w1}) is too small!')
+
+    hq = img.copy()
+
+    if sf == 4 and random.random() < scale2_prob:   # downsample1
+        if np.random.rand() < 0.5:
+            img = cv2.resize(img, (int(1/2*img.shape[1]), int(1/2*img.shape[0])), interpolation=random.choice([1,2,3]))
+        else:
+            img = util.imresize_np(img, 1/2, True)
+        img = np.clip(img, 0.0, 1.0)
+        sf = 2
+
+    shuffle_order = random.sample(range(7), 7)
+    idx1, idx2 = shuffle_order.index(2), shuffle_order.index(3)
+    if idx1 > idx2:  # keep downsample3 last
+        shuffle_order[idx1], shuffle_order[idx2] = shuffle_order[idx2], shuffle_order[idx1]
+
+    for i in shuffle_order:
+
+        if i == 0:
+            img = add_blur(img, sf=sf)
+
+        if i == 1:
+            img = add_blur(img, sf=sf)
+
+        elif i == 2:
+            a, b = img.shape[1], img.shape[0]
+            # downsample2
+            if random.random() < 0.75:
+                sf1 = random.uniform(1,2*sf)
+                img = cv2.resize(img, (int(1/sf1*img.shape[1]), int(1/sf1*img.shape[0])), interpolation=random.choice([1,2,3]))
+            else:
+                k = fspecial('gaussian', 25, random.uniform(0.1, 0.6*sf))
+                k_shifted = shift_pixel(k, sf)
+                k_shifted = k_shifted/k_shifted.sum()  # blur with shifted kernel
+                img = ndimage.filters.convolve(img, np.expand_dims(k_shifted, axis=2), mode='mirror')
+                img = img[0::sf, 0::sf, ...]  # nearest downsampling
+            img = np.clip(img, 0.0, 1.0)
+
+        elif i == 3:
+            # downsample3
+            img = cv2.resize(img, (int(1/sf*a), int(1/sf*b)), interpolation=random.choice([1,2,3]))
+            img = np.clip(img, 0.0, 1.0)
+
+        elif i == 4:
+            # add Gaussian noise
+            img = add_Gaussian_noise(img, noise_level1=2, noise_level2=25)
+
+        elif i == 5:
+            # add JPEG noise
+            if random.random() < jpeg_prob:
+                img = add_JPEG_noise(img)
+
+        elif i == 6:
+            # add processed camera sensor noise
+            if random.random() < isp_prob and isp_model is not None:
+                with torch.no_grad():
+                    img, hq = isp_model.forward(img.copy(), hq)
+
+    # add final JPEG compression noise
+    img = add_JPEG_noise(img)
+
+    # random crop
+    img, hq = random_crop(img, hq, sf_ori, lq_patchsize)
+
+    return img, hq
+
+
+
+
 def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patchsize=64, isp_model=None):
     """
     This is an extended degradation model by combining
@@ -521,11 +613,19 @@ if __name__ == '__main__':
     img = util.imread_uint('utils/test.png', 3)
     img = util.uint2single(img)
     sf = 4
-    for i in range(10):
-        img_lq, img_hq = degradation_bsrgan_plus(img, sf=sf, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64)
+    
+    for i in range(20):
+        img_lq, img_hq = degradation_bsrgan(img, sf=sf, lq_patchsize=72)
         print(i)
         lq_nearest =  cv2.resize(util.single2uint(img_lq), (int(sf*img_lq.shape[1]), int(sf*img_lq.shape[0])), interpolation=0)
         img_concat = np.concatenate([lq_nearest, util.single2uint(img_hq)], axis=1)
         util.imsave(img_concat, str(i)+'.png')
+
+#    for i in range(10):
+#        img_lq, img_hq = degradation_bsrgan_plus(img, sf=sf, shuffle_prob=0.1, use_sharp=True, lq_patchsize=64)
+#        print(i)
+#        lq_nearest =  cv2.resize(util.single2uint(img_lq), (int(sf*img_lq.shape[1]), int(sf*img_lq.shape[0])), interpolation=0)
+#        img_concat = np.concatenate([lq_nearest, util.single2uint(img_hq)], axis=1)
+#        util.imsave(img_concat, str(i)+'.png')
 
 #    run utils/utils_blindsr.py
