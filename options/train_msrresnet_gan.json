@@ -105,8 +105,8 @@
     , "D_optimizer_reuse": false
 
     , "G_param_strict": true
-	, "D_param_strict": true
-	, "E_param_strict": true
+    , "D_param_strict": true
+    , "E_param_strict": true
 
     , "checkpoint_test": 5000
     , "checkpoint_save": 5000
