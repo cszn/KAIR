@@ -19,6 +19,7 @@ class ModelPlain(ModelBase):
         # ------------------------------------
         # define network
         # ------------------------------------
+        self.opt_train = self.opt['train']    # training option
         self.netG = define_G(opt)
         self.netG = self.model_to_device(self.netG)
 
@@ -33,7 +34,6 @@ class ModelPlain(ModelBase):
     # initialize training
     # ----------------------------------------
     def init_train(self):
-        self.opt_train = self.opt['train']    # training option
         self.load()                           # load model
         self.netG.train()                     # set training mode,for BN
         self.define_loss()                    # define loss
@@ -49,7 +49,7 @@ class ModelPlain(ModelBase):
         load_path_G = self.opt['path']['pretrained_netG']
         if load_path_G is not None:
             print('Loading model for G [{:s}] ...'.format(load_path_G))
-            self.load_network(load_path_G, self.netG, strict=self.opt['path']['strict_netG'])
+            self.load_network(load_path_G, self.netG, strict=self.opt_train['G_param_strict'])
 
     # ----------------------------------------
     # load optimizer

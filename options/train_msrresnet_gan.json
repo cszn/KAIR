@@ -15,9 +15,8 @@
     "root": "superresolution"  // "denoising" | "superresolution"
     , "pretrained_netG": null  // path of pretrained model
     , "pretrained_netD": null  // path of pretrained model
-    , "strict_netG": true
-    , "strict_netD": true
-  }
+	, "pretrained_netE": null  // path of pretrained model
+	}
 
   , "datasets": {
     "train": {
@@ -83,6 +82,8 @@
     , "gan_type": "ragan"    // "gan" | "ragan" | "lsgan" | "wgan" | "softplusgan"
     , "D_lossfn_weight": 5e-3
 
+	, "E_decay": 0.999  // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+
     , "D_init_iters": 0
 
     , "G_optimizer_type": "adam"
@@ -96,12 +97,16 @@
     , "G_scheduler_type": "MultiStepLR"
     , "G_scheduler_milestones": [200000, 800000, 1200000, 2000000]
     , "G_scheduler_gamma": 0.5
-    , "G_optimizer_reuse": true
+    , "G_optimizer_reuse": false
 
     , "D_scheduler_type": "MultiStepLR"
     , "D_scheduler_milestones": [200000, 800000, 1200000, 2000000]
     , "D_scheduler_gamma": 0.5
-    , "D_optimizer_reuse": true
+    , "D_optimizer_reuse": false
+
+    , "G_param_strict": true
+	, "D_param_strict": true
+	, "E_param_strict": true
 
     , "checkpoint_test": 5000
     , "checkpoint_save": 5000

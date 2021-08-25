@@ -17,11 +17,14 @@ class ModelGAN(ModelBase):
         # ------------------------------------
         # define network
         # ------------------------------------
+        self.opt_train = self.opt['train']    # training option
         self.netG = define_G(opt)
         self.netG = self.model_to_device(self.netG)
         if self.is_train:
             self.netD = define_D(opt)
             self.netD = self.model_to_device(self.netD)
+            if self.opt_train['E_decay'] > 0:
+                self.netE = define_G(opt).to(self.device).eval()
 
     """
     # ----------------------------------------
@@ -34,7 +37,6 @@ class ModelGAN(ModelBase):
     # initialize training
     # ----------------------------------------
     def init_train(self):
-        self.opt_train = self.opt['train']    # training option
         self.load()                           # load model
         self.netG.train()                     # set training mode,for BN
         self.netD.train()                     # set training mode,for BN
@@ -51,11 +53,17 @@ class ModelGAN(ModelBase):
         load_path_G = self.opt['path']['pretrained_netG']
         if load_path_G is not None:
             print('Loading model for G [{:s}] ...'.format(load_path_G))
-            self.load_network(load_path_G, self.netG, strict=self.opt['path']['strict_netG'])
+            self.load_network(load_path_G, self.netG, strict=self.opt_train['G_param_strict'])
+        load_path_E = self.opt['path']['pretrained_netE']
+        if self.opt_train['E_decay'] > 0:
+            if load_path_E is None:
+                load_path_E = load_path_G
+            print('Loading model for E [{:s}] ...'.format(load_path_E))
+            self.load_network(load_path_E, self.netE, strict=self.opt_train['E_param_strict'])
         load_path_D = self.opt['path']['pretrained_netD']
         if self.opt['is_train'] and load_path_D is not None:
             print('Loading model for D [{:s}] ...'.format(load_path_D))
-            self.load_network(load_path_D, self.netD, strict=self.opt['path']['strict_netD'])
+            self.load_network(load_path_D, self.netD, strict=self.opt_train['D_param_strict'])
 
     # ----------------------------------------
     # load optimizerG and optimizerD
@@ -76,6 +84,8 @@ class ModelGAN(ModelBase):
     def save(self, iter_label):
         self.save_network(self.save_dir, self.netG, 'G', iter_label)
         self.save_network(self.save_dir, self.netD, 'D', iter_label)
+        if self.opt_train['E_decay'] > 0:
+            self.save_network(self.save_dir, self.netE, 'E', iter_label)
         if self.opt_train['G_optimizer_reuse']:
             self.save_optimizer(self.save_dir, self.G_optimizer, 'optimizerG', iter_label)
         if self.opt_train['D_optimizer_reuse']:
@@ -268,6 +278,9 @@ class ModelGAN(ModelBase):
         #self.log_dict['l_d_fake'] = l_d_fake.item()
         self.log_dict['D_real'] = torch.mean(pred_d_real.detach())
         self.log_dict['D_fake'] = torch.mean(pred_d_fake.detach())
+
+        if self.opt_train['E_decay'] > 0:
+            self.update_E(self.opt_train['E_decay'])
 
     # ----------------------------------------
     # test and inference

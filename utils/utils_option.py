@@ -121,8 +121,24 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     if 'G_optimizer_reuse' not in opt['train']:
         opt['train']['G_optimizer_reuse'] = False
-    if 'D_optimizer_reuse' not in opt['train']:
+    if 'netD' in opt and 'D_optimizer_reuse' not in opt['train']:
         opt['train']['D_optimizer_reuse'] = False
+
+    # ----------------------------------------
+    # default setting of strict for model loading
+    # ----------------------------------------
+    if 'G_param_strict' not in opt['train']:
+        opt['train']['G_param_strict'] = True
+    if 'netD' in opt and 'D_param_strict' not in opt['path']:
+        opt['train']['D_param_strict'] = True
+    if 'netD' in opt and 'E_param_strict' not in opt['path']:
+        opt['train']['E_param_strict'] = True
+
+    # ----------------------------------------
+    # Exponential Moving Average -- Generator for GAN training
+    # ----------------------------------------
+    if 'netD' in opt and 'E_decay' not in opt['train']:
+        opt['train']['E_decay'] = 0
 
     # ----------------------------------------
     # default setting for discriminator
@@ -139,13 +155,6 @@ def parse(opt_path, is_train=True):
         if 'norm_type' not in opt['netD']:
             opt['netD']['norm_type'] = 'spectral'
 
-    # ----------------------------------------
-    # default setting of strict for model loading
-    # ----------------------------------------
-    if 'strict_netG' not in opt['path']:
-        opt['path']['strict_netG'] = True
-    if 'netD' in opt and 'strict_netD' not in opt['path']:
-        opt['path']['strict_netD'] = True
 
     return opt
 
