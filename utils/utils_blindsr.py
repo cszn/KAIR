@@ -473,7 +473,7 @@ def degradation_bsrgan(img, sf=4, lq_patchsize=72, isp_model=None):
         if i == 0:
             img = add_blur(img, sf=sf)
 
-        if i == 1:
+        elif i == 1:
             img = add_blur(img, sf=sf)
 
         elif i == 2:
@@ -521,7 +521,7 @@ def degradation_bsrgan(img, sf=4, lq_patchsize=72, isp_model=None):
 
 
 
-def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=True, lq_patchsize=64, isp_model=None):
+def degradation_bsrgan_plus(img, sf=4, shuffle_prob=0.5, use_sharp=False, lq_patchsize=64, isp_model=None):
     """
     This is an extended degradation model by combining
     the degradation models of BSRGAN and Real-ESRGAN
