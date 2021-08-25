@@ -60,7 +60,7 @@
 
     , "G_optimizer_type": "adam"        // fixed, adam is enough
     , "G_optimizer_lr": 1e-4            // learning rate
-	, "G_optimizer_wd": 0               // weight decay, default 0
+    , "G_optimizer_wd": 0               // weight decay, default 0
     , "G_optimizer_clipgrad": null      // unused
     , "G_optimizer_reuse": false
 
@@ -71,7 +71,7 @@
     , "G_regularizer_orthstep": null    // unused
     , "G_regularizer_clipstep": null    // unused
 
-	, "G_param_strict": true
+    , "G_param_strict": true
 
     , "checkpoint_test": 5000           // for testing
     , "checkpoint_save": 5000           // for saving model
