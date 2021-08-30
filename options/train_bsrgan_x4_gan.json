@@ -1,0 +1,121 @@
+{
+  "task": "bsrgan_x4_gan" // root/task/images|models|options
+  , "model": "gan"        // "gan"
+  , "gpu_ids": [0]        // [0,1,2,3] for 4 GPUs
+
+  , "scale": 4       // broadcast to "netG" if SISR
+  , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
+
+  , "path": {
+    "root": "superresolution"  // "denoising" | "superresolution"
+    , "pretrained_netG": null  // path of pretrained model
+    , "pretrained_netD": null  // path of pretrained model
+	, "pretrained_netE": null  // path of pretrained model
+	}
+
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"           // fixed
+      , "dataset_type": "blindsr"       // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch"
+      , "dataroot_H": "trainsets/trainH"// path of H training dataset
+      , "dataroot_L": null              // path of L training dataset
+
+      , "degradation_type": "bsrgan"    // "bsrgan" | "bsrgan_plus"
+      , "H_size": 288                   // patch_size 256 | 288 | 320
+      , "shuffle_prob": 0.1             // 
+      , "lq_patchsize": 72
+      , "use_sharp": false
+
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 8     // 8 | 32 | 64
+      , "dataloader_batch_size": 4      // batch size 1 | 16 | 32 | 48 | 64 | 128
+    }
+    , "test": {
+      "name": "test_dataset"            // fixed
+      , "dataset_type": "blindsr"
+
+      , "degradation_type": "bsrgan"    // "bsrgan" | "bsrgan_plus"
+      , "H_size": 288                   // patch_size 256 | 288 | 320
+      , "shuffle_prob": 0.1             // 
+      , "lq_patchsize": 72
+      , "use_sharp": false
+
+      , "dataroot_H": "testsets/set5"   // path of H testing dataset
+      , "dataroot_L": null              // path of L testing dataset
+    }
+  }
+
+  , "netG": {
+    "net_type": "rrdbnet" // "dncnn" | "fdncnn" | "ffdnet" | "srmd" | "dpsr" | "srresnet0" |  "srresnet1" | "rrdbnet" 
+    , "in_nc": 3          // input channel number
+    , "out_nc": 3         // ouput channel number
+    , "nf": 64            // 96 for DPSR, 128 for SRMD, 64 for "dncnn"
+    , "nb": 23            // 12 for "srmd", 15 for "ffdnet", 20 for "dncnn", 16 for "srresnet" and "dpsr"
+    , "gc": 32            // 
+    , "ng": 2             // unused
+    , "reduction" : 16    // unused
+    , "act_mode": "L"     // "BR" for BN+ReLU | "R" for ReLU
+    , "bias": true
+
+    , "init_type": "orthogonal"      // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
+    , "init_bn_type": "uniform"      // "uniform" | "constant"
+    , "init_gain": 0.2
+  }
+
+  , "netD": {
+    "net_type": "discriminator_unet" // "discriminator_patchgan" | "discriminator_unet"
+    , "in_nc": 3
+    , "base_nc": 64
+    , "n_layers": 3                  // only for "net_type":"discriminator_patchgan"
+    , "norm_type": "spectral"        // only for "net_type":"discriminator_patchgan"  | 'batch', 'instance', 'spectral', 'batchspectral', 'instancespectral'
+
+    , "init_type": "orthogonal"      // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
+    , "init_bn_type": "uniform"      // "uniform" | "constant"
+    , "init_gain": 0.2
+  }
+
+  , "train": {
+    "G_lossfn_type": "l1"    // "l1" | "l2" | "l2sum" | "l1c" | "ssim"
+    , "G_lossfn_weight": 1
+
+    , "F_lossfn_type": "l1"  // "l1" | "l2"
+    , "F_lossfn_weight": 1
+    , "F_feature_layer": [2,7,16,25,34]        // 25 | [2,7,16,25,34]
+    , "F_weights": [0.1,0.1,1.0,1.0,1.0]       // 1.0 | [0.1,0.1,1.0,1.0,1.0]
+    , "F_use_input_norm": true
+    , "F_use_range_norm": false
+
+    , "gan_type": "lsgan"     // "gan" | "ragan" | "lsgan" | "wgan" | "softplusgan"
+    , "D_lossfn_weight": 1
+
+    , "E_decay": 0.999        // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+
+    , "D_init_iters": 0
+
+    , "G_optimizer_type": "adam"
+    , "G_optimizer_lr": 5e-5  // learning rate
+    , "G_optimizer_wd": 0
+
+    , "D_optimizer_type": "adam"
+    , "D_optimizer_lr": 5e-5  // learning rate
+    , "D_optimizer_wd": 0
+
+    , "G_scheduler_type": "MultiStepLR"
+    , "G_scheduler_milestones": [800000, 1600000]
+    , "G_scheduler_gamma": 0.5
+    , "G_optimizer_reuse": false
+
+    , "D_scheduler_type": "MultiStepLR"
+    , "D_scheduler_milestones": [800000, 1600000]
+    , "D_scheduler_gamma": 0.5
+    , "D_optimizer_reuse": false
+
+    , "G_param_strict": true
+    , "D_param_strict": true
+    , "E_param_strict": true
+
+    , "checkpoint_test": 50000000000  // skip testing
+    , "checkpoint_save": 5000
+    , "checkpoint_print": 200
+  }
+}
