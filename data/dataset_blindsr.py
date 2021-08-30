@@ -4,7 +4,6 @@ import torch.utils.data as data
 import utils.utils_image as util
 import os
 from utils import utils_blindsr as blindsr
-# import time
 
 
 class DatasetBlindSR(data.Dataset):
@@ -18,8 +17,9 @@ class DatasetBlindSR(data.Dataset):
         self.opt = opt
         self.n_channels = opt['n_channels'] if opt['n_channels'] else 3
         self.sf = opt['scale'] if opt['scale'] else 4
-        self.shuffle_prob = opt['shuffle_prob'] if opt['shuffle_prob'] else 0.5
+        self.shuffle_prob = opt['shuffle_prob'] if opt['shuffle_prob'] else 0.1
         self.use_sharp = opt['use_sharp'] if opt['use_sharp'] else False
+        self.degradation_type = opt['degradation_type'] if opt['degradation_type'] else 'bsrgan'
         self.lq_patchsize = self.opt['lq_patchsize'] if self.opt['lq_patchsize'] else 64
         self.patch_size = self.opt['H_size'] if self.opt['H_size'] else self.lq_patchsize*self.sf
 
@@ -35,6 +35,7 @@ class DatasetBlindSR(data.Dataset):
     def __getitem__(self, index):
 
         L_path = None
+
         # ------------------------------------
         # get H image
         # ------------------------------------
@@ -65,11 +66,17 @@ class DatasetBlindSR(data.Dataset):
                 img_H = util.augment_img(img_H, mode=mode)
 
             img_H = util.uint2single(img_H)
-            img_L, img_H = blindsr.degradation_bsrgan_plus(img_H, self.sf, shuffle_prob=self.shuffle_prob, use_sharp=self.use_sharp, lq_patchsize=self.lq_patchsize)
+            if self.degradation_type == 'bsrgan':
+                img_L, img_H = blindsr.degradation_bsrgan(img_H, self.sf, lq_patchsize=self.lq_patchsize, isp_model=None)
+            elif self.degradation_type == 'bsrgan_plus':
+                img_L, img_H = blindsr.degradation_bsrgan_plus(img_H, self.sf, shuffle_prob=self.shuffle_prob, use_sharp=self.use_sharp, lq_patchsize=self.lq_patchsize)
 
         else:
             img_H = util.uint2single(img_H)
-            img_L, img_H = blindsr.degradation_bsrgan_plus(img_H, self.sf, shuffle_prob=self.shuffle_prob, use_sharp=self.use_sharp, lq_patchsize=self.lq_patchsize)
+            if self.degradation_type == 'bsrgan':
+                img_L, img_H = blindsr.degradation_bsrgan(img_H, self.sf, lq_patchsize=self.lq_patchsize, isp_model=None)
+            elif self.degradation_type == 'bsrgan_plus':
+                img_L, img_H = blindsr.degradation_bsrgan_plus(img_H, self.sf, shuffle_prob=self.shuffle_prob, use_sharp=self.use_sharp, lq_patchsize=self.lq_patchsize)
 
         # ------------------------------------
         # L/H pairs, HWC to CHW, numpy to tensor
