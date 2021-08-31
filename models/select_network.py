@@ -304,6 +304,7 @@ def init_weights(net, init_type='xavier_uniform', init_bn_type='uniform', gain=1
     #
     # Args:
     #   init_type:
+    #       default, none: pass init_weights
     #       normal; normal; xavier_normal; xavier_uniform;
     #       kaiming_normal; kaiming_uniform; orthogonal
     #   init_bn_type:
@@ -363,5 +364,6 @@ def init_weights(net, init_type='xavier_uniform', init_bn_type='uniform', gain=1
             else:
                 raise NotImplementedError('Initialization method [{:s}] is not implemented'.format(init_bn_type))
 
-    fn = functools.partial(init_fn, init_type=init_type, init_bn_type=init_bn_type, gain=gain)
-    net.apply(fn)
+    if init_type not in ['default', 'none']:
+        fn = functools.partial(init_fn, init_type=init_type, init_bn_type=init_bn_type, gain=gain)
+        net.apply(fn)
