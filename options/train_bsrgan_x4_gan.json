@@ -21,7 +21,7 @@
       , "dataroot_L": null              // path of L training dataset
 
       , "degradation_type": "bsrgan"    // "bsrgan" | "bsrgan_plus"
-      , "H_size": 288                   // patch_size 256 | 288 | 320
+      , "H_size": 320                   // patch_size 256 | 288 | 320
       , "shuffle_prob": 0.1             // 
       , "lq_patchsize": 72
       , "use_sharp": false
@@ -35,7 +35,7 @@
       , "dataset_type": "blindsr"
 
       , "degradation_type": "bsrgan"    // "bsrgan" | "bsrgan_plus"
-      , "H_size": 288                   // patch_size 256 | 288 | 320
+      , "H_size": 320                   // patch_size 256 | 288 | 320
       , "shuffle_prob": 0.1             // 
       , "lq_patchsize": 72
       , "use_sharp": false
@@ -103,7 +103,7 @@
     , "G_scheduler_type": "MultiStepLR"
     , "G_scheduler_milestones": [800000, 1600000]
     , "G_scheduler_gamma": 0.5
-    , "G_optimizer_reuse": false
+    , "G_optimizer_reuse": true
 
     , "D_scheduler_type": "MultiStepLR"
     , "D_scheduler_milestones": [800000, 1600000]
