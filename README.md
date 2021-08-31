@@ -1,9 +1,10 @@
-## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, IMDN
+## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN
 [Kai Zhang](https://cszn.github.io/)
 
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+- **_News (2021-08-31)_**: We upload the [training code of BSRGAN](https://github.com/cszn/BSRGAN#training).
 - **_News (2021-08-24)_**: We upload the BSRGAN degradation model.
 - **_News (2021-08-22)_**: Support multi-feature-layer VGG perceptual loss and UNet discriminator. 
 - **_News (2021-08-18)_**: We upload the extended BSRGAN degradation model. It is slightly different from our published version. 
