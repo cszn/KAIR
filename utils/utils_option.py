@@ -131,13 +131,13 @@ def parse(opt_path, is_train=True):
         opt['train']['G_param_strict'] = True
     if 'netD' in opt and 'D_param_strict' not in opt['path']:
         opt['train']['D_param_strict'] = True
-    if 'netD' in opt and 'E_param_strict' not in opt['path']:
+    if 'E_param_strict' not in opt['path']:
         opt['train']['E_param_strict'] = True
 
     # ----------------------------------------
-    # Exponential Moving Average -- Generator for GAN training
+    # Exponential Moving Average
     # ----------------------------------------
-    if 'netD' in opt and 'E_decay' not in opt['train']:
+    if 'E_decay' not in opt['train']:
         opt['train']['E_decay'] = 0
 
     # ----------------------------------------

@@ -22,6 +22,8 @@ class ModelPlain(ModelBase):
         self.opt_train = self.opt['train']    # training option
         self.netG = define_G(opt)
         self.netG = self.model_to_device(self.netG)
+        if self.opt_train['E_decay'] > 0:
+            self.netE = define_G(opt).to(self.device).eval()
 
     """
     # ----------------------------------------
@@ -50,6 +52,15 @@ class ModelPlain(ModelBase):
         if load_path_G is not None:
             print('Loading model for G [{:s}] ...'.format(load_path_G))
             self.load_network(load_path_G, self.netG, strict=self.opt_train['G_param_strict'])
+        load_path_E = self.opt['path']['pretrained_netE']
+        if self.opt_train['E_decay'] > 0:
+            if load_path_E is not None:
+                print('Loading model for E [{:s}] ...'.format(load_path_E))
+                self.load_network(load_path_E, self.netE, strict=self.opt_train['E_param_strict'])
+            else:
+                print('Copying model for E ...')
+                self.update_E(0)
+            self.netE.eval()
 
     # ----------------------------------------
     # load optimizer
@@ -65,6 +76,8 @@ class ModelPlain(ModelBase):
     # ----------------------------------------
     def save(self, iter_label):
         self.save_network(self.save_dir, self.netG, 'G', iter_label)
+        if self.opt_train['E_decay'] > 0:
+            self.save_network(self.save_dir, self.netE, 'E', iter_label)
         if self.opt_train['G_optimizer_reuse']:
             self.save_optimizer(self.save_dir, self.G_optimizer, 'optimizerG', iter_label)
 
@@ -157,7 +170,10 @@ class ModelPlain(ModelBase):
 
         # self.log_dict['G_loss'] = G_loss.item()/self.E.size()[0]  # if `reduction='sum'`
         self.log_dict['G_loss'] = G_loss.item()
- 
+
+        if self.opt_train['E_decay'] > 0:
+            self.update_E(self.opt_train['E_decay'])
+
     # ----------------------------------------
     # test / inference
     # ----------------------------------------

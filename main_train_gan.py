@@ -64,13 +64,15 @@ def main(json_path='options/train_msrresnet_gan.json'):
     # -->-->-->-->-->-->-->-->-->-->-->-->-->-
     init_iter_G, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
     init_iter_D, init_path_D = option.find_last_checkpoint(opt['path']['models'], net_type='D')
+    init_iter_E, init_path_E = option.find_last_checkpoint(opt['path']['models'], net_type='E')
     opt['path']['pretrained_netG'] = init_path_G
     opt['path']['pretrained_netD'] = init_path_D
+    opt['path']['pretrained_netE'] = init_path_E
     init_iter_optimizerG, init_path_optimizerG = option.find_last_checkpoint(opt['path']['models'], net_type='optimizerG')
     init_iter_optimizerD, init_path_optimizerD = option.find_last_checkpoint(opt['path']['models'], net_type='optimizerD')
     opt['path']['pretrained_optimizerG'] = init_path_optimizerG
     opt['path']['pretrained_optimizerD'] = init_path_optimizerD
-    current_step = max(init_iter_G, init_iter_D, init_iter_optimizerG, init_iter_optimizerD)
+    current_step = max(init_iter_G, init_iter_D, init_iter_E, init_iter_optimizerG, init_iter_optimizerD)
 
     # opt['path']['pretrained_netG'] = ''
     # current_step = 0

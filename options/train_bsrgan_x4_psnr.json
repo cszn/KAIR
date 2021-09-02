@@ -10,6 +10,7 @@
   , "path": {
     "root": "superresolution"      // "denoising" | "superresolution"
     , "pretrained_netG": null      // path of pretrained model
+    , "pretrained_netE": null      // path of pretrained model
   }
 
   , "datasets": {
@@ -65,6 +66,8 @@
     "G_lossfn_type": "l1"               // "l1" preferred | "l2sum" | "l2" | "ssim" 
     , "G_lossfn_weight": 1.0            // default
 
+    , "E_decay": 0.999                  // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+
     , "G_optimizer_type": "adam"        // fixed, adam is enough
     , "G_optimizer_lr": 1e-4            // learning rate
     , "G_optimizer_clipgrad": null      // unused
@@ -76,6 +79,9 @@
 
     , "G_regularizer_orthstep": null    // unused
     , "G_regularizer_clipstep": null    // 
+
+    , "G_param_strict": true
+    , "E_param_strict": true
 
     , "checkpoint_test": 500000000      // skip testing
     , "checkpoint_save": 5000           // for saving model

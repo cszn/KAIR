@@ -56,10 +56,14 @@ class ModelGAN(ModelBase):
             self.load_network(load_path_G, self.netG, strict=self.opt_train['G_param_strict'])
         load_path_E = self.opt['path']['pretrained_netE']
         if self.opt_train['E_decay'] > 0:
-            if load_path_E is None:
-                load_path_E = load_path_G
-            print('Loading model for E [{:s}] ...'.format(load_path_E))
-            self.load_network(load_path_E, self.netE, strict=self.opt_train['E_param_strict'])
+            if load_path_E is not None:
+                print('Loading model for E [{:s}] ...'.format(load_path_E))
+                self.load_network(load_path_E, self.netE, strict=self.opt_train['E_param_strict'])
+            else:
+                print('Copying model for E')
+                self.update_E(0)
+            self.netE.eval()
+
         load_path_D = self.opt['path']['pretrained_netD']
         if self.opt['is_train'] and load_path_D is not None:
             print('Loading model for D [{:s}] ...'.format(load_path_D))
