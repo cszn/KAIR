@@ -22,15 +22,14 @@ class DatasetJPEG(data.Dataset):
         self.paths_H = util.get_image_paths(opt['dataroot_H'])
 
     def __getitem__(self, index):
-        # -------------------------------------
-        # get H image
-        # -------------------------------------
-        H_path = self.paths_H[index]
-        img_H = util.imread_uint(H_path, 3)
-
-        L_path = H_path
 
         if self.opt['phase'] == 'train':
+            # -------------------------------------
+            # get H image
+            # -------------------------------------
+            H_path = self.paths_H[index]
+            img_H = util.imread_uint(H_path, 3)
+            L_path = H_path
 
             H, W = img_H.shape[:2]
             self.patch_size_plus = self.patch_size + 8
@@ -89,25 +88,29 @@ class DatasetJPEG(data.Dataset):
             img_L, img_H = util.uint2tensor3(img_L), util.uint2tensor3(img_H)
 
         else:
+
+            H_path = self.paths_H[index]
             # ---------------------------------
             # set quality factor
             # ---------------------------------
             quality_factor = self.quality_factor_test
 
-            img_L = img_H.copy()
-
-            if self.is_color:  # color image
+            if self.is_color:  # color JPEG image deblocking
+                img_H = util.imread_uint(H_path, 3)
+                L_path = H_path
+                img_L = img_H.copy()
                 img_L = cv2.cvtColor(img_L, cv2.COLOR_RGB2BGR)
                 result, encimg = cv2.imencode('.jpg', img_L, [int(cv2.IMWRITE_JPEG_QUALITY), quality_factor])
                 img_L = cv2.imdecode(encimg, 1)
                 img_L = cv2.cvtColor(img_L, cv2.COLOR_BGR2RGB)
             else:
-                if random.random() > 0.5:
-                    img_L = util.rgb2ycbcr(img_L)
-                else:
-                    img_L = cv2.cvtColor(img_L, cv2.COLOR_RGB2GRAY)
-                img_H = img_L.copy()
-                result, encimg = cv2.imencode('.jpg', img_L, [int(cv2.IMWRITE_JPEG_QUALITY), quality_factor])
+                img_H = cv2.imread(H_path, cv2.IMREAD_UNCHANGED)
+                is_to_ycbcr = True if img_L.ndim == 3 else False
+                if is_to_ycbcr:
+                    img_H = cv2.cvtColor(img_H, cv2.COLOR_BGR2RGB)
+                    img_H = util.rgb2ycbcr(img_H)
+
+                result, encimg = cv2.imencode('.jpg', img_H, [int(cv2.IMWRITE_JPEG_QUALITY), quality_factor])
                 img_L = cv2.imdecode(encimg, 0)
 
         return {'L': img_L, 'H': img_H, 'L_path': L_path, 'H_path': H_path}
