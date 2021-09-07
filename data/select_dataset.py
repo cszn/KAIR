@@ -50,8 +50,8 @@ def define_Dataset(dataset_opt):
     # -------------------------------------------------
     # JPEG compression artifact reduction (deblocking)
     # -------------------------------------------------
-    elif dataset_type in ['deblocking']:
-        from data.dataset_deblocking import DatasetDeblocking as D
+    elif dataset_type in ['jpeg']:
+        from data.dataset_jpeg import DatasetJPEG as D
 
     # -----------------------------------------
     # common
