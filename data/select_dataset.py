@@ -47,6 +47,12 @@ def define_Dataset(dataset_opt):
     elif dataset_type in ['bsrnet', 'bsrgan', 'blindsr']:
         from data.dataset_blindsr import DatasetBlindSR as D
 
+    # -------------------------------------------------
+    # JPEG compression artifact reduction (deblocking)
+    # -------------------------------------------------
+    elif dataset_type in ['deblocking']:
+        from data.dataset_deblocking import DatasetDeblocking as D
+
     # -----------------------------------------
     # common
     # -----------------------------------------

@@ -1,0 +1,81 @@
+{
+  "task": "swinir_sr_lightweight_x2"     //  classical image sr for x2/x3/x4. root/task/images-models-options
+  , "model": "plain" // "plain" | "plain2" if two inputs
+  , "gpu_ids": [0,1,2,3,4,5,6,7]
+  , "dist": true
+
+  , "scale": 2       // 2 | 3 | 4
+  , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
+
+  , "path": {
+    "root": "superresolution"            // "denoising" | "superresolution" | "deblocking"
+    , "pretrained_netG": null      // path of pretrained model. We fine-tune X3/X4 models from X2 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+    , "pretrained_netE": null      // path of pretrained model
+  }
+
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"           // just name
+      , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "deblocking"
+      , "dataroot_H": "trainsets/trainH"// path of H training dataset. DIV2K (800 training images)
+      , "dataroot_L": "trainsets/trainL"              // path of L training dataset
+
+      , "H_size": 128                   // 128/192/256/512.
+
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 16
+      , "dataloader_batch_size": 64      // Total batch size =8x8=64 in SwinIR
+    }
+    , "test": {
+      "name": "test_dataset"            // just name
+      , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch"
+      , "dataroot_H": "testsets/Set5/HR"  // path of H testing dataset
+      , "dataroot_L": "testsets/Set5/LR_bicubic/X2"              // path of L testing dataset
+
+    }
+  }
+
+  , "netG": {
+    "net_type": "swinir" 
+    , "upscale": 2                      // 2 | 3  | 4
+    , "in_chans": 3 
+    , "img_size": 64
+    , "window_size": 8  
+    , "img_range": 1.0 
+    , "depths": [6, 6, 6, 6]
+    , "embed_dim": 180 
+    , "num_heads": [6, 6, 6, 6]
+    , "mlp_ratio": 2 
+    , "upsampler": "pixelshuffledirect"        // "pixelshuffle" | "pixelshuffledirect" | "nearest+conv" | null
+    , "resi_connection": "1conv"        // "1conv" | "3conv"
+
+    , "init_type": "default"
+  }
+
+  , "train": {
+    "G_lossfn_type": "l1"               // "l1" preferred | "l2sum" | "l2" | "ssim" | "charbonnier"
+    , "G_lossfn_weight": 1.0            // default
+
+    , "E_decay": 0.999                  // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+
+    , "G_optimizer_type": "adam"        // fixed, adam is enough
+    , "G_optimizer_lr": 2e-4            // learning rate
+    , "G_optimizer_wd": 0               // weight decay, default 0
+    , "G_optimizer_clipgrad": null      // unused
+    , "G_optimizer_reuse": true         // 
+
+    , "G_scheduler_type": "MultiStepLR" // "MultiStepLR" is enough
+    , "G_scheduler_milestones": [250000, 400000, 450000, 475000, 500000]
+    , "G_scheduler_gamma": 0.5
+
+    , "G_regularizer_orthstep": null    // unused
+    , "G_regularizer_clipstep": null    // unused
+
+    , "G_param_strict": true
+    , "E_param_strict": true
+
+    , "checkpoint_test": 5000           // for testing
+    , "checkpoint_save": 5000           // for saving model
+    , "checkpoint_print": 200           // for print
+  }
+}
