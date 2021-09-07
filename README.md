@@ -216,6 +216,18 @@ Testing
 References
 ----------
 ```BibTex
+@inproceedings{liang2021swinir,
+title={SwinIR: Image Restoration Using Swin Transformer},
+author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},
+booktitle={IEEE International Conference on Computer Vision Workshops},
+year={2021}
+}
+@inproceedings{zhang2021designing,
+title={Designing a Practical Degradation Model for Deep Blind Image Super-Resolution},
+author={Zhang, Kai and Liang, Jingyun and Van Gool, Luc and Timofte, Radu},
+booktitle={IEEE International Conference on Computer Vision},
+year={2021}
+}
 @article{zhang2021plug, % DPIR & DRUNet & IRCNN
   title={Plug-and-Play Image Restoration with Deep Denoiser Prior},
   author={Zhang, Kai and Li, Yawei and Zuo, Wangmeng and Zhang, Lei and Van Gool, Luc and Timofte, Radu},
@@ -294,16 +306,10 @@ year={2017}
   booktitle={IEEE International Conference on Computer Vision Workshops},
   year={2019}
 }
-@inproceedings{Yang2021GPEN,
+@inproceedings{yang2021gan,
     title={GAN Prior Embedded Network for Blind Face Restoration in the Wild},
     author={Tao Yang, Peiran Ren, Xuansong Xie, and Lei Zhang},
     booktitle={IEEE Conference on Computer Vision and Pattern Recognition},
-    year={2021}
-}
-@article{liang2021swinir,
-    title={SwinIR: Image Restoration Using Swin Transformer},
-    author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},
-    journal={arXiv preprint arXiv:2108.10257}, 
     year={2021}
 }
 ```
