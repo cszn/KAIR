@@ -105,6 +105,12 @@ class DatasetUSRNet(data.Dataset):
             k = self.kernels[0, 0].astype(np.float64)  # validation kernel
             k /= np.sum(k)
             noise_level = 0./255.0  # validation noise level
+
+            # ------------------------------------
+            # modcrop
+            # ------------------------------------
+            img_H = util.modcrop(img_H, self.sf_validation)
+
             img_L = ndimage.filters.convolve(img_H, np.expand_dims(k, axis=2), mode='wrap')  # blur
             img_L = img_L[0::self.sf_validation, 0::self.sf_validation, ...]  # downsampling
             img_L = util.uint2single(img_L) + np.random.normal(0, noise_level, img_L.shape)
