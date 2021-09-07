@@ -7,7 +7,7 @@
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
 
   , "path": {
-    "root": "superresolution"  // "denoising" | "superresolution" | "deblocking"
+    "root": "superresolution"  // "denoising" | "superresolution" | "dejpeg"
     , "pretrained_netG": null  // path of pretrained model
     , "pretrained_netD": null  // path of pretrained model
 	, "pretrained_netE": null  // path of pretrained model
@@ -16,7 +16,7 @@
   , "datasets": {
     "train": {
       "name": "train_dataset"           // just name
-      , "dataset_type": "blindsr"       // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "deblocking"
+      , "dataset_type": "blindsr"       // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
       , "dataroot_H": "trainsets/trainH"// path of H training dataset. DIV2K (800 training images) + Flickr2K (2650 images) + + OST (10324 images)
       , "dataroot_L": null              // path of L training dataset
 

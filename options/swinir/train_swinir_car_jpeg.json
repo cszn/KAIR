@@ -4,10 +4,10 @@
   , "gpu_ids": [0,1,2,3,4,5,6,7]
   , "dist": true
 
-  , "n_channels": 1  // broadcast to "datasets", 1 for grayscale, 3 for color
+  , "is_color": false // color or grayscale
 
   , "path": {
-    "root": "deblocking"            // "denoising" | "superresolution" | "deblocking"
+    "root": "dejpeg"            // "denoising" | "superresolution" | "dejpeg"
     , "pretrained_netG": null      // path of pretrained model. We fine-tune quality=10/20/30 models from quality=40 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
     , "pretrained_netE": null      // path of pretrained model
   }
@@ -15,7 +15,7 @@
   , "datasets": {
     "train": {
       "name": "train_dataset"           // just name
-      , "dataset_type": "deblocking"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "deblocking"
+      , "dataset_type": "jpeg"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
       , "dataroot_H": "trainsets/trainH"// path of H training dataset. DIV2K (800 training images) + Flickr2K (2650 images) + BSD500 (400 training&testing images) + WED(4744 images) in SwinIR
       , "dataroot_L": null              // path of L training dataset
 
@@ -30,7 +30,7 @@
     }
     , "test": {
       "name": "test_dataset"            // just name
-      , "dataset_type": "deblocking"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "deblocking"
+      , "dataset_type": "jpeg"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
       , "dataroot_H": "testsets/LIVE1"  // path of H testing dataset
       , "dataroot_L": null              // path of L testing dataset
 
