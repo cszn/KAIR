@@ -20,8 +20,9 @@
       , "dataroot_L": null              // path of L training dataset
 
       , "H_size": 126                   // patch_size
-      , "quality": 40                     //  10 | 20 | 30 | 40.
-      , "quality_test": 40                //
+      , "quality_factor": 40            //  10 | 20 | 30 | 40.
+      , "quality_factor_test": 40       //
+      , "is_color": false               //
 
       , "dataloader_shuffle": true
       , "dataloader_num_workers": 16
@@ -33,8 +34,9 @@
       , "dataroot_H": "testsets/LIVE1"  // path of H testing dataset
       , "dataroot_L": null              // path of L testing dataset
 
-      , "quality": 40                     //
-      , "quality_test": 40                //
+      , "quality_factor": 40            //  10 | 20 | 30 | 40.
+      , "quality_factor_test": 40       //
+      , "is_color": false               //
 
     }
   }
