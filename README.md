@@ -1,9 +1,16 @@
-## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN
+## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN, SwinIR
 [Kai Zhang](https://cszn.github.io/)
 
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+- **_News (2021-09-07)_**: We upload [the training code](https://github.com/cszn/KAIR/blob/main/docs/README_SwinIR.md) of [SwinIR ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/SwinIR?style=social)](https://github.com/JingyunLiang/SwinIR) and provide an [interactive online Colob demo for real-world image SR](https://colab.research.google.com/gist/JingyunLiang/10bc0a26f7efd899c95fd7137a936d10/real-esrgan-inference-demo.ipynb). Try to super-resolve your own images [here! <a href="https://colab.research.google.com/gist/JingyunLiang/a5e3e54bc9ef8d7bf594f6fee8208533/swinir-demo-on-real-world-image-sr.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="google colab logo"></a>](https://colab.research.google.com/gist/JingyunLiang/a5e3e54bc9ef8d7bf594f6fee8208533/swinir-demo-on-real-world-image-sr.ipynb)
+
+Real-World Image (x4) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;[BSRGAN, ICCV2021](https://github.com/cszn/BSRGAN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SwinIR (ours)
+><p align="center">
+  <img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/ETH_LR.png"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/ETH_BSRGAN.png"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/ETH_realESRGAN.jpg"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/ETH_SwinIR.png">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/OST_009_crop_LR.png"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/OST_009_crop_BSRGAN.png"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/OST_009_crop_realESRGAN.png"><img width="200" src="https://raw.githubusercontent.com/JingyunLiang/SwinIR/main/figs/OST_009_crop_SwinIR.png">
+
 - **_News (2021-08-31)_**: We upload the [training code of BSRGAN](https://github.com/cszn/BSRGAN#training).
 - **_News (2021-08-24)_**: We upload the BSRGAN degradation model.
 - **_News (2021-08-22)_**: Support multi-feature-layer VGG perceptual loss and UNet discriminator. 
@@ -129,6 +136,8 @@ kill $(ps aux | grep main_train_gan.py | grep -v grep | awk '{print $2}')
 | USRNet | [https://github.com/cszn/USRNet](https://github.com/cszn/USRNet)|
 | DRUNet | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
 | DPIR | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
+| BSRGAN | [https://github.com/cszn/BSRGAN](https://github.com/cszn/BSRGAN)|
+| SwinIR | [https://github.com/JingyunLiang/SwinIR](https://github.com/JingyunLiang/SwinIR)|
 
 Network architectures
 ----------
@@ -289,6 +298,12 @@ year={2017}
     title={GAN Prior Embedded Network for Blind Face Restoration in the Wild},
     author={Tao Yang, Peiran Ren, Xuansong Xie, and Lei Zhang},
     booktitle={IEEE Conference on Computer Vision and Pattern Recognition},
+    year={2021}
+}
+@article{liang2021swinir,
+    title={SwinIR: Image Restoration Using Swin Transformer},
+    author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},
+    journal={arXiv preprint arXiv:2108.10257}, 
     year={2021}
 }
 ```
