@@ -84,12 +84,10 @@ class DatasetJPEG(data.Dataset):
                 rnd_w = 0
             img_H = img_H[rnd_h:rnd_h + self.patch_size, rnd_w:rnd_w + self.patch_size]
             img_L = img_L[rnd_h:rnd_h + self.patch_size, rnd_w:rnd_w + self.patch_size]
-
-            img_L, img_H = util.uint2tensor3(img_L), util.uint2tensor3(img_H)
-
         else:
 
             H_path = self.paths_H[index]
+            L_path = H_path
             # ---------------------------------
             # set quality factor
             # ---------------------------------
@@ -97,7 +95,6 @@ class DatasetJPEG(data.Dataset):
 
             if self.is_color:  # color JPEG image deblocking
                 img_H = util.imread_uint(H_path, 3)
-                L_path = H_path
                 img_L = img_H.copy()
                 img_L = cv2.cvtColor(img_L, cv2.COLOR_RGB2BGR)
                 result, encimg = cv2.imencode('.jpg', img_L, [int(cv2.IMWRITE_JPEG_QUALITY), quality_factor])
@@ -112,6 +109,8 @@ class DatasetJPEG(data.Dataset):
 
                 result, encimg = cv2.imencode('.jpg', img_H, [int(cv2.IMWRITE_JPEG_QUALITY), quality_factor])
                 img_L = cv2.imdecode(encimg, 0)
+
+        img_L, img_H = util.uint2tensor3(img_L), util.uint2tensor3(img_H)
 
         return {'L': img_L, 'H': img_H, 'L_path': L_path, 'H_path': H_path}
 
