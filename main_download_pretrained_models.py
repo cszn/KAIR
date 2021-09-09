@@ -111,7 +111,7 @@ if __name__ == '__main__':
                     else:
                         download_pretrained_model(args.model_dir, model_name)
             elif method_model in model_zoo:  # model, do not need for loop
-                if 'SwinIR' in model_name:
+                if 'SwinIR' in method_model:
                     download_pretrained_model(os.path.join(args.model_dir, 'swinir'), method_model)
                 else:
                     download_pretrained_model(args.model_dir, method_model)
