@@ -1,6 +1,6 @@
 
 
-Run matlab file [main_denoising_gray.m](matlab/main_denoising_gray.m) for local zoom.
+Run matlab file [main_denoising_gray.m](https://github.com/cszn/KAIR/blob/master/matlab/main_denoising_gray.m) for local zoom.
 
 ```matlab
 upperleft_pixel =  [172, 218];
