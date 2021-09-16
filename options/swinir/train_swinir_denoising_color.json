@@ -59,7 +59,7 @@
   , "train": {
     "G_lossfn_type": "charbonnier"      // "l1" | "l2sum" | "l2" | "ssim" | "charbonnier" preferred
     , "G_lossfn_weight": 1.0            // default
-    , "G_charbonnier_eps": 1e-3
+    , "G_charbonnier_eps": 1e-9
 
     , "E_decay": 0.999                  // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
 
