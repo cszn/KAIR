@@ -5,8 +5,6 @@
 
   , "scale": 1       // broadcast to "netG" if SISR
   , "n_channels": 1  // broadcast to "datasets", 1 for grayscale, 3 for color
-  , "sigma": 25      // 15, 25, 50 for DnCNN | [0, 75] for FFDNet and FDnCNN
-  , "sigma_test": 25 // 15, 25, 50 for DnCNN and ffdnet
 
   , "merge_bn": true               // BN for DnCNN
   , "merge_bn_startpoint": 400000  // merge BN after N iterations
@@ -23,6 +21,10 @@
       , "dataroot_H": "trainsets/trainH"// path of H training dataset
       , "dataroot_L": null              // path of L training dataset
       , "H_size": 40                    // patch size 40 | 64 | 96 | 128 | 192
+
+      , "sigma": 25                     // 15, 25, 50 for DnCNN | [0, 75] for FFDNet and FDnCNN
+      , "sigma_test": 25                // 15, 25, 50 for DnCNN and ffdnet
+
       , "dataloader_shuffle": true
       , "dataloader_num_workers": 8
       , "dataloader_batch_size": 64     // batch size 1 | 16 | 32 | 48 | 64 | 128
@@ -32,6 +34,10 @@
       , "dataset_type": "dncnn"         // "dncnn" | "dnpatch" for dncnn,  | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch"
       , "dataroot_H": "testsets/bsd68"  // path of H testing dataset
       , "dataroot_L": null              // path of L testing dataset
+
+      , "sigma": 25                     // 15, 25, 50 for DnCNN | [0, 75] for FFDNet and FDnCNN
+      , "sigma_test": 25                // 15, 25, 50 for DnCNN and ffdnet
+
     }
   }
 
