@@ -66,8 +66,12 @@ def surf(Z, cmap='rainbow', figsize=None):
 
 def get_image_paths(dataroot):
     paths = None  # return None if dataroot is None
-    if dataroot is not None:
+    if isinstance(dataroot, str):
         paths = sorted(_get_paths_from_images(dataroot))
+    elif isinstance(dataroot, list):
+        paths = []
+        for i in dataroot:
+            paths += sorted(_get_paths_from_images(i))
     return paths
 
 
