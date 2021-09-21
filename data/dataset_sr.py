@@ -25,26 +25,12 @@ class DatasetSR(data.Dataset):
         # ------------------------------------
         # get paths of L/H
         # ------------------------------------
-        if isinstance(opt['dataroot_H'], str):
-            opt['dataroot_H'] = [opt['dataroot_H']]
-        if isinstance(opt['dataroot_L'], str):
-            opt['dataroot_L'] = [opt['dataroot_L']]
-        elif opt['dataroot_L'] is None:
-            opt['dataroot_L'] = [None] * len(opt['dataroot_H'])
-        assert len(opt['dataroot_H']) == len(opt['dataroot_L'])
+        self.paths_H = util.get_image_paths(opt['dataroot_H'])
+        self.paths_L = util.get_image_paths(opt['dataroot_L'])
 
-        self.paths_H, self.paths_L = [], []
-        for dataroot_H, dataroot_L in zip(opt['dataroot_H'], opt['dataroot_L']):
-            paths_H = util.get_image_paths(dataroot_H)
-            paths_L = util.get_image_paths(dataroot_L)
-
-            assert paths_H, 'Error: H path is empty.'
-            self.paths_H += paths_H
-            if paths_L:
-                assert len(paths_L) == len(paths_H), 'L/H mismatch - {}, {}.'.format(len(paths_L), len(paths_H))
-                self.paths_L += paths_L
-            else:
-                self.paths_L = None
+        assert self.paths_H, 'Error: H path is empty.'
+        if self.paths_L and self.paths_H:
+            assert len(self.paths_L) == len(self.paths_H), 'L/H mismatch - {}, {}.'.format(len(self.paths_L), len(self.paths_H))
 
     def __getitem__(self, index):
 
