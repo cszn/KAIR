@@ -47,6 +47,7 @@
     , "num_heads": [6, 6, 6, 6]
     , "mlp_ratio": 2 
     , "upsampler": "pixelshuffledirect"        // "pixelshuffle" | "pixelshuffledirect" | "nearest+conv" | null
+    , "resi_connection": "1conv"        // "1conv" | "3conv"
 
     , "init_type": "default"
   }
