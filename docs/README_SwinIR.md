@@ -100,7 +100,7 @@ python main_test_swinir.py --task lightweight_sr --scale 3 --model_path model_zo
 python main_test_swinir.py --task lightweight_sr --scale 4 --model_path model_zoo/swinir/002_lightweightSR_DIV2K_s64w8_SwinIR-S_x4.pth --folder_lq testsets/set5/LR_bicubic/X4 --folder_gt testsets/set5/HR
 
 
-# 003 Real-World Image Super-Resolution
+# 003 Real-World Image Super-Resolution (use --tile 400 if you run out-of-memory)
 # (middle size)
 python main_test_swinir.py --task real_sr --scale 4 --model_path model_zoo/swinir/003_realSR_BSRGAN_DFO_s64w8_SwinIR-M_x4_GAN.pth --folder_lq testsets/RealSRSet+5images
 
