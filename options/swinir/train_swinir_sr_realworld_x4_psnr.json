@@ -34,7 +34,7 @@
       "name": "test_dataset"            // just name
       , "dataset_type": "sr"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
       , "dataroot_H": "testsets/Set5/HR"  // path of H testing dataset
-      , "dataroot_L": "testsets/Set5/LR_bicubic/X2"              // path of L testing dataset
+      , "dataroot_L": "testsets/Set5/LR_bicubic/X4"              // path of L testing dataset
 
     }
   }
