@@ -9,6 +9,7 @@ _______
 - **_News (2021-12-23)_**: Our techniques are adopted in [https://www.amemori.ai/](https://www.amemori.ai/).
 - **_News (2021-12-23)_**: Our new work for practical image denoising.
 
+- <img src="figs/palace.png" height="320px"/> <img src="figs/palace_HSCU.png" height="320px"/> 
 - [<img src="https://github.com/cszn/KAIR/raw/master/figs/denoising_02.png" height="256px"/>](https://imgsli.com/ODczMTc) 
 [<img src="https://github.com/cszn/KAIR/raw/master/figs/denoising_01.png" height="256px"/>](https://imgsli.com/ODczMTY) 
 - **_News (2021-09-09)_**: Add [main_download_pretrained_models.py](https://github.com/cszn/KAIR/blob/master/main_download_pretrained_models.py) to download pre-trained models.
