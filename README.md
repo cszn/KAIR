@@ -7,7 +7,7 @@
 
 _______
 - **_News (2021-12-23)_**: Our techniques are adopted in [https://www.amemori.ai/](https://www.amemori.ai/).
-- **_News (2021-12-23)_**: Real image denoising.
+- **_News (2021-12-23)_**: Our new work for practical image denoising.
 
 - [<img src="https://github.com/cszn/KAIR/raw/master/figs/denoising_02.png" height="256px"/>](https://imgsli.com/ODczMTc) 
 [<img src="https://github.com/cszn/KAIR/raw/master/figs/denoising_01.png" height="256px"/>](https://imgsli.com/ODczMTY) 
