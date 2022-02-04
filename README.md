@@ -230,12 +230,14 @@ References
 title={SwinIR: Image Restoration Using Swin Transformer},
 author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},
 booktitle={IEEE International Conference on Computer Vision Workshops},
+pages={1833--1844},
 year={2021}
 }
 @inproceedings{zhang2021designing,
 title={Designing a Practical Degradation Model for Deep Blind Image Super-Resolution},
 author={Zhang, Kai and Liang, Jingyun and Van Gool, Luc and Timofte, Radu},
 booktitle={IEEE International Conference on Computer Vision},
+pages={4791--4800},
 year={2021}
 }
 @article{zhang2021plug, % DPIR & DRUNet & IRCNN
