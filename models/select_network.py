@@ -384,4 +384,4 @@ def init_weights(net, init_type='xavier_uniform', init_bn_type='uniform', gain=1
         fn = functools.partial(init_fn, init_type=init_type, init_bn_type=init_bn_type, gain=gain)
         net.apply(fn)
     else:
-        print('Pass this initialization! Initialization was done during network defination!')
+        print('Pass this initialization! Initialization was done during network definition!')
