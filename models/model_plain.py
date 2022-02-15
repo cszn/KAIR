@@ -111,16 +111,31 @@ class ModelPlain(ModelBase):
                 G_optim_params.append(v)
             else:
                 print('Params [{:s}] will not optimize.'.format(k))
-        self.G_optimizer = Adam(G_optim_params, lr=self.opt_train['G_optimizer_lr'], weight_decay=0)
+        if self.opt_train['G_optimizer_type'] == 'adam':
+            self.G_optimizer = Adam(G_optim_params, lr=self.opt_train['G_optimizer_lr'],
+                                    betas=self.opt_train['G_optimizer_betas'],
+                                    weight_decay=self.opt_train['G_optimizer_wd'])
+        else:
+            raise NotImplementedError
 
     # ----------------------------------------
     # define scheduler, only "MultiStepLR"
     # ----------------------------------------
     def define_scheduler(self):
-        self.schedulers.append(lr_scheduler.MultiStepLR(self.G_optimizer,
-                                                        self.opt_train['G_scheduler_milestones'],
-                                                        self.opt_train['G_scheduler_gamma']
-                                                        ))
+        if self.opt_train['G_scheduler_type'] == 'MultiStepLR':
+            self.schedulers.append(lr_scheduler.MultiStepLR(self.G_optimizer,
+                                                            self.opt_train['G_scheduler_milestones'],
+                                                            self.opt_train['G_scheduler_gamma']
+                                                            ))
+        elif self.opt_train['G_scheduler_type'] == 'CosineAnnealingWarmRestarts':
+            self.schedulers.append(lr_scheduler.CosineAnnealingWarmRestarts(self.G_optimizer,
+                                                            self.opt_train['G_scheduler_periods'],
+                                                            self.opt_train['G_scheduler_restart_weights'],
+                                                            self.opt_train['G_scheduler_eta_min']
+                                                            ))
+        else:
+            raise NotImplementedError
+
     """
     # ----------------------------------------
     # Optimization during training with data

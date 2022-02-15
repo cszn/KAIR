@@ -1,0 +1,116 @@
+{
+  "task": "004_train_vrt_videosr_bd_vimeo_7frames"
+  , "model": "vrt"
+  , "gpu_ids": [0,1,2,3,4,5,6,7]
+  , "dist": true
+  , "find_unused_parameters": false
+  , "use_static_graph": true
+
+  ,"scale": 4
+  , "n_channels": 3
+
+  , "path": {
+    "root": "experiments"
+    , "pretrained_netG": "model_zoo/vrt/002_VRT_videosr_bi_REDS_16frames.pth"
+    , "pretrained_netE": null
+  }
+
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"
+      , "dataset_type": "VideoRecurrentTrainVimeoDataset"
+      , "dataroot_gt": "trainsets/vimeo90k/vimeo90k_train_GT_all.lmdb"
+      , "dataroot_lq": "trainsets/vimeo90k/vimeo90k_train_BDLR7frames.lmdb"
+      , "meta_info_file": "data/meta_info/meta_info_Vimeo90K_train_GT.txt"
+      , "io_backend": {"type": "lmdb"}
+      , "num_frame": -1
+      , "gt_size": 256
+      , "interval_list": [1]
+      , "random_reverse": true
+      , "use_hflip": true
+      , "use_rot": true
+      , "pad_sequence": true
+
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 32
+      , "dataloader_batch_size": 8
+    }
+    , "test": {
+      "name": "test_dataset"
+      , "dataset_type": "VideoRecurrentTestDataset"
+      , "dataroot_gt": "testsets/Vid4/GT"
+      , "dataroot_lq": "testsets/Vid4/BDx4"
+      , "cache_data": true
+      , "io_backend": {"type": "disk"}
+      , "num_frame": -1
+    }
+  }
+
+  , "netG": {
+    "net_type": "vrt"
+    , "upscale": 4
+    , "img_size": [8,64,64]
+    , "window_size": [8,8,8]
+    , "depths": [8,8,8,8,8,8,8, 4,4,4,4, 4,4]
+    , "indep_reconsts": [11,12]
+    , "embed_dims": [120,120,120,120,120,120,120, 180,180,180,180, 180,180]
+    , "num_heads": [6,6,6,6,6,6,6, 6,6,6,6, 6,6]
+    , "spynet_path": "model_zoo/vrt/spynet_sintel_final-3d2a1287.pth" // automatical download
+    , "pa_frames": 4
+    , "deformable_groups": 16
+    , "nonblind_denoising": false
+
+    , "use_checkpoint_attn": false
+    , "use_checkpoint_ffn": false
+    , "no_checkpoint_attn_blocks": []
+    , "no_checkpoint_ffn_blocks": []
+
+    , "init_type": "default"
+  }
+
+
+  , "train": {
+    "G_lossfn_type": "charbonnier"
+    , "G_lossfn_weight": 1.0
+    , "G_charbonnier_eps": 1e-9
+
+    , "E_decay": 0                      // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+
+    , "G_optimizer_type": "adam"        // fixed, adam is enough
+    , "G_optimizer_lr": 4e-4            // learning rate
+    , "G_optimizer_betas": [0.9,0.99]
+    , "G_optimizer_wd": 0               // weight decay, default 0
+    , "G_optimizer_clipgrad": null      // unused
+    , "G_optimizer_reuse": true         //
+
+    , "fix_iter": 20000
+    , "fix_lr_mul": 0.125
+    , "fix_keys": ["spynet", "deform"]
+
+    , "total_iter": 300000
+    , "G_scheduler_type": "CosineAnnealingWarmRestarts"
+    , "G_scheduler_periods": 300000
+    , "G_scheduler_eta_min": 1e-7
+
+    , "G_regularizer_orthstep": null    // unused
+    , "G_regularizer_clipstep": null    // unused
+
+    , "G_param_strict": false
+    , "E_param_strict": false
+
+    , "checkpoint_test": 5000           // for testing
+    , "checkpoint_save": 5000           // for saving model
+    , "checkpoint_print": 200           // for print
+  }
+
+  , "val": {
+    "save_img": false
+    , "pad_seq": false
+    , "flip_seq": false
+    , "center_frame_only": false
+    , "num_frame_testing": 32
+    , "num_frame_overlapping": 2
+    , "size_patch_testing": 128
+  }
+
+}

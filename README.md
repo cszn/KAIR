@@ -1,4 +1,4 @@
-## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN, SwinIR
+## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN, SwinIR, VRT
 [![download](https://img.shields.io/github/downloads/cszn/KAIR/total.svg)](https://github.com/cszn/KAIR/releases) ![visitors](https://visitor-badge.glitch.me/badge?page_id=cszn/KAIR) 
 
 [Kai Zhang](https://cszn.github.io/)
@@ -6,6 +6,15 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+- **_News (2022-02-15)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_VRT.md) of [VRT ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/VRT?style=social)](https://github.com/JingyunLiang/VRT) for video SR, deblurring and denoising.
+<p align="center">
+  <a href="https://github.com/JingyunLiang/VRT">
+    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vsr.gif"/>
+    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdb.gif"/>
+    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdn.gif"/>
+  </a>
+</p>
+
 - **_News (2021-12-23)_**: Our techniques are adopted in [https://www.amemori.ai/](https://www.amemori.ai/).
 - **_News (2021-12-23)_**: Our new work for practical image denoising.
 
@@ -148,6 +157,7 @@ kill $(ps aux | grep main_train_gan.py | grep -v grep | awk '{print $2}')
 | DPIR | [https://github.com/cszn/DPIR](https://github.com/cszn/DPIR)|
 | BSRGAN | [https://github.com/cszn/BSRGAN](https://github.com/cszn/BSRGAN)|
 | SwinIR | [https://github.com/JingyunLiang/SwinIR](https://github.com/JingyunLiang/SwinIR)|
+| VRT | [https://github.com/JingyunLiang/VRT](https://github.com/JingyunLiang/VRT)       |
 
 Network architectures
 ----------
@@ -226,6 +236,12 @@ Testing
 References
 ----------
 ```BibTex
+@article{liang2022vrt,
+title={VRT: A Video Restoration Transformer},
+author={Liang, Jingyun and Cao, Jiezhang and Fan, Yuchen and Zhang, Kai and Ranjan, Rakesh and Li, Yawei and Timofte, Radu and Van Gool, Luc},
+journal={arXiv preprint arXiv:2022.00000},
+year={2022}
+}
 @inproceedings{liang2021swinir,
 title={SwinIR: Image Restoration Using Swin Transformer},
 author={Liang, Jingyun and Cao, Jiezhang and Sun, Guolei and Zhang, Kai and Van Gool, Luc and Timofte, Radu},

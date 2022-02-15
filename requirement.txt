@@ -4,3 +4,7 @@ pillow
 torchvision
 hdf5storage
 ninja
+lmdb
+requests
+timm
+einops

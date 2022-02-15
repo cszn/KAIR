@@ -54,6 +54,22 @@ def define_Dataset(dataset_opt):
         from data.dataset_jpeg import DatasetJPEG as D
 
     # -----------------------------------------
+    # video restoration
+    # -----------------------------------------
+    elif dataset_type in ['videorecurrenttraindataset']:
+        from data.dataset_video_train import VideoRecurrentTrainDataset as D
+    elif dataset_type in ['videorecurrenttrainnonblinddenoisingdataset']:
+        from data.dataset_video_train import VideoRecurrentTrainNonblindDenoisingDataset as D
+    elif dataset_type in ['videorecurrenttrainvimeodataset']:
+        from data.dataset_video_train import VideoRecurrentTrainVimeoDataset as D
+    elif dataset_type in ['videorecurrenttestdataset']:
+        from data.dataset_video_test import VideoRecurrentTestDataset as D
+    elif dataset_type in ['singlevideorecurrenttestdataset']:
+        from data.dataset_video_test import SingleVideoRecurrentTestDataset as D
+    elif dataset_type in ['videotestvimeo90kdataset']:
+        from data.dataset_video_test import VideoTestVimeo90KDataset as D
+
+    # -----------------------------------------
     # common
     # -----------------------------------------
     elif dataset_type in ['plain']:

@@ -21,6 +21,9 @@ def define_Model(opt):
     elif model == 'gan':     # one input: L
         from models.model_gan import ModelGAN as M
 
+    elif model == 'vrt':     # one video input L, for VRT
+        from models.model_vrt import ModelVRT as M
+
     else:
         raise NotImplementedError('Model [{:s}] is not defined.'.format(model))
 

@@ -17,7 +17,7 @@ import os
 '''
 
 
-def find_last_checkpoint(save_dir, net_type='G'):
+def find_last_checkpoint(save_dir, net_type='G', pretrained_path=None):
     """
     # ---------------------------------------
     # Kai Zhang (github: https://github.com/cszn)
@@ -26,12 +26,14 @@ def find_last_checkpoint(save_dir, net_type='G'):
     Args:
         save_dir: model folder
         net_type: 'G' or 'D' or 'optimizerG' or 'optimizerD'
+        pretrained_path: pretrained model path. If save_dir does not have any model, load from pretrained_path
 
     Return:
         init_iter: iteration number
         init_path: model path
     # ---------------------------------------
     """
+
     file_list = glob.glob(os.path.join(save_dir, '*_{}.pth'.format(net_type)))
     if file_list:
         iter_exist = []
@@ -42,7 +44,7 @@ def find_last_checkpoint(save_dir, net_type='G'):
         init_path = os.path.join(save_dir, '{}_{}.pth'.format(init_iter, net_type))
     else:
         init_iter = 0
-        init_path = None
+        init_path = pretrained_path
     return init_iter, init_path
 
 

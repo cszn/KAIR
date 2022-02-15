@@ -97,6 +97,8 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     if 'find_unused_parameters' not in opt:
         opt['find_unused_parameters'] = True
+    if 'use_static_graph' not in opt:
+        opt['use_static_graph'] = False
     if 'dist' not in opt:
         opt['dist'] = False
     opt['num_gpu'] = len(opt['gpu_ids'])
@@ -119,6 +121,14 @@ def parse(opt_path, is_train=True):
     # ----------------------------------------
     # default setting for optimizer
     # ----------------------------------------
+    if 'G_optimizer_type' not in opt['train']:
+        opt['train']['G_optimizer_type'] = "adam"
+    if 'G_optimizer_betas' not in opt['train']:
+        opt['train']['G_optimizer_betas'] = [0,9,0.999]
+    if 'G_scheduler_restart_weights' not in opt['train']:
+        opt['train']['G_scheduler_restart_weights'] = 1
+    if 'G_optimizer_wd' not in opt['train']:
+        opt['train']['G_optimizer_wd'] = 0
     if 'G_optimizer_reuse' not in opt['train']:
         opt['train']['G_optimizer_reuse'] = False
     if 'netD' in opt and 'D_optimizer_reuse' not in opt['train']:
@@ -159,11 +169,12 @@ def parse(opt_path, is_train=True):
     return opt
 
 
-def find_last_checkpoint(save_dir, net_type='G'):
+def find_last_checkpoint(save_dir, net_type='G', pretrained_path=None):
     """
     Args: 
         save_dir: model folder
         net_type: 'G' or 'D' or 'optimizerG' or 'optimizerD'
+        pretrained_path: pretrained model path. If save_dir does not have any model, load from pretrained_path
 
     Return:
         init_iter: iteration number
@@ -179,7 +190,7 @@ def find_last_checkpoint(save_dir, net_type='G'):
         init_path = os.path.join(save_dir, '{}_{}.pth'.format(init_iter, net_type))
     else:
         init_iter = 0
-        init_path = None
+        init_path = pretrained_path
     return init_iter, init_path
 
 
