@@ -474,7 +474,7 @@ def add_video_compression(imgs):
         stream.bit_rate = bitrate
         
         for img in imgs:
-            img = (255 * img).astype(np.uint8)
+            img = np.uint8((img.clip(0, 1)*255.).round())
             frame = av.VideoFrame.from_ndarray(img, format='rgb24')
             frame.pict_type = 'NONE'
             # pdb.set_trace()
