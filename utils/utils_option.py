@@ -124,7 +124,7 @@ def parse(opt_path, is_train=True):
     if 'G_optimizer_type' not in opt['train']:
         opt['train']['G_optimizer_type'] = "adam"
     if 'G_optimizer_betas' not in opt['train']:
-        opt['train']['G_optimizer_betas'] = [0,9,0.999]
+        opt['train']['G_optimizer_betas'] = [0.9,0.999]
     if 'G_scheduler_restart_weights' not in opt['train']:
         opt['train']['G_scheduler_restart_weights'] = 1
     if 'G_optimizer_wd' not in opt['train']:
