@@ -65,7 +65,7 @@ class DatasetPlain(data.Dataset):
             # augmentation - flip and/or rotate
             # --------------------------------
             mode = random.randint(0, 7)
-            patch_L, patch_H = util.image_augment(patch_L, mode=mode), util.image_augment(patch_H, mode=mode)
+            patch_L, patch_H = util.augment_img(patch_L, mode=mode), util.augment_img(patch_H, mode=mode)
 
             # --------------------------------
             # HWC to CHW, numpy(uint) to tensor
