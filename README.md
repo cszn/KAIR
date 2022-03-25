@@ -8,6 +8,16 @@
 _______
 - **_News (2022-03-23)_**: We release [the testing codes](https://github.com/cszn/SCUNet) of [SCUNet ![GitHub Stars](https://img.shields.io/github/stars/cszn/SCUNet?style=social)](https://github.com/cszn/SCUNet) for blind real image denoising.
 
+__*The following results are obtained by our SCUNet with purely synthetic training data! 
+We did not use the paired noisy/clean data by DND and SIDD during training!*__
+<p align="center">
+  <a href="https://github.com/cszn/SCUNet">
+    <img width=45% src="https://github.com/cszn/cszn.github.io/blob/master/files/input_16.gif"/>
+    <img width=45% src="https://github.com/cszn/cszn.github.io/blob/master/files/wm_fnb_0010_16.gif"/>
+  </a>
+</p>
+
+
 - **_News (2022-02-15)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_VRT.md) of [VRT ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/VRT?style=social)](https://github.com/JingyunLiang/VRT) for video SR, deblurring and denoising.
 <p align="center">
   <a href="https://github.com/JingyunLiang/VRT">
