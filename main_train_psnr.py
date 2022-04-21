@@ -54,7 +54,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     if opt['dist']:
         init_dist('pytorch')
     opt['rank'], opt['world_size'] = get_dist_info()
-    
+
     if opt['rank'] == 0:
         util.mkdirs((path for key, path in opt['path'].items() if 'pretrained' not in key))
 
@@ -165,6 +165,9 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     '''
 
     for epoch in range(1000000):  # keep running
+        if opt['dist']:
+            train_sampler.set_epoch(epoch)
+
         for i, train_data in enumerate(train_loader):
 
             current_step += 1
