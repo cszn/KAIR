@@ -94,8 +94,8 @@ class faceenhancer_with_detection_alignment(object):
         img: uint8 RGB image, (W, H, 3)
         img, orig_faces, enhanced_faces: uint8 RGB image / cropped face images
         '''
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        facebs, landms = self.facedetector.detect(img)
+        img_bgr = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        facebs, landms = self.facedetector.detect(img_bgr)
 
         orig_faces, enhanced_faces = [], []
         height, width = img.shape[:2]
@@ -108,7 +108,7 @@ class faceenhancer_with_detection_alignment(object):
 
             facial5points = np.reshape(facial5points, (2, 5))
 
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             of, tfm_inv = warp_and_crop_face(img, facial5points, reference_pts=self.reference_5pts, crop_size=(self.size, self.size))
             # Enhance the face image!
             
