@@ -23,7 +23,7 @@ from models.select_model import define_Model
 
 '''
 # --------------------------------------------
-# training code for VRT
+# training code for VRT/RVRT
 # --------------------------------------------
 '''
 

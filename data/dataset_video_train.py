@@ -322,7 +322,7 @@ class VideoRecurrentTrainVimeoDataset(data.Dataset):
         self.random_reverse = opt['random_reverse']
         print(f'Random reverse is {self.random_reverse}.')
 
-        self.flip_sequence = opt.get('flip_sequence', False)
+        self.mirror_sequence = opt.get('mirror_sequence', False)
         self.pad_sequence = opt.get('pad_sequence', False)
         self.neighbor_list = [1, 2, 3, 4, 5, 6, 7]
 
@@ -370,7 +370,7 @@ class VideoRecurrentTrainVimeoDataset(data.Dataset):
         img_lqs = torch.stack(img_results[:7], dim=0)
         img_gts = torch.stack(img_results[7:], dim=0)
 
-        if self.flip_sequence:  # flip the sequence: 7 frames to 14 frames
+        if self.mirror_sequence:  # mirror the sequence: 7 frames to 14 frames
             img_lqs = torch.cat([img_lqs, img_lqs.flip(0)], dim=0)
             img_gts = torch.cat([img_gts, img_gts.flip(0)], dim=0)
         elif self.pad_sequence:  # pad the sequence: 7 frames to 8 frames

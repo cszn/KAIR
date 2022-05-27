@@ -222,6 +222,31 @@ def define_G(opt):
                    no_checkpoint_attn_blocks=opt_net['no_checkpoint_attn_blocks'],
                    no_checkpoint_ffn_blocks=opt_net['no_checkpoint_ffn_blocks'])
 
+        # ----------------------------------------
+        # RVRT
+        # ----------------------------------------
+    elif net_type == 'rvrt':
+        from models.network_rvrt import RVRT as net
+        netG = net(upscale=opt_net['upscale'],
+                   clip_size=opt_net['clip_size'],
+                   img_size=opt_net['img_size'],
+                   window_size=opt_net['window_size'],
+                   num_blocks=opt_net['num_blocks'],
+                   depths=opt_net['depths'],
+                   embed_dims=opt_net['embed_dims'],
+                   num_heads=opt_net['num_heads'],
+                   inputconv_groups=opt_net['inputconv_groups'],
+                   spynet_path=opt_net['spynet_path'],
+                   deformable_groups=opt_net['deformable_groups'],
+                   attention_heads=opt_net['attention_heads'],
+                   attention_window=opt_net['attention_window'],
+                   nonblind_denoising=opt_net['nonblind_denoising'],
+                   use_checkpoint_attn=opt_net['use_checkpoint_attn'],
+                   use_checkpoint_ffn=opt_net['use_checkpoint_ffn'],
+                   no_checkpoint_attn_blocks=opt_net['no_checkpoint_attn_blocks'],
+                   no_checkpoint_ffn_blocks=opt_net['no_checkpoint_ffn_blocks'],
+                   cpu_cache_length=opt_net['cpu_cache_length'])
+
     # ----------------------------------------
     # others
     # ----------------------------------------
