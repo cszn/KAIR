@@ -17,7 +17,8 @@ from torch.utils.data import DataLoader
 
 from models.network_vrt import VRT as net
 from utils import utils_image as util
-from data.dataset_video_test import VideoRecurrentTestDataset, VideoTestVimeo90KDataset, SingleVideoRecurrentTestDataset
+from data.dataset_video_test import VideoRecurrentTestDataset, VideoTestVimeo90KDataset, \
+    SingleVideoRecurrentTestDataset, VFI_DAVIS, VFI_UCF101, VFI_Vid4
 
 
 def main():
@@ -32,6 +33,8 @@ def main():
                         help='Tile size, [0,0,0] for no tile during testing (testing as a whole)')
     parser.add_argument('--tile_overlap', type=int, nargs='+', default=[2,20,20],
                         help='Overlapping of different tiles')
+    parser.add_argument('--num_workers', type=int, default=16, help='number of workers in data loading')
+    parser.add_argument('--save_result', action='store_true', help='save resulting image')
     args = parser.parse_args()
 
     # define model
@@ -40,9 +43,22 @@ def main():
     model.eval()
     model = model.to(device)
     if 'vimeo' in args.folder_lq.lower():
-        test_set = VideoTestVimeo90KDataset({'dataroot_gt':args.folder_gt, 'dataroot_lq':args.folder_lq,
-                                           'meta_info_file': "data/meta_info/meta_info_Vimeo90K_test_GT.txt",
-                                            'pad_sequence': True, 'num_frame': 7, 'cache_data': False})
+        if 'videofi' in args.task:
+            test_set = VideoTestVimeo90KDataset({'dataroot_gt':args.folder_gt, 'dataroot_lq':args.folder_gt,
+                                               'meta_info_file': "data/meta_info/meta_info_Vimeo90K_test_GT.txt",
+                                                'pad_sequence': False, 'num_frame': 7, 'temporal_scale': 2,
+                                                 'cache_data': False})
+        else:
+            test_set = VideoTestVimeo90KDataset({'dataroot_gt': args.folder_gt, 'dataroot_lq': args.folder_lq,
+                                                 'meta_info_file': "data/meta_info/meta_info_Vimeo90K_test_GT.txt",
+                                                 'pad_sequence': True, 'num_frame': 7, 'temporal_scale': 1,
+                                                 'cache_data': False})
+    elif 'davis' in args.folder_lq.lower() and 'videofi' in args.task:
+        test_set = VFI_DAVIS(data_root=args.folder_gt)
+    elif 'ucf101' in args.folder_lq.lower() and 'videofi' in args.task:
+        test_set = VFI_UCF101(data_root=args.folder_gt)
+    elif 'vid4' in args.folder_lq.lower() and 'videofi' in args.task:
+        test_set = VFI_Vid4(data_root=args.folder_gt)
     elif args.folder_gt is not None:
         test_set = VideoRecurrentTestDataset({'dataroot_gt':args.folder_gt, 'dataroot_lq':args.folder_lq,
                                               'sigma':args.sigma, 'num_frame':-1, 'cache_data': False})
@@ -50,10 +66,11 @@ def main():
         test_set = SingleVideoRecurrentTestDataset({'dataroot_gt':args.folder_gt, 'dataroot_lq':args.folder_lq,
                                               'sigma':args.sigma, 'num_frame':-1, 'cache_data': False})
 
-    test_loader = DataLoader(dataset=test_set, num_workers=8, batch_size=1, shuffle=False)
+    test_loader = DataLoader(dataset=test_set, num_workers=args.num_workers, batch_size=1, shuffle=False)
 
     save_dir = f'results/{args.task}'
-    os.makedirs(save_dir, exist_ok=True)
+    if args.save_result:
+        os.makedirs(save_dir, exist_ok=True)
     test_results = OrderedDict()
     test_results['psnr'] = []
     test_results['ssim'] = []
@@ -71,10 +88,12 @@ def main():
         with torch.no_grad():
             output = test_video(lq, model, args)
 
-        if 'vimeo' in args.folder_lq.lower():
+        if 'videofi' in args.task:
+            output = output[:, :1, ...]
+            batch['lq_path'] = batch['gt_path']
+        elif 'videosr' in args.task and 'vimeo' in args.folder_lq.lower():
             output = output[:, 3:4, :, :, :]
-            gt = gt.unsqueeze(0)
-            batch['lq_path'] = [['im4.png']]
+            batch['lq_path'] = batch['gt_path']
 
         test_results_folder = OrderedDict()
         test_results_folder['psnr'] = []
@@ -88,9 +107,10 @@ def main():
             if img.ndim == 3:
                 img = np.transpose(img[[2, 1, 0], :, :], (1, 2, 0))  # CHW-RGB to HCW-BGR
             img = (img * 255.0).round().astype(np.uint8)  # float32 to uint8
-            seq_ = osp.basename(batch['lq_path'][i][0]).split('.')[0]
-            os.makedirs(f'{save_dir}/{folder[0]}', exist_ok=True)
-            cv2.imwrite(f'{save_dir}/{folder[0]}/{seq_}.png', img)
+            if args.save_result:
+                seq_ = osp.basename(batch['lq_path'][i][0]).split('.')[0]
+                os.makedirs(f'{save_dir}/{folder[0]}', exist_ok=True)
+                cv2.imwrite(f'{save_dir}/{folder[0]}/{seq_}.png', img)
 
             # evaluate psnr/ssim
             if gt is not None:
@@ -203,6 +223,15 @@ def prepare_model_dataset(args):
         args.window_size = [6,8,8]
         args.nonblind_denoising = True
 
+    elif args.task == '009_VRT_videofi_Vimeo_4frames':
+        model = net(upscale=1, out_chans=3, img_size=[4,192,192], window_size=[4,8,8], depths=[8,8,8,8,8,8,8, 4,4, 4,4],
+                    indep_reconsts=[], embed_dims=[96,96,96,96,96,96,96, 120,120, 120,120],
+                    num_heads=[6,6,6,6,6,6,6, 6,6, 6,6], pa_frames=0)
+        datasets = ['UCF101', 'DAVIS-train']  # 'Vimeo'. Vimeo dataset is too large. Please refer to #training to download it.
+        args.scale = 1
+        args.window_size = [4,8,8]
+        args.nonblind_denoising = False
+
     # download model
     model_path = f'model_zoo/vrt/{args.task}.pth'
     if os.path.exists(model_path):
@@ -215,7 +244,7 @@ def prepare_model_dataset(args):
         open(model_path, 'wb').write(r.content)
 
     pretrained_model = torch.load(model_path)
-    model.load_state_dict(pretrained_model['params'] if 'params' in pretrained_model.keys() else pretrained_model)
+    model.load_state_dict(pretrained_model['params'] if 'params' in pretrained_model.keys() else pretrained_model, strict=True)
 
     # download datasets
     if os.path.exists(f'{args.folder_lq}'):

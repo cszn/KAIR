@@ -30,6 +30,9 @@ download SwinIR models:
 download VRT models:
     python main_download_pretrained_models.py --models "VRT" --model_dir "model_zoo"
     
+download RVRT models:
+    python main_download_pretrained_models.py --models "RVRT" --model_dir "model_zoo"
+    
 download other models:
     python main_download_pretrained_models.py --models "others" --model_dir "model_zoo"
 
@@ -53,8 +56,10 @@ def download_pretrained_model(model_dir='model_zoo', model_name='dncnn3.pth'):
         os.makedirs(model_dir, exist_ok=True)
         if 'SwinIR' in model_name:
             url = 'https://github.com/JingyunLiang/SwinIR/releases/download/v0.0/{}'.format(model_name)
-        elif 'VRT' in model_name:
+        elif '_VRT_' in model_name:
             url = 'https://github.com/JingyunLiang/VRT/releases/download/v0.0/{}'.format(model_name)
+        elif '_RVRT_' in model_name:
+            url = 'https://github.com/JingyunLiang/RVRT/releases/download/v0.0/{}'.format(model_name)
         else:
             url = 'https://github.com/cszn/KAIR/releases/download/v1.0/{}'.format(model_name)
         r = requests.get(url, allow_redirects=True)
@@ -95,9 +100,13 @@ if __name__ == '__main__':
                                    '006_CAR_DFWB_s126w7_SwinIR-M_jpeg20.pth', '006_CAR_DFWB_s126w7_SwinIR-M_jpeg30.pth', 
                                    '006_CAR_DFWB_s126w7_SwinIR-M_jpeg40.pth'],
                         'VRT': ['001_VRT_videosr_bi_REDS_6frames.pth', '002_VRT_videosr_bi_REDS_16frames.pth',
-                                   '003_VRT_videosr_bi_Vimeo_7frames.pth', '004_VRT_videosr_bd_Vimeo_7frames.pth',
-                                   '005_VRT_videodeblurring_DVD.pth', '006_VRT_videodeblurring_GoPro.pth',
-                                   '007_VRT_videodeblurring_REDS.pth', '008_VRT_videodenoising_DAVIS.pth'],
+                                '003_VRT_videosr_bi_Vimeo_7frames.pth', '004_VRT_videosr_bd_Vimeo_7frames.pth',
+                                '005_VRT_videodeblurring_DVD.pth', '006_VRT_videodeblurring_GoPro.pth',
+                                '007_VRT_videodeblurring_REDS.pth', '008_VRT_videodenoising_DAVIS.pth',
+                                '009_VRT_videofi_Vimeo_4frames.pth'],
+                        'RVRT': ['001_RVRT_videosr_bi_REDS_30frames.pth', '002_RVRT_videosr_bi_Vimeo_14frames.pth',
+                                 '003_RVRT_videosr_bd_Vimeo_14frames.pth', '004_RVRT_videodeblurring_DVD_16frames.pth',
+                                 '005_RVRT_videodeblurring_GoPro_16frames.pth', '006_RVRT_videodenoising_DAVIS_16frames.pth'],
                         'others': ['msrresnet_x4_psnr.pth', 'msrresnet_x4_gan.pth', 'imdn_x4.pth', 'RRDB.pth', 'ESRGAN.pth', 
                                    'FSSR_DPED.pth', 'FSSR_JPEG.pth', 'RealSR_DPED.pth', 'RealSR_JPEG.pth']
                         }
@@ -117,15 +126,19 @@ if __name__ == '__main__':
                 for model_name in method_model_zoo[method_model]:
                     if 'SwinIR' in model_name:
                         download_pretrained_model(os.path.join(args.model_dir, 'swinir'), model_name)
-                    elif 'VRT' in model_name:
+                    elif '_VRT_' in model_name:
                         download_pretrained_model(os.path.join(args.model_dir, 'vrt'), model_name)
+                    elif '_RVRT_' in model_name:
+                        download_pretrained_model(os.path.join(args.model_dir, 'rvrt'), model_name)
                     else:
                         download_pretrained_model(args.model_dir, model_name)
             elif method_model in model_zoo:  # model, do not need for loop
                 if 'SwinIR' in method_model:
                     download_pretrained_model(os.path.join(args.model_dir, 'swinir'), method_model)
-                elif 'VRT' in method_model:
+                elif '_VRT_' in method_model:
                     download_pretrained_model(os.path.join(args.model_dir, 'vrt'), method_model)
+                elif '_RVRT_' in method_model:
+                    download_pretrained_model(os.path.join(args.model_dir, 'rvrt'), method_model)
                 else:
                     download_pretrained_model(args.model_dir, method_model)
             else:

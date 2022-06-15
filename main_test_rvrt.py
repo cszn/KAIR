@@ -76,8 +76,7 @@ def main():
 
         if 'vimeo' in args.folder_lq.lower():
             output = (output[:, 3:4, :, :, :] + output[:, 10:11, :, :, :]) / 2
-            gt = gt.unsqueeze(0)
-            batch['lq_path'] = [['im4.png']]
+            batch['lq_path'] = batch['gt_path']
 
         test_results_folder = OrderedDict()
         test_results_folder['psnr'] = []
@@ -205,7 +204,7 @@ def prepare_model_dataset(args):
         open(model_path, 'wb').write(r.content)
 
     pretrained_model = torch.load(model_path)
-    model.load_state_dict(pretrained_model['params'] if 'params' in pretrained_model.keys() else pretrained_model)
+    model.load_state_dict(pretrained_model['params'] if 'params' in pretrained_model.keys() else pretrained_model, strict=True)
 
     # download datasets
     if os.path.exists(f'{args.folder_lq}'):

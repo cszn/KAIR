@@ -1,4 +1,4 @@
-## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN, SwinIR, VRT
+## Training and testing codes for USRNet, DnCNN, FFDNet, SRMD, DPSR, MSRResNet, ESRGAN, BSRGAN, SwinIR, VRT, RVRT
 [![download](https://img.shields.io/github/downloads/cszn/KAIR/total.svg)](https://github.com/cszn/KAIR/releases) ![visitors](https://visitor-badge.glitch.me/badge?page_id=cszn/KAIR) 
 
 [Kai Zhang](https://cszn.github.io/)
@@ -6,7 +6,7 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **_News (2022-06-01)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_RVRT.md) of [RVRT ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/RVRT?style=social)](https://github.com/JingyunLiang/RVRT) for video SR, deblurring and denoising.
+- **_News (2022-10-04)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_RVRT.md) of [RVRT, NeurlPS2022 ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/RVRT?style=social)](https://github.com/JingyunLiang/RVRT) for video SR, deblurring and denoising.
 
 - **_News (2022-05-05)_**: Try the [online demo](https://replicate.com/cszn/scunet) of [SCUNet ![GitHub Stars](https://img.shields.io/github/stars/cszn/SCUNet?style=social)](https://github.com/cszn/SCUNet) for blind real image denoising.
 
@@ -23,13 +23,11 @@ We did not use the paired noisy/clean data by DND and SIDD during training!*__
 
 
 - **_News (2022-02-15)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_VRT.md) of [VRT ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/VRT?style=social)](https://github.com/JingyunLiang/VRT) for video SR, deblurring and denoising.
-<p align="center">
-  <a href="https://github.com/JingyunLiang/VRT">
-    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vsr.gif"/>
-    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdb.gif"/>
-    <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdn.gif"/>
-  </a>
-</p>
+![Eg1](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vsr.gif)
+![Eg2](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdb.gif)
+![Eg3](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdn.gif)
+![Eg4](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vfi.gif)
+![Eg5](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_stvsr.gif)
 
 - **_News (2021-12-23)_**: Our techniques are adopted in [https://www.amemori.ai/](https://www.amemori.ai/).
 - **_News (2021-12-23)_**: Our new work for practical image denoising.

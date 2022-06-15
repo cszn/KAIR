@@ -1170,29 +1170,3 @@ class RVRT(nn.Module):
 
         # reconstruction
         return self.upsample(lqs[:, :, :3, :, :], feats)
-
-
-if __name__ == '__main__':
-    device = torch.device('cpu')
-    upscale = 4
-    window_size = 8
-    height = (256 // upscale // window_size) * window_size
-    width = (256 // upscale // window_size) * window_size
-
-    model = RVRT(upscale=upscale,
-                    clip_size=2,
-                    img_size=[2, 64, 64],
-                    window_size=[2, 8, 8],
-                    num_blocks=[1, 2, 1],
-                    depths=[2, 2, 2],
-                    embed_dims=[24, 24, 24],
-                    num_heads=[2, 2, 2],
-                    deformable_groups=2,
-                    attention_heads=2,
-                    ).to(device)
-    print(model)
-    print('{:>16s} : {:<.4f} [M]'.format('#Params', sum(map(lambda x: x.numel(), model.parameters())) / 10 ** 6))
-
-    x = torch.randn((1, 30, 3, height, width)).to(device)
-    x = model(x)
-    print(x.shape)

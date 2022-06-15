@@ -1087,18 +1087,20 @@ class Stage(nn.Module):
         self.linear2 = nn.Linear(dim, dim)
 
         # parallel warping
-        self.pa_deform = DCNv2PackFlowGuided(dim, dim, 3, padding=1, deformable_groups=deformable_groups,
-                                             max_residue_magnitude=max_residue_magnitude, pa_frames=pa_frames)
-        self.pa_fuse = Mlp_GEGLU(dim * (1 + 2), dim * (1 + 2), dim)
+        if self.pa_frames:
+            self.pa_deform = DCNv2PackFlowGuided(dim, dim, 3, padding=1, deformable_groups=deformable_groups,
+                                                 max_residue_magnitude=max_residue_magnitude, pa_frames=pa_frames)
+            self.pa_fuse = Mlp_GEGLU(dim * (1 + 2), dim * (1 + 2), dim)
 
     def forward(self, x, flows_backward, flows_forward):
         x = self.reshape(x)
         x = self.linear1(self.residual_group1(x).transpose(1, 4)).transpose(1, 4) + x
         x = self.linear2(self.residual_group2(x).transpose(1, 4)).transpose(1, 4) + x
-        x = x.transpose(1, 2)
 
-        x_backward, x_forward = getattr(self, f'get_aligned_feature_{self.pa_frames}frames')(x, flows_backward, flows_forward)
-        x = self.pa_fuse(torch.cat([x, x_backward, x_forward], 2).permute(0, 1, 3, 4, 2)).permute(0, 4, 1, 2, 3)
+        if self.pa_frames:
+            x = x.transpose(1, 2)
+            x_backward, x_forward = getattr(self, f'get_aligned_feature_{self.pa_frames}frames')(x, flows_backward, flows_forward)
+            x = self.pa_fuse(torch.cat([x, x_backward, x_forward], 2).permute(0, 1, 3, 4, 2)).permute(0, 4, 1, 2, 3)
 
         return x
 
@@ -1234,6 +1236,7 @@ class VRT(nn.Module):
     Args:
         upscale (int): Upscaling factor. Set as 1 for video deblurring, etc. Default: 4.
         in_chans (int): Number of input image channels. Default: 3.
+        out_chans (int): Number of output image channels. Default: 3.
         img_size (int | tuple(int)): Size of input image. Default: [6, 64, 64].
         window_size (int | tuple(int)): Window size. Default: (6,8,8).
         depths (list[int]): Depths of each Transformer stage.
@@ -1260,6 +1263,7 @@ class VRT(nn.Module):
     def __init__(self,
                  upscale=4,
                  in_chans=3,
+                 out_chans=3,
                  img_size=[6, 64, 64],
                  window_size=[6, 8, 8],
                  depths=[8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4],
@@ -1284,17 +1288,25 @@ class VRT(nn.Module):
                  ):
         super().__init__()
         self.in_chans = in_chans
+        self.out_chans = out_chans
         self.upscale = upscale
         self.pa_frames = pa_frames
         self.recal_all_flows = recal_all_flows
         self.nonblind_denoising = nonblind_denoising
 
         # conv_first
-        self.conv_first = nn.Conv3d(in_chans*(1+2*4)+1 if self.nonblind_denoising else in_chans*(1+2*4),
-                                    embed_dims[0], kernel_size=(1, 3, 3), padding=(0, 1, 1))
+        if self.pa_frames:
+            if self.nonblind_denoising:
+                conv_first_in_chans = in_chans*(1+2*4)+1
+            else:
+                conv_first_in_chans = in_chans*(1+2*4)
+        else:
+            conv_first_in_chans = in_chans
+        self.conv_first = nn.Conv3d(conv_first_in_chans, embed_dims[0], kernel_size=(1, 3, 3), padding=(0, 1, 1))
 
         # main body
-        self.spynet = SpyNet(spynet_path, [2, 3, 4, 5])
+        if self.pa_frames:
+            self.spynet = SpyNet(spynet_path, [2, 3, 4, 5])
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
         reshapes = ['none', 'down', 'down', 'down', 'up', 'up', 'up']
         scales = [1, 2, 4, 8, 4, 2, 1]
@@ -1357,54 +1369,103 @@ class VRT(nn.Module):
         self.conv_after_body = nn.Linear(embed_dims[-1], embed_dims[0])
 
         # reconstruction
-        num_feat = 64
-        if self.upscale == 1:
-            # for video deblurring, etc.
-            self.conv_last = nn.Conv3d(embed_dims[0], in_chans, kernel_size=(1, 3, 3), padding=(0, 1, 1))
+        if self.pa_frames:
+            if self.upscale == 1:
+                # for video deblurring, etc.
+                self.conv_last = nn.Conv3d(embed_dims[0], out_chans, kernel_size=(1, 3, 3), padding=(0, 1, 1))
+            else:
+                # for video sr
+                num_feat = 64
+                self.conv_before_upsample = nn.Sequential(
+                    nn.Conv3d(embed_dims[0], num_feat, kernel_size=(1, 3, 3), padding=(0, 1, 1)),
+                    nn.LeakyReLU(inplace=True))
+                self.upsample = Upsample(upscale, num_feat)
+                self.conv_last = nn.Conv3d(num_feat, out_chans, kernel_size=(1, 3, 3), padding=(0, 1, 1))
         else:
-            # for video sr
-            self.conv_before_upsample = nn.Sequential(
-                nn.Conv3d(embed_dims[0], num_feat, kernel_size=(1, 3, 3), padding=(0, 1, 1)),
-                nn.LeakyReLU(inplace=True))
-            self.upsample = Upsample(upscale, num_feat)
-            self.conv_last = nn.Conv3d(num_feat, in_chans, kernel_size=(1, 3, 3), padding=(0, 1, 1))
+            num_feat = 64
+            self.linear_fuse = nn.Conv2d(embed_dims[0]*img_size[0], num_feat, kernel_size=1 , stride=1)
+            self.conv_last = nn.Conv2d(num_feat, out_chans , kernel_size=7 , stride=1, padding=0)
+
+    def init_weights(self, pretrained=None, strict=True):
+        """Init weights for models.
+
+        Args:
+            pretrained (str, optional): Path for pretrained weights. If given
+                None, pretrained weights will not be loaded. Defaults: None.
+            strict (boo, optional): Whether strictly load the pretrained model.
+                Defaults to True.
+        """
+        if isinstance(pretrained, str):
+            logger = get_root_logger()
+            load_checkpoint(self, pretrained, strict=strict, logger=logger)
+        elif pretrained is not None:
+            raise TypeError(f'"pretrained" must be a str or None. '
+                            f'But received {type(pretrained)}.')
+
+    def reflection_pad2d(self, x, pad=1):
+        """ Reflection padding for any dtypes (torch.bfloat16.
+
+        Args:
+            x: (tensor): BxCxHxW
+            pad: (int): Default: 1.
+        """
+
+        x = torch.cat([torch.flip(x[:, :, 1:pad+1, :], [2]), x, torch.flip(x[:, :, -pad-1:-1, :], [2])], 2)
+        x = torch.cat([torch.flip(x[:, :, :, 1:pad+1], [3]), x, torch.flip(x[:, :, :, -pad-1:-1], [3])], 3)
+        return x
 
     def forward(self, x):
         # x: (N, D, C, H, W)
 
-        # obtain noise level map
-        if self.nonblind_denoising:
-            x, noise_level_map = x[:, :, :self.in_chans, :, :], x[:, :, self.in_chans:, :, :]
-
-        x_lq = x.clone()
-
-        # calculate flows
-        flows_backward, flows_forward = self.get_flows(x)
-
-        # warp input
-        x_backward, x_forward = self.get_aligned_image_2frames(x,  flows_backward[0], flows_forward[0])
-        x = torch.cat([x, x_backward, x_forward], 2)
-
-        # concatenate noise level map
-        if self.nonblind_denoising:
-            x = torch.cat([x, noise_level_map], 2)
-
         # main network
-        if self.upscale == 1:
-            # video deblurring, etc.
-            x = self.conv_first(x.transpose(1, 2))
-            x = x + self.conv_after_body(
-                self.forward_features(x, flows_backward, flows_forward).transpose(1, 4)).transpose(1, 4)
-            x = self.conv_last(x).transpose(1, 2)
-            return x + x_lq
+        if self.pa_frames:
+            # obtain noise level map
+            if self.nonblind_denoising:
+                x, noise_level_map = x[:, :, :self.in_chans, :, :], x[:, :, self.in_chans:, :, :]
+
+            x_lq = x.clone()
+
+            # calculate flows
+            flows_backward, flows_forward = self.get_flows(x)
+
+            # warp input
+            x_backward, x_forward = self.get_aligned_image_2frames(x,  flows_backward[0], flows_forward[0])
+            x = torch.cat([x, x_backward, x_forward], 2)
+
+            # concatenate noise level map
+            if self.nonblind_denoising:
+                x = torch.cat([x, noise_level_map], 2)
+
+            if self.upscale == 1:
+                # video deblurring, etc.
+                x = self.conv_first(x.transpose(1, 2))
+                x = x + self.conv_after_body(
+                    self.forward_features(x, flows_backward, flows_forward).transpose(1, 4)).transpose(1, 4)
+                x = self.conv_last(x).transpose(1, 2)
+                return x + x_lq
+            else:
+                # video sr
+                x = self.conv_first(x.transpose(1, 2))
+                x = x + self.conv_after_body(
+                    self.forward_features(x, flows_backward, flows_forward).transpose(1, 4)).transpose(1, 4)
+                x = self.conv_last(self.upsample(self.conv_before_upsample(x))).transpose(1, 2)
+                _, _, C, H, W = x.shape
+                return x + torch.nn.functional.interpolate(x_lq, size=(C, H, W), mode='trilinear', align_corners=False)
         else:
-            # video sr
+            # video fi
+            x_mean = x.mean([1,3,4], keepdim=True)
+            x = x - x_mean
+
             x = self.conv_first(x.transpose(1, 2))
             x = x + self.conv_after_body(
-                self.forward_features(x, flows_backward, flows_forward).transpose(1, 4)).transpose(1, 4)
-            x = self.conv_last(self.upsample(self.conv_before_upsample(x))).transpose(1, 2)
-            _, _, C, H, W = x.shape
-            return x + torch.nn.functional.interpolate(x_lq, size=(C, H, W), mode='trilinear', align_corners=False)
+                self.forward_features(x, [], []).transpose(1, 4)).transpose(1, 4)
+
+            x = torch.cat(torch.unbind(x , 2) , 1)
+            x = self.conv_last(self.reflection_pad2d(F.leaky_relu(self.linear_fuse(x), 0.2), pad=3))
+            x = torch.stack(torch.split(x, dim=1, split_size_or_sections=3), 1)
+
+            return x + x_mean
+
 
     def get_flows(self, x):
         ''' Get flows for 2 frames, 4 frames or 6 frames.'''
@@ -1536,29 +1597,3 @@ class VRT(nn.Module):
         x = rearrange(x, 'n d h w c -> n c d h w')
 
         return x
-
-
-if __name__ == '__main__':
-    device = torch.device('cpu')
-    upscale = 4
-    window_size = 8
-    height = (256 // upscale // window_size) * window_size
-    width = (256 // upscale // window_size) * window_size
-
-    model = VRT(upscale=4,
-                img_size=[6, 64, 64],
-                window_size=[6, 8, 8],
-                depths=[8, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 4, 4],
-                indep_reconsts=[11, 12],
-                embed_dims=[120, 120, 120, 120, 120, 120, 120, 180, 180, 180, 180, 180, 180],
-                num_heads=[6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-                spynet_path=None,
-                pa_frames=2,
-                deformable_groups=12
-                ).to(device)
-    print(model)
-    print('{:>16s} : {:<.4f} [M]'.format('#Params', sum(map(lambda x: x.numel(), model.parameters())) / 10 ** 6))
-
-    x = torch.randn((2, 12, 3, height, width)).to(device)
-    x = model(x)
-    print(x.shape)

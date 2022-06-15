@@ -1,4 +1,4 @@
-# [Recurrent Video Restoration Transformer with Guided Deformable Attention (RVRT)](https://github.com/JingyunLiang/RVRT)
+# [Recurrent Video Restoration Transformer with Guided Deformable Attention (RVRT, NeurlPS2022)](https://github.com/JingyunLiang/RVRT)
 [arxiv](https://arxiv.org/abs/2206.02146)
 **|** 
 [supplementary](https://github.com/JingyunLiang/RVRT/releases/download/v0.0/RVRT_supplementary.pdf)
@@ -16,7 +16,7 @@
 [ <a href="https://colab.research.google.com/gist/JingyunLiang/23502e2c65d82144219fa3e3322e4fc3/rvrt-demo-on-video-restoration.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="google colab logo"></a>](https://colab.research.google.com/gist/JingyunLiang/23502e2c65d82144219fa3e3322e4fc3/rvrt-demo-on-video-restoration.ipynb)
 
 This is the readme of "Recurrent Video Restoration Transformer with Guided Deformable Attention"
-([arxiv](https://arxiv.org/pdf/2206.02146.pdf), [supp](https://github.com/JingyunLiang/RVRT/releases/download/v0.0/RVRT_supplementary.pdf), [pretrained models](https://github.com/JingyunLiang/RVRT/releases), [visual results](https://github.com/JingyunLiang/RVRT/releases)). RVRT ahcieves state-of-the-art performance with balanced model size, testing memory and runtime in
+([arxiv](https://arxiv.org/pdf/2206.02146.pdf), [supp](https://github.com/JingyunLiang/RVRT/releases/download/v0.0/RVRT_supplementary.pdf), [pretrained models](https://github.com/JingyunLiang/RVRT/releases), [visual results](https://github.com/JingyunLiang/RVRT/releases)). RVRT achieves state-of-the-art performance with balanced model size, testing memory and runtime in
 - video SR (REDS, Vimeo90K, Vid4, UDM10) 
 - video deblurring (GoPro, DVD)
 - video denoising (DAVIS, Set8)

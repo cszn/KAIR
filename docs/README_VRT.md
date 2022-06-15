@@ -16,11 +16,14 @@
 [ <a href="https://colab.research.google.com/gist/JingyunLiang/deb335792768ad9eb73854a8efca4fe0#file-vrt-demo-on-video-restoration-ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="google colab logo"></a>](https://colab.research.google.com/gist/JingyunLiang/deb335792768ad9eb73854a8efca4fe0#file-vrt-demo-on-video-restoration-ipynb)
 
 This is the readme of "VRT: A Video Restoration Transformer"
-([arxiv](https://arxiv.org/pdf/2201.12288.pdf), [supp](https://github.com/JingyunLiang/VRT/releases/download/v0.0/VRT_supplementary.pdf), [pretrained models](https://github.com/JingyunLiang/VRT/releases), [visual results](https://github.com/JingyunLiang/VRT/releases)). VRT ahcieves state-of-the-art performance **(up to 2.16dB)** in
+([arxiv](https://arxiv.org/pdf/2201.12288.pdf), [supp](https://github.com/JingyunLiang/VRT/releases/download/v0.0/VRT_supplementary.pdf), [pretrained models](https://github.com/JingyunLiang/VRT/releases), [visual results](https://github.com/JingyunLiang/VRT/releases)). VRT achieves state-of-the-art performance **(up to 2.16dB)** in
 - video SR (REDS, Vimeo90K, Vid4 and UDM10)
 - video deblurring (GoPro, DVD and REDS)
 - video denoising (DAVIS and Set8)
+- video frame interpolation (Vimeo90K, UCF101, DAVIS)
+- space-time video SR (Vimeo90K, Vid4)
 
+<!--
 <p align="center">
   <a href="https://github.com/JingyunLiang/VRT/releases">
     <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vsr.gif"/>
@@ -28,10 +31,17 @@ This is the readme of "VRT: A Video Restoration Transformer"
     <img width=30% src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdn.gif"/>
   </a>
 </p>
+-->
+
+![Eg1](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vsr.gif)
+![Eg2](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdb.gif)
+![Eg3](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vdn.gif)
+![Eg4](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_vfi.gif)
+![Eg5](https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/teaser_stvsr.gif)
 
 ---
 
-> Video restoration (e.g., video super-resolution) aims to restore high-quality frames from low-quality frames. Different from single image restoration, video restoration generally requires to utilize temporal information from multiple adjacent but usually misaligned video frames. Existing deep methods generally tackle with this by exploiting a sliding window strategy or a recurrent architecture, which either is restricted by frame-by-frame restoration or lacks long-range modelling ability. In this paper, we propose a Video Restoration Transformer (VRT) with parallel frame prediction and long-range temporal dependency modelling abilities. More specifically, VRT is composed of multiple scales, each of which consists of two kinds of modules: temporal mutual self attention (TMSA) and parallel warping. TMSA divides the video into small clips, on which mutual attention is applied for joint motion estimation, feature alignment and feature fusion, while self-attention is used for feature extraction. To enable cross-clip interactions, the video sequence is shifted for every other layer. Besides, parallel warping is used to further fuse information from neighboring frames by parallel feature warping. Experimental results on three tasks, including video super-resolution, video deblurring and video denoising, demonstrate that VRT outperforms the state-of-the-art methods by large margins (**up to 2.16 dB**) on nine benchmark datasets.
+> Video restoration (e.g., video super-resolution) aims to restore high-quality frames from low-quality frames. Different from single image restoration, video restoration generally requires to utilize temporal information from multiple adjacent but usually misaligned video frames. Existing deep methods generally tackle with this by exploiting a sliding window strategy or a recurrent architecture, which either is restricted by frame-by-frame restoration or lacks long-range modelling ability. In this paper, we propose a Video Restoration Transformer (VRT) with parallel frame prediction and long-range temporal dependency modelling abilities. More specifically, VRT is composed of multiple scales, each of which consists of two kinds of modules: temporal mutual self attention (TMSA) and parallel warping. TMSA divides the video into small clips, on which mutual attention is applied for joint motion estimation, feature alignment and feature fusion, while self-attention is used for feature extraction. To enable cross-clip interactions, the video sequence is shifted for every other layer. Besides, parallel warping is used to further fuse information from neighboring frames by parallel feature warping. Experimental results on three tasks, including video super-resolution, video deblurring, video denoising, video frame interpolation and space-time video super-resolution, demonstrate that VRT outperforms the state-of-the-art methods by large margins (**up to 2.16 dB**) on nine benchmark datasets.
 <p align="center">
   <img width="800" src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/framework.jpeg">
 </p>
@@ -85,9 +95,17 @@ python main_test_vrt.py --task 006_VRT_videodeblurring_GoPro --folder_lq testset
 # 007, video deblurring trained on REDS, tested on REDS4
 python main_test_vrt.py --task 007_VRT_videodeblurring_REDS --folder_lq testsets/REDS4/blur --folder_gt testsets/REDS4/GT --tile 12 256 256 --tile_overlap 2 20 20
 
-# 008, video denoising trained on DAVIS (noise level 0-50) and tested on Set8 and DAVIS
+# 008, video denoising trained on DAVIS (noise level 0-50), tested on Set8 and DAVIS
 python main_test_vrt.py --task 008_VRT_videodenoising_DAVIS --sigma 10 --folder_lq testsets/Set8 --folder_gt testsets/Set8 --tile 12 256 256 --tile_overlap 2 20 20
 python main_test_vrt.py --task 008_VRT_videodenoising_DAVIS --sigma 10  --folder_lq testsets/DAVIS-test --folder_gt testsets/DAVIS-test --tile 12 256 256 --tile_overlap 2 20 20
+
+# 009, video frame interpolation trained on Vimeo (single frame interpolation), tested on Viemo, UCF101 and DAVIS-train
+python main_test_vrt.py --task 009_VRT_videofi_Vimeo_4frames --folder_lq testsets/vimeo90k/vimeo_septuplet/sequences --folder_gt testsets/vimeo90k/vimeo_septuplet/sequences --tile 0 0 0 --tile_overlap 0 0 0
+python main_test_vrt.py --task 009_VRT_videofi_Vimeo_4frames --folder_lq testsets/UCF101 --folder_gt testsets/UCF101 --tile 0 0 0 --tile_overlap 0 0 0
+python main_test_vrt.py --task 009_VRT_videofi_Vimeo_4frames --folder_lq testsets/DAVIS-train --folder_gt testsets/DAVIS-train --tile 0 256 256 --tile_overlap 0 20 20
+
+# 010, space-time video sr, using pretrained models from 003 and 009, tested on Vid4 and Viemo
+# Please refer to 003 and 009
 
 # test on your own datasets (an example)
 python main_test_vrt.py --task 001_VRT_videosr_bi_REDS_6frames --folder_lq testsets/your/own --tile 40 128 128 --tile_overlap 2 20 20
@@ -110,6 +128,8 @@ Note: You do **NOT need** to prepare the datasets if you just want to test the m
 | video deblurring (setting 2, motion blur)                     |                                                                                             [GoPro](http://data.cv.snu.ac.kr:8008/webdav/dataset/GOPRO/GOPRO_Large.zip) (22 videos, 2103 frames)  <br  /><br  /> *Use [prepare_GoPro_as_video.py](https://github.com/cszn/KAIR/tree/master/scripts/data_preparation/prepare_GoPro_as_video.py) to regroup and rename the dataset.                                                                                              |                                                                                                                                                                                  GoPro (11 videos, 1111 frames)  <br  /><br  /> *Use [evaluate_video_deblurring.m](https://github.com/cszn/KAIR/tree/master/scripts/matlab_scripts/evaluate_video_deblurring.m) for final evaluation.                                                                                                                                                                                   | [here](https://github.com/JingyunLiang/VRT/releases) |
 | video deblurring (setting 3, motion blur)                     |                                                         [REDS sharp & blur](https://seungjunnah.github.io/Datasets/reds.html) (266 videos, 266000 frames: train & val except REDS4)   <br  /><br  /> *Use  [regroup_reds_dataset.py](https://github.com/cszn/KAIR/tree/master/scripts/data_preparation/regroup_reds_dataset.py) to regroup and rename REDS val set. Note that it shares the same HQ frames as in VSR.                                                          |                                                                                                                                                                                                                                                           REDS4 (4 videos, 400 frames: 000, 011, 015, 020 of REDS)                                                                                                                                                                                                                                                           | [here](https://github.com/JingyunLiang/VRT/releases) |
 | video denoising (Gaussian noise)                              |                                                                                                                                             [DAVIS-2017](https://data.vision.ee.ethz.ch/csergi/share/davis/DAVIS-2017-Unsupervised-trainval-480p.zip) (90 videos, 6208 frames)  <br  /><br  /> *Use all files in DAVIS/JPEGImages/480p                                                                                                                                              |                                                                                                              [DAVIS-2017-test](https://github.com/JingyunLiang/VRT/releases) (30 videos) + [Set8](https://www.dropbox.com/sh/20n4cscqkqsfgoj/AABGftyJuJDwuCLGczL-fKvBa/test_sequences?dl=0&subfolder_nav_tracking=1) (8 videos: tractor, touchdown, park_joy and sunflower selected from DERF + hypersmooth, motorbike, rafting and snowboard from GOPRO_540P)                                                                                                               | [here](https://github.com/JingyunLiang/VRT/releases) |
+| video frame interpolation (single-frame interpolation) |                                                                                                                                                                       [Vimeo90K](http://data.csail.mit.edu/tofu/dataset/vimeo_septuplet.zip) (64612 seven-frame videos as in `sep_trainlist.txt`)                                                                                                                                                                        |                    Vimeo90K-T (the rest 7824 7-frame videos) + [UCF101](https://www.dropbox.com/s/dbihqk5deobn0f7/ucf101_extracted.zip?dl=0) (100 videos, 100 quintuples) + [DAVIS-2017](https://data.vision.ee.ethz.ch/csergi/share/davis/DAVIS-2017-Unsupervised-trainval-480p.zip) (90 videos, 6208 frames, 2849 quintuples)  <br  /><br  /> *For DAVIS-2017, use all files in DAVIS/JPEGImages/480p                    | [here](https://github.com/JingyunLiang/VRT/releases) |
+| space-time video SR                                    |                                                                                                                                                                                                            Not trained. Using pretrianed models 003 and 009.                                                                                                                                                                                                             |                                                                                                          Vimeo90K-T (the rest 7824 7-frame videos) + [Vid4](https://drive.google.com/file/d/1ZuvNNLgR85TV_whJoHM7uVb-XW1y70DW/view) (4 videos)   <br  /><br  /> *Using fast/medium/slow splits in data/meta_info.                                                                                                          | [here](https://github.com/JingyunLiang/VRT/releases) |
 
 Run following commands for training:
 ```bash
@@ -141,6 +161,12 @@ python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_tr
 
 # 008, video denoising trained on DAVIS (noise level 0-50) and tested on Set8 and DAVIS
 python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_train_vrt.py --opt options/vrt/008_train_vrt_videodenoising_davis.json  --dist True
+
+# 009, video frame interpolation trained on Vimeo (single frame interpolation), tested on Viemo, UCF101 and DAVIS-train
+python -m torch.distributed.launch --nproc_per_node=8 --master_port=1234 main_train_vrt.py --opt options/vrt/009_train_vrt_videofi_vimeo_4frames.json  --dist True
+
+# 010, space-time video sr, using pretrained models from 003 and 009, tested on Vid4 and Viemo
+# Not trained. Directly using 003 and 009.
 ```
 Tip: The training process will terminate automatically at 20000 iteration due to a bug. Just resume training after that.
 <details>
@@ -177,6 +203,19 @@ We achieved state-of-the-art performance on video SR, video deblurring and video
 </p>
 </details>
 
+<details>
+<summary>Video Frame Interpolation</summary>
+<p align="center">
+  <img width="350" src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/vfi.jpeg">
+</p>
+</details>
+
+<details>
+<summary>Space-Time Video Super-Resolution</summary>
+<p align="center">
+  <img width="350" src="https://raw.githubusercontent.com/JingyunLiang/VRT/main/assets/stvsr.jpeg">
+</p>
+</details>
 
 ## Citation
     @article{liang2022vrt,
