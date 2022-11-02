@@ -1,4 +1,5 @@
 import os.path
+import os
 import math
 import argparse
 import time
@@ -9,6 +10,9 @@ import logging
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 import torch
+from clearml import Task
+from clearml import Dataset
+import os
 
 from utils import utils_logger
 from utils import utils_image as util
@@ -17,7 +21,6 @@ from utils.utils_dist import get_dist_info, init_dist
 
 from data.select_dataset import define_Dataset
 from models.select_model import define_Model
-
 
 '''
 # --------------------------------------------
@@ -30,15 +33,45 @@ from models.select_model import define_Model
 # --------------------------------------------
 '''
 
-
 def main(json_path='options/train_msrresnet_psnr.json'):
+    
+    '''
+    # ----------------------------------------
+    # Step--0 (get clearml dataset)
+    # ----------------------------------------
+    '''
+    clearml_project="Super Resolution"
+    clearml_name="Eastern Township Super-Resolution RGB C"
+    dataset_location='/home/horoma/data/70.SuperResolution/ClearMLDataset/'
+    if not os.path.exists(dataset_location+'train'): 
 
+           dataset = Dataset.get(
+           dataset_id=None,  
+           dataset_project=clearml_project,
+           dataset_name=clearml_name,
+           only_completed=True
+           )
+           dataset.get_mutable_local_copy(dataset_location)
     '''
     # ----------------------------------------
     # Step--1 (prepare opt)
     # ----------------------------------------
     '''
-
+#    task = Task.init(project_name="Super Resolution", task_name="KAIR SwinIR",auto_connect_arg_parser={'rank': False})
+    project_name="Super Resolution"
+    task_name= "KAIR SwinIR Optical 5m to 2.5m clearml dataset"
+    print(os.environ.get('LOCAL_RANK', 0))
+    """
+    if int(os.environ.get('LOCAL_RANK', 0)) == 0:
+        print("Yeah")
+        task = Task.init( project_name=project_name, task_name=task_name)
+    else:
+        task = Task.get_task(project_name=project_name, task_name=task_name)
+    """
+#    if Task.is_main_task():
+#       task =  Task.init( project_name=project_name,task_name=task_name)
+#    else:
+#       task =  Task.get_task( project_name=project_name,task_name=task_name)
     parser = argparse.ArgumentParser()
     parser.add_argument('--opt', type=str, default=json_path, help='Path to option JSON file.')
     parser.add_argument('--launcher', default='pytorch', help='job launcher')
@@ -47,7 +80,14 @@ def main(json_path='options/train_msrresnet_psnr.json'):
 
     opt = option.parse(parser.parse_args().opt, is_train=True)
     opt['dist'] = parser.parse_args().dist
-
+    if int(os.environ.get('LOCAL_RANK', 0)) == 0:
+        print("Yeah")
+        task = Task.init( project_name=project_name, task_name=task_name, continue_last_task=True)
+        task.connect(opt)
+    else:
+        task = Task.get_task(project_name=project_name, task_name=task_name)
+#    time.sleep(10)
+#    exit()
     # ----------------------------------------
     # distributed settings
     # ----------------------------------------
@@ -164,7 +204,7 @@ def main(json_path='options/train_msrresnet_psnr.json'):
     # ----------------------------------------
     '''
 
-    for epoch in range(1000000):  # keep running
+    for epoch in range(500000):  # keep running
         if opt['dist']:
             train_sampler.set_epoch(epoch)
 
@@ -195,6 +235,11 @@ def main(json_path='options/train_msrresnet_psnr.json'):
                 message = '<epoch:{:3d}, iter:{:8,d}, lr:{:.3e}> '.format(epoch, current_step, model.current_learning_rate())
                 for k, v in logs.items():  # merge log information into message
                     message += '{:s}: {:.3e} '.format(k, v)
+                    task.get_logger().report_scalar(
+                    k,
+                    'worker {:02d}'.format(opt['rank']), 
+                    value=v, 
+                    iteration=current_step)
                 logger.info(message)
 
             # -------------------------------
@@ -232,6 +277,20 @@ def main(json_path='options/train_msrresnet_psnr.json'):
                     # -----------------------
                     save_img_path = os.path.join(img_dir, '{:s}_{:d}.png'.format(img_name, current_step))
                     util.imsave(E_img, save_img_path)
+                    task.get_logger().report_image(
+                    img_name, 
+                    "Generated Image", 
+                    iteration=current_step, 
+                    image=E_img
+                    )
+
+                    task.get_logger().report_image(
+                    img_name, 
+                    "True Image", 
+                    iteration=current_step, 
+                    image=H_img
+                    )
+                    
 
                     # -----------------------
                     # calculate PSNR
@@ -246,6 +305,11 @@ def main(json_path='options/train_msrresnet_psnr.json'):
 
                 # testing log
                 logger.info('<epoch:{:3d}, iter:{:8,d}, Average PSNR : {:<.2f}dB\n'.format(epoch, current_step, avg_psnr))
+                task.get_logger().report_scalar(
+                "Test average PSNR",
+                'worker {:02d}'.format(opt['rank']), 
+                value=avg_psnr, 
+                iteration=current_step)
 
 if __name__ == '__main__':
     main()
