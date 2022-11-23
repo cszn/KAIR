@@ -1,8 +1,8 @@
 {
   "task": "swinir_denoising_color_15"     //  color Gaussian denoising for noise level 15/25/50. root/task/images-models-options
   , "model": "plain" // "plain" | "plain2" if two inputs
-  , "gpu_ids": [0,1,2,3,4,5,6,7]
-  , "dist": true
+  , "gpu_ids": [0]
+  , "dist": false
 
   , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
 
@@ -24,13 +24,13 @@
       , "sigma_test": 15                // 
 
       , "dataloader_shuffle": true
-      , "dataloader_num_workers": 16
-      , "dataloader_batch_size": 8      // batch size 1 | 16 | 32 | 48 | 64 | 128. Total batch size =1x8=8 in SwinIR
+      , "dataloader_num_workers": 1
+      , "dataloader_batch_size": 1      // batch size 1 | 16 | 32 | 48 | 64 | 128. Total batch size =1x8=8 in SwinIR
     }
     , "test": {
       "name": "test_dataset"            // just name
       , "dataset_type": "dncnn"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
-      , "dataroot_H": "testsets/McMaster"  // path of H testing dataset
+      , "dataroot_H": "testsets/set5"  // path of H testing dataset
       , "dataroot_L": null              // path of L testing dataset
 
       , "sigma": 15                     // 
