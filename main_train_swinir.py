@@ -6,38 +6,18 @@ from collections import OrderedDict
 import os
 import torch
 import requests
+import os.path
+import math
+import argparse
+import time
+import random
+import numpy as np
+from collections import OrderedDict
+import logging
+import torch
+from torch.utils.data import DataLoader
 
 from models.network_swinir import SwinIR as net
-from utils import utils_image as util
-
-import os.path
-import math
-import argparse
-import time
-import random
-import numpy as np
-from collections import OrderedDict
-import logging
-import torch
-from torch.utils.data import DataLoader
-
-
-from utils import utils_logger
-from utils import utils_image as util
-from utils import utils_option as option
-
-import os.path
-import math
-import argparse
-import time
-import random
-import numpy as np
-from collections import OrderedDict
-import logging
-import torch
-from torch.utils.data import DataLoader
-
-
 from utils import utils_logger
 from utils import utils_image as util
 from utils import utils_option as option
@@ -163,8 +143,7 @@ def main(json_path='options/swinir/train_swinir_denoising_color.json'):
     '''
 
     model = define_Model(opt)
-    import pdb
-    pdb.set_trace()
+
     logger.info(model.info_network())
     model.init_train()
     logger.info(model.info_params())
