@@ -2,16 +2,17 @@ from collections import OrderedDict
 import torch
 import torch.nn as nn
 from torch.optim import lr_scheduler
-from torch.optim import Adam
+from torch.optim import Adam,SGD
 
 from models.select_network import define_G
 from models.model_base import ModelBase
-from models.loss import CharbonnierLoss
-from models.loss_ssim import SSIMLoss
+from models.loss import CharbonnierLoss,PerceptualLoss,TVLoss
+from models.loss_ssim import SSIMLoss,MSSSIMLoss
+
 
 from utils.utils_model import test_mode
 from utils.utils_regularizers import regularizer_orth, regularizer_clip
-
+from collections import OrderedDict
 
 class ModelPlain(ModelBase):
     """Train with pixel loss"""
@@ -87,18 +88,16 @@ class ModelPlain(ModelBase):
     # ----------------------------------------
     def define_loss(self):
         G_lossfn_type = self.opt_train['G_lossfn_type']
-        if G_lossfn_type == 'l1':
-            self.G_lossfn = nn.L1Loss().to(self.device)
-        elif G_lossfn_type == 'l2':
-            self.G_lossfn = nn.MSELoss().to(self.device)
-        elif G_lossfn_type == 'l2sum':
-            self.G_lossfn = nn.MSELoss(reduction='sum').to(self.device)
-        elif G_lossfn_type == 'ssim':
-            self.G_lossfn = SSIMLoss().to(self.device)
-        elif G_lossfn_type == 'charbonnier':
-            self.G_lossfn = CharbonnierLoss(self.opt_train['G_charbonnier_eps']).to(self.device)
-        else:
-            raise NotImplementedError('Loss type [{:s}] is not found.'.format(G_lossfn_type))
+        self.G_lossfn =OrderedDict()##todo multi loss func
+        self.G_lossfn['l1'] = nn.L1Loss().to(self.device)
+        self.G_lossfn['l2'] = nn.MSELoss().to(self.device)
+        self.G_lossfn['l2sum'] = nn.MSELoss(reduction='sum').to(self.device)
+        self.G_lossfn['ssim'] = SSIMLoss(window_size=self.opt_train['G_ssim_window']).to(self.device)
+        self.G_lossfn['mssim'] = MSSSIMLoss(window_size=self.opt_train['G_ssim_window']).to(self.device)
+        self.G_lossfn['charbonnier'] = CharbonnierLoss(self.opt_train['G_charbonnier_eps']).to(self.device)
+        self.G_lossfn['vggperceptualLoss'] = PerceptualLoss().to(self.device)
+        self.G_lossfn['logcosh'] = PerceptualLoss().to(self.device)
+
         self.G_lossfn_weight = self.opt_train['G_lossfn_weight']
 
     # ----------------------------------------
@@ -114,6 +113,9 @@ class ModelPlain(ModelBase):
         if self.opt_train['G_optimizer_type'] == 'adam':
             self.G_optimizer = Adam(G_optim_params, lr=self.opt_train['G_optimizer_lr'],
                                     betas=self.opt_train['G_optimizer_betas'],
+                                    weight_decay=self.opt_train['G_optimizer_wd'])
+        elif self.opt_train['G_optimizer_type'] == 'SGD':
+            self.G_optimizer = SGD(G_optim_params, lr=self.opt_train['G_optimizer_lr'],
                                     weight_decay=self.opt_train['G_optimizer_wd'])
         else:
             raise NotImplementedError
@@ -163,7 +165,10 @@ class ModelPlain(ModelBase):
     def optimize_parameters(self, current_step):
         self.G_optimizer.zero_grad()
         self.netG_forward()
-        G_loss = self.G_lossfn_weight * self.G_lossfn(self.E, self.H)
+        G_loss = 0
+        for loss_,weight_ in zip(self.opt_train['G_lossfn_type'],self.G_lossfn_weight):
+            G_loss+=(self.G_lossfn[loss_](self.E, self.H)*weight_)
+        # G_loss = self.G_lossfn_weight * self.G_lossfn(self.E, self.H)#todo multi loss func
         G_loss.backward()
 
         # ------------------------------------

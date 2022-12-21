@@ -1,0 +1,82 @@
+{
+    "task": "restformer_denoising_gray_224_multiloss_"     //  grayscale Gaussian denoising for noise level 15/25/50. root/task/images-models-options
+    , "model": "plain" // "plain" | "plain2" if two inputs
+    , "gpu_ids": [0]
+    , "dist": false
+  
+    , "n_channels": 3  // broadcast to "datasets", 1 for grayscale, 3 for color
+  
+    , "path": {
+      "root": "denoising"            // "denoising" | "superresolution" | "dejpeg"
+      , "pretrained_netG": null      // path of pretrained model. We fine-tune sigma=25/50 models from sigma=15 model, so that `G_optimizer_lr` and `G_scheduler_milestones` can be halved to save time.
+      , "pretrained_netE": null      // path of pretrained model
+    }
+  
+    , "datasets": {
+      "train": {
+        "name": "train_dataset"           // just name
+        , "dataset_type": "dncnn"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
+        , "dataroot_H": "trainsets/trainH"// path of H training dataset. DIV2K (800 training images) + Flickr2K (2650 images) + BSD500 (400 training&testing images) + WED(4744 images) in SwinIR
+        , "dataroot_L": null              // path of L training dataset
+  
+        , "H_size": 224                   // patch_size
+        , "sigma": 15                     //  15 | 25 | 50.
+        , "sigma_test": 15                //
+  
+        , "dataloader_shuffle": true
+        , "dataloader_num_workers": 1   
+        , "dataloader_batch_size": 1    // batch size 1 | 16 | 32 | 48 | 64 | 128. Total batch size =1x8=8 in SwinIR
+      }
+      , "test": {
+        "name": "test_dataset"            // just name
+        , "dataset_type": "SFA"         // "dncnn" | "dnpatch" | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch" | "jpeg"
+        , "dataroot_H": "testsets/set12"  // path of H testing dataset
+        , "dataroot_L": null              // path of L testing dataset
+  
+        , "sigma": 15                     // 
+        , "sigma_test": 15                // 
+  
+      }
+    }
+  
+    , "netG": {
+      "net_type": "restformer"
+      , "in_chans": 3
+      , "img_size": 224 
+      , "depths": [4, 6, 6, 8] 
+      , "embed_dim": 48
+      , "num_heads": [1, 2, 4, 8]  
+      , "bias": true 
+      , "ffn_expansion_factor": 2.66
+      , "layernorm_type": "WithBias"  // "WithBias",,,"BiasFree
+      ,"init_type": "default"
+    }
+  
+    , "train": {
+      "G_lossfn_type": ["charbonnier","logcosh"]//["charbonnier","vggperceptualLoss","ssim"]     // "l1" | "l2sum" | "l2" | "ssim" | "charbonnier" preferred ++ ssim++ vggperceptualLoss
+      , "G_lossfn_weight": [1,1]//[9,1,1]            // default
+      , "G_charbonnier_eps": 1e-9
+      , "G_ssim_window" : 1
+      , "E_decay": 0.999                  // Exponential Moving Average for netG: set 0 to disable; default setting 0.999
+  
+      , "G_optimizer_type": "adam"        // fixed, adam is enough
+      , "G_optimizer_lr": 2e-4            // learning rate
+      , "G_optimizer_wd": 0               // weight decay, default 0
+      , "G_optimizer_clipgrad": null      // unused
+      , "G_optimizer_reuse": true         // 
+  
+      , "G_scheduler_type": "MultiStepLR" // "MultiStepLR" is enough // else  CosineAnnealingWarmRestarts
+      , "G_scheduler_milestones": [40000, 60000, 70000, 75000, 80000]
+      , "G_scheduler_gamma": 0.5
+  
+      , "G_regularizer_orthstep": null    // unused
+      , "G_regularizer_clipstep": null    // unused
+  
+      , "G_param_strict": true
+      , "E_param_strict": true
+  
+      , "checkpoint_test":  20000 // 10000          // for testing
+      , "checkpoint_save":  500 // 2000           // for saving model
+      , "checkpoint_print": 100 // 200           // for print
+    }
+  }

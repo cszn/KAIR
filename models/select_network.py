@@ -201,6 +201,23 @@ def define_G(opt):
                    upsampler=opt_net['upsampler'],
                    resi_connection=opt_net['resi_connection'])
 
+
+    # ----------------------------------------
+    # restformer 
+    # ----------------------------------------
+
+    elif net_type == 'restformer':
+        from models.network_restformer import Restormer as net
+        netG = net(inp_channels=opt_net['in_chans'],
+                   num_blocks=opt_net['depths'],
+                   embed_dim=opt_net['embed_dim'],
+                   heads=opt_net['num_heads'],
+                   ffn_expansion_factor=opt_net['ffn_expansion_factor'],
+                   bias=opt_net['bias'],
+                   LayerNorm_type=opt_net['layernorm_type'])
+
+
+
     # ----------------------------------------
     # VRT
     # ----------------------------------------

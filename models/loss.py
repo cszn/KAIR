@@ -216,6 +216,15 @@ class CharbonnierLoss(nn.Module):
         loss = torch.mean(torch.sqrt((diff * diff) + self.eps))
         return loss
 
+class LogCoshLoss(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, y_t, y_prime_t):
+        ey_t = y_t - y_prime_t
+        return torch.mean(torch.log(torch.cosh(ey_t + 1e-12)))
+
+
 
 
 def r1_penalty(real_pred, real_img):
