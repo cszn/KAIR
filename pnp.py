@@ -10,6 +10,7 @@ import logging
 import os.path
 from collections import OrderedDict
 from copy import deepcopy
+from itertools import product
 
 from utils import utils_option as option
 from utils import utils_image as util
@@ -78,7 +79,7 @@ class PNP_ADMM(nn.Module):
     def ADMM(self, f, u, v, b):
         # model_input = f / 255.
         model_input = u / 255.
-        u1 = self.model(model_input)
+        u1 = self.model(model_input) * 255.
         b1 = b # self.mu
         v1 = self.IRL1(f, u1, v, b1)
         return u1, v1, b1
@@ -94,7 +95,7 @@ class PNP_ADMM(nn.Module):
             if origin_img:
                 self.get_intermediate_results(v, origin_img)
 
-        return u1
+        return u1 / 255.
 
     def get_intermediate_results(self, v, origin_img): # only test
         pre_i = torch.clamp(v / 255., 0., 1.)
@@ -178,10 +179,20 @@ def evaluate(opt):
     
     return ave_psnr, ave_ssim
 
+def gen_opts():
+    opts = []
+    all_opt = get_opt()
+    pnp_opt = all_opt['pnp']
+    for lamb in range(*pnp_opt['lamb']):
+        for denoisor_sigma in pnp_opt['denoisor_sigma']:
+            opt = deepcopy(all_opt)
+            opt['pnp']['lamb'] = lamb
+            opt['pnp']['denoisor_sigma'] = denoisor_sigma
+            opts.append(opt)
+    return opts
+
 def search_args():
-    # TODO: get_opts
-    opt = get_opt()
-    opts = [opt,]
+    opts = gen_opts()
     opt_max_psnr = None
     opt_max_ssim = None
     max_psnr = 0.
