@@ -1,0 +1,82 @@
+{
+  "task": "drunet"  //  root/task/images-models-options
+  , "model": "plain" // "plain"
+  , "gpu_ids": [0]
+
+  , "scale": 1       // broadcast to "netG" if SISR
+  , "n_channels": 1  // broadcast to "datasets", 1 for grayscale, 3 for color
+  , "sigma": [0, 50]      // 15, 25, 50 for DnCNN | [0, 75] for FFDNet and FDnCNN
+  , "sigma_test": 15 // 15, 25, 50 for DnCNN and ffdnet
+
+  , "path": {
+    "root": "denoising"            // "denoising" | "superresolution"
+    , "pretrained_netG": "model_zoo/drunet_gray.pth"      // path of pretrained model
+  }
+
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"           // just name
+      , "dataset_type": "fdncnn"         // "dncnn" | "dnpatch" for dncnn,  | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch"
+      , "dataroot_H": "trainsets/trainH"// path of H training dataset
+      , "dataroot_L": null              // path of L training dataset
+      , "H_size": 128                    // patch size 40 | 64 | 96 | 128 | 192
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 8
+      , "dataloader_batch_size": 64     // batch size 1 | 16 | 32 | 48 | 64 | 128
+    }
+    , "test": {
+      "name": "test_dataset"            // just name
+      , "dataset_type": "fdncnn"         // "dncnn" | "dnpatch" for dncnn,  | "fdncnn" | "ffdnet" | "sr" | "srmd" | "dpsr" | "plain" | "plainpatch"
+      , "dataroot_H": "testsets/set12"  // path of H testing dataset
+      , "dataroot_L": null              // path of L testing dataset
+    }
+  }
+
+  , "netG": {
+    "net_type": "drunet" // "dncnn" | "fdncnn" | "ffdnet" | "srmd" | "dpsr" | "srresnet0" |  "srresnet1" | "rrdbnet" 
+    , "in_nc": 2        // input channel number
+    , "out_nc": 1       // ouput channel number
+    , "nc": [64, 128, 256, 512]          // 64 for "dncnn"
+    , "nb": 4          // 17 for "dncnn", 20 for dncnn3, 16 for "srresnet"
+    , "gc": 32          // unused
+    , "ng": 2           // unused
+    , "reduction": 16  // unused
+    , "act_mode": "R"  // "BR" for BN+ReLU | "R" for ReLU
+    , "upsample_mode": "convtranspose"  // "pixelshuffle" | "convtranspose" | "upconv"
+    , "downsample_mode": "strideconv"   // "strideconv" | "avgpool" | "maxpool"
+    , "bias": false //
+    , "init_type": "orthogonal"         // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
+    , "init_bn_type": "uniform"         // "uniform" | "constant"
+    , "init_gain": 0.2
+  }
+
+  , "train": {
+    "G_lossfn_type": "l1"               // "l1" preferred | "l2sum" | "l2" | "ssim" 
+    , "G_lossfn_weight": 1.0            // default
+
+    , "G_optimizer_type": "adam"        // fixed, adam is enough
+    , "G_optimizer_lr": 1e-4           // learning rate
+    , "G_optimizer_clipgrad": null      // unused
+
+    , "G_scheduler_type": "MultiStepLR" // "MultiStepLR" is enough
+    , "G_scheduler_milestones": [100000,200000,300000,400000]
+    , "G_scheduler_gamma": 0.5
+
+    , "G_regularizer_orthstep": null    // unused
+    , "G_regularizer_clipstep": null    // unused
+
+    , "checkpoint_test": 5000           // for testing
+    , "checkpoint_save": 5000           // for saving model
+    , "checkpoint_print": 200           // for print
+  }
+  
+  , "pnp": {
+    "lamb": 690
+    , "sigma2": 1.0
+    , "denoisor_sigma": 25
+    , "admm_iter_num": 1
+    , "irl1_iter_num": 20
+    , "mu": 0.5
+    , "eps": 1e-5
+  }
+}
