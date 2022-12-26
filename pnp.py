@@ -18,7 +18,7 @@ from utils import utils_logger
 from data.select_dataset import define_Dataset
 from models.select_network import define_G
 
-def get_opt(json_path='options/pnp/pnp_drunet.json'):
+def get_opt(json_path):
     opt = option.parse(json_path, is_train=True)
     opt = option.dict_to_nonedict(opt)
     return opt
@@ -106,8 +106,9 @@ class PNP_ADMM(nn.Module):
         return psnr, ssim
 
 def evaluate(opt):
+    '''Given opt, evaluate on testset'''
     device = 'cuda'
-    test_loader = get_test_loader(opt)
+    # test_loader = get_test_loader(opt)
     network = get_network(opt)
     network.to(device)
     logger = gen_logger(opt)
@@ -179,9 +180,10 @@ def evaluate(opt):
     
     return ave_psnr, ave_ssim
 
-def gen_opts():
+def gen_opts(json_path):
+    '''Generate all opt grids to be searched'''
     opts = []
-    all_opt = get_opt()
+    all_opt = get_opt(json_path)
     pnp_opt = all_opt['pnp']
     for lamb in range(*pnp_opt['lamb']):
         for denoisor_sigma in pnp_opt['denoisor_sigma']:
@@ -191,8 +193,8 @@ def gen_opts():
             opts.append(opt)
     return opts
 
-def search_args():
-    opts = gen_opts()
+def search_args(json_path='options/pnp/pnp_drunet.json'):
+    opts = gen_opts(json_path)
     opt_max_psnr = None
     opt_max_ssim = None
     max_psnr = 0.

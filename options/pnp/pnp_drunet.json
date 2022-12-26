@@ -71,9 +71,9 @@
   }
   
   , "pnp": {
-    "lamb": 690
+    "lamb": [650, 700, 10] // 690
     , "sigma2": 1.0
-    , "denoisor_sigma": 25
+    , "denoisor_sigma": [20, 25]
     , "admm_iter_num": 1
     , "irl1_iter_num": 20
     , "mu": 0.5
