@@ -20,6 +20,9 @@ def define_Dataset(dataset_opt):
     elif dataset_type in ['dncnn', 'denoising']:
         from data.dataset_dncnn import DatasetDnCNN as D
 
+    elif dataset_type in ['rician']:
+        from data.dataset_rician import DatasetRician as D
+
     elif dataset_type in ['dnpatch']:
         from data.dataset_dnpatch import DatasetDnPatch as D
 

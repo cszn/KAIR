@@ -248,6 +248,17 @@ def define_G(opt):
                    cpu_cache_length=opt_net['cpu_cache_length'])
 
     # ----------------------------------------
+    # WDNN
+    # ----------------------------------------
+    elif net_type == 'wdnn':
+        from models.network_wdnn import WDNN as net
+        netG = net(in_nc=opt_net['in_nc'],
+                   out_nc=opt_net['out_nc'],
+                   nc=opt_net['nc'],
+                   nb=opt_net['nb'],
+                   act_mode=opt_net['act_mode'])
+                   
+    # ----------------------------------------
     # others
     # ----------------------------------------
     # TODO
