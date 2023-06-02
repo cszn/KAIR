@@ -6,6 +6,8 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
+- **_News (2023-06-02)_**: Code for "Denoising Diffusion Models for Plug-and-Play Image Restoration" is released at [yuanzhi-zhu/DiffPIR](https://github.com/yuanzhi-zhu/DiffPIR).
+
 - **_News (2022-10-04)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_RVRT.md) of [RVRT, NeurlPS2022 ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/RVRT?style=social)](https://github.com/JingyunLiang/RVRT) for video SR, deblurring and denoising.
 
 - **_News (2022-05-05)_**: Try the [online demo](https://replicate.com/cszn/scunet) of [SCUNet ![GitHub Stars](https://img.shields.io/github/stars/cszn/SCUNet?style=social)](https://github.com/cszn/SCUNet) for blind real image denoising.
@@ -172,6 +174,7 @@ kill $(ps aux | grep main_train_gan.py | grep -v grep | awk '{print $2}')
 | BSRGAN | [https://github.com/cszn/BSRGAN](https://github.com/cszn/BSRGAN)|
 | SwinIR | [https://github.com/JingyunLiang/SwinIR](https://github.com/JingyunLiang/SwinIR)|
 | VRT | [https://github.com/JingyunLiang/VRT](https://github.com/JingyunLiang/VRT)       |
+| DiffPIR | [https://github.com/yuanzhi-zhu/DiffPIR](https://github.com/yuanzhi-zhu/DiffPIR)|
 
 Network architectures
 ----------
