@@ -250,6 +250,12 @@ Testing
 References
 ----------
 ```BibTex
+@inproceedings{zhu2023denoising, % DiffPIR
+title={Denoising Diffusion Models for Plug-and-Play Image Restoration},
+author={Yuanzhi Zhu and Kai Zhang and Jingyun Liang and Jiezhang Cao and Bihan Wen and Radu Timofte and Luc Van Gool},
+booktitle={IEEE Conference on Computer Vision and Pattern Recognition Workshops},
+year={2023}
+}
 @article{liang2022vrt,
 title={VRT: A Video Restoration Transformer},
 author={Liang, Jingyun and Cao, Jiezhang and Fan, Yuchen and Zhang, Kai and Ranjan, Rakesh and Li, Yawei and Timofte, Radu and Van Gool, Luc},
