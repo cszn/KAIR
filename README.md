@@ -6,7 +6,7 @@
 *[Computer Vision Lab](https://vision.ee.ethz.ch/the-institute.html), ETH Zurich, Switzerland*
 
 _______
-- **_News (2023-06-02)_**: Code for "Denoising Diffusion Models for Plug-and-Play Image Restoration" is released at [yuanzhi-zhu/DiffPIR](https://github.com/yuanzhi-zhu/DiffPIR).
+- **_News (2023-06-02)_**: Code for "[Denoising Diffusion Models for Plug-and-Play Image Restoration](https://github.com/yuanzhi-zhu/DiffPIR)" is released at [yuanzhi-zhu/DiffPIR](https://github.com/yuanzhi-zhu/DiffPIR).
 
 - **_News (2022-10-04)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_RVRT.md) of [RVRT, NeurlPS2022 ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/RVRT?style=social)](https://github.com/JingyunLiang/RVRT) for video SR, deblurring and denoising.
 
@@ -16,12 +16,8 @@ _______
 
 __*The following results are obtained by our SCUNet with purely synthetic training data! 
 We did not use the paired noisy/clean data by DND and SIDD during training!*__
-<p align="center">
-  <a href="https://github.com/cszn/SCUNet">
-    <img width=45% src="https://github.com/cszn/cszn.github.io/blob/master/files/input_16.gif"/>
-    <img width=45% src="https://github.com/cszn/cszn.github.io/blob/master/files/wm_fnb_0010_16.gif"/>
-  </a>
-</p>
+
+   <img src="https://github.com/cszn/cszn.github.io/blob/master/files/input_16.gif" width="360px"/> <img src="https://github.com/cszn/cszn.github.io/blob/master/files/wm_fnb_0010_16.gif" width="360px"/>
 
 
 - **_News (2022-02-15)_**: We release [the training codes](https://github.com/cszn/KAIR/blob/master/docs/README_VRT.md) of [VRT ![GitHub Stars](https://img.shields.io/github/stars/JingyunLiang/VRT?style=social)](https://github.com/JingyunLiang/VRT) for video SR, deblurring and denoising.
