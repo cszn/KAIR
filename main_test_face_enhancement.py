@@ -141,7 +141,7 @@ if __name__=='__main__':
     os.makedirs(outdir, exist_ok=True)
 
     # whether use the face detection&alignment or not
-    need_face_detection = True
+    need_face_detection = False
 
     if need_face_detection:
         enhancer = faceenhancer_with_detection_alignment(model_path=os.path.join('model_zoo','GPEN-512.pth'), size=512, channel_multiplier=2)
@@ -154,7 +154,7 @@ if __name__=='__main__':
 
         print('{:->4d} --> {:<s}'.format(idx+1, img_name+ext))
 
-        img_L = cv2.resize(img_L, (0,0), fx=2, fy=2)
+        img_L = cv2.resize(img_L, (0,0), fx=1, fy=1)
 
         if need_face_detection:
             # do the enhancement
