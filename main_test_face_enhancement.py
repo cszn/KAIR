@@ -19,6 +19,12 @@ step 1: Download <RetinaFace-R50.pth> model and <GPEN-512.pth> model and put the
 RetinaFace-R50.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/RetinaFace-R50.pth
 GPEN-512.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/GPEN-512.pth
 
+Update(04/12/2023):
+step 1: Download <RetinaFace-R50.pth> model and <GPEN-BFR-512.pth> model and put them into `model_zoo`. See https://github.com/yangxy/GPEN for more details!
+RetinaFace-R50.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/RetinaFace-R50.pth
+GPEN-BFR-512.pth: https://public-vigen-video.oss-cn-shanghai.aliyuncs.com/robin/models/GPEN-BFR-512.pth
+
+
 step 2: Install ninja by `pip install ninja`; set <inputdir> for your own testing images
 
 step 3: `python main_test_face_enhancement.py`
@@ -144,9 +150,9 @@ if __name__=='__main__':
     need_face_detection = True
 
     if need_face_detection:
-        enhancer = faceenhancer_with_detection_alignment(model_path=os.path.join('model_zoo','GPEN-512.pth'), size=512, channel_multiplier=2)
+        enhancer = faceenhancer_with_detection_alignment(model_path=os.path.join('model_zoo','GPEN-BFR-512.pth'), size=512, channel_multiplier=2)
     else:
-        enhancer = faceenhancer(model_path=os.path.join('model_zoo','GPEN-512.pth'), size=512, channel_multiplier=2)
+        enhancer = faceenhancer(model_path=os.path.join('model_zoo','GPEN-BFR-512.pth'), size=512, channel_multiplier=2)
 
     for idx, img_file in enumerate(util.get_image_paths(inputdir)):
         img_name, ext = os.path.splitext(os.path.basename(img_file))
