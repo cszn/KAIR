@@ -1,10 +1,8 @@
 import os.path
 import math
 import argparse
-import time
 import random
 import numpy as np
-from collections import OrderedDict
 import logging
 from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
@@ -21,12 +19,10 @@ from models.select_model import define_Model
 
 '''
 # --------------------------------------------
-# training code for GAN-based model, such as ESRGAN, DPSRGAN
+# training code for GAN-based model
 # --------------------------------------------
 # Kai Zhang (cskaizhang@gmail.com)
 # github: https://github.com/cszn/KAIR
-# --------------------------------------------
-# https://github.com/xinntao/BasicSR
 # --------------------------------------------
 '''
 
@@ -173,7 +169,7 @@ def main(json_path='options/train_msrresnet_gan.json'):
 
     for epoch in range(1000000):  # keep running
         if opt['dist']:
-            train_sampler.set_epoch(epoch)
+            train_sampler.set_epoch(epoch + seed)
 
         for i, train_data in enumerate(train_loader):
 
