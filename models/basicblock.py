@@ -58,13 +58,19 @@ def sequential(*args):
 # --------------------------------------------
 # return nn.Sequantial of (Conv + BN + ReLU)
 # --------------------------------------------
-def conv(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=True, mode='CBR', negative_slope=0.2):
+def conv(out_channels=64, kernel_size=3, stride=1, padding=1, bias=True, mode='CBR', negative_slope=0.2, in_channels=None):
+    # Changed convolution layers to lazy convolution layers.
+    # Lazy layers defer parameter initialization until input is passed through.
+    # This avoids the need to explicitly define input sizes, making the model more flexible.
+    # It also improves memory efficiency as memory is allocated only when the layers are used.
     L = []
     for t in mode:
         if t == 'C':
-            L.append(nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias))
+            L.append(nn.LazyConv2d(out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias))
         elif t == 'T':
-            L.append(nn.ConvTranspose2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias))
+            if in_channels is None:
+                raise ValueError("in_channels must be provided for ConvTranspose2d")
+            L.append(nn.LazyConvTranspose2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size, stride=stride, padding=padding, bias=bias))
         elif t == 'B':
             L.append(nn.BatchNorm2d(out_channels, momentum=0.9, eps=1e-04, affine=True))
         elif t == 'I':
@@ -94,7 +100,7 @@ def conv(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bi
         elif t == 'A':
             L.append(nn.AvgPool2d(kernel_size=kernel_size, stride=stride, padding=0))
         else:
-            raise NotImplementedError('Undefined type: '.format(t))
+            raise NotImplementedError(f'Undefined type: {t}')
     return sequential(*L)
 
 
