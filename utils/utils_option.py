@@ -96,7 +96,7 @@ def parse(opt_path, is_train=True):
     # default setting for distributeddataparallel
     # ----------------------------------------
     if 'find_unused_parameters' not in opt:
-        opt['find_unused_parameters'] = True
+        opt['find_unused_parameters'] = False
     if 'use_static_graph' not in opt:
         opt['use_static_graph'] = False
     if 'dist' not in opt:
